@@ -3,32 +3,28 @@
 <div class="absolute top-0 left-0 h-full w-full bg-cover bg-no-repeat bg-scroll bg-background">
 
   <div class="grid grid-cols-3 place-content-center w-screen gap-4 p-4">
-    <button class="m-4" mat-raised-button color="primary">RSVP</button>
+    <button class="m-4" mat-raised-button color="primary" (click)="openRsvp()">RSVP</button>
     <button class="m-4" mat-raised-button color="primary">Registry</button>
-    <button class="m-4" mat-raised-button color="primary">Map</button>
+    <button class="m-4" mat-raised-button color="primary" (click)="openMap()">Location</button>
   </div>
 
-  <div class="flex justify-center w-50 p-20">
-    <img class="h-45" src="assets/SVG/baby-img.svg" />
+  <div class="flex justify-center">
+    <img class="h-42 p-10" src="assets/SVG/baby-img.svg" />
   </div>
-    <div class="flex justify-center font-sans text-5xl text-white justify-self-center p-4">
+    <div class="flex justify-center font-sans text-5xl text-white justify-self-center">
       Galaxy Girl
     </div>
     <div class="flex justify-center font-sans text-3xl text-white pt-4">
       Join Ellene and Peset 
     </div>
     <div class="flex justify-center font-sans text-3xl text-white pb-4">
-      in Welcoming Baby Alyana!
+      in welcoming Baby Alyana!
     </div>
 
-    <div class="flex justify-center font-sans text-2xl text-white pt-4">
+    <div class="flex justify-center font-sans text-4xl text-white">
       Febuary 14th 2024
     </div>
-    <div class="flex justify-center font-sans text-2xl text-white pb-4">
+    <div class="flex justify-center font-sans text-4xl text-white pb-4">
       1:00PM - 4:00PM
     </div>
-
-
-
-
 </div>

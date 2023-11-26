@@ -1,0 +1,16 @@
+<form>
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput [formControl]="name" />
+  </mat-form-field>
+
+  <div class="p-1">Additional Guests</div>
+  <mat-button-toggle-group name="Additional Guests">
+    <mat-button-toggle value="oneMore">One More</mat-button-toggle>
+    <mat-button-toggle value="twoMore">Two More</mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <div class="flex place-content-center p-6">
+    <button mat-raised-button color="primary">Confirm</button>
+  </div>
+</form>
