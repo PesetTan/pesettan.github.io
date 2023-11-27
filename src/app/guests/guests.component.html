@@ -1,0 +1,8 @@
+<div class="flex justify-center font-sans text-3xl text-white pb-4">
+Total Guests: &nbsp; <em>{{total}}</em>
+</div>
+
+<li *ngFor="let guest of guests">
+    {{guest.name}}
+    +{{guest.additional}}
+</li>

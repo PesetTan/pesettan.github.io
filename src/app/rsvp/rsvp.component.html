@@ -1,16 +1,18 @@
 <form>
   <mat-form-field>
     <mat-label>Name</mat-label>
-    <input matInput [formControl]="name" />
+    <input matInput [formControl]="guest.controls.name" />
   </mat-form-field>
 
-  <div class="p-1">Additional Guests</div>
-  <mat-button-toggle-group name="Additional Guests">
-    <mat-button-toggle value="oneMore">One More</mat-button-toggle>
-    <mat-button-toggle value="twoMore">Two More</mat-button-toggle>
-  </mat-button-toggle-group>
+  <mat-chip-listbox>
+    <mat-chip-option>Additional Guest</mat-chip-option>
+  </mat-chip-listbox>
 
   <div class="flex place-content-center p-6">
-    <button mat-raised-button color="primary">Confirm</button>
+    <button mat-raised-button 
+      color="primary" 
+      [disabled]="guest.invalid" 
+      [mat-dialog-close]="guest">Confirm</button>
   </div>
+
 </form>
