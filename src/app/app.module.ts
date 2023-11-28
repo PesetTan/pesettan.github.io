@@ -15,13 +15,15 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { MapComponent } from './map/map.component';
 import { RsvpComponent } from './rsvp/rsvp.component';
 import { GuestsComponent } from './guests/guests.component';
+import { RegistryComponent } from './registry/registry.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MapComponent,
     RsvpComponent,
-    GuestsComponent
+    GuestsComponent,
+    RegistryComponent
   ],
   imports: [
     HttpClientModule,

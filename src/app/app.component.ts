@@ -5,6 +5,7 @@ import { RsvpComponent } from './rsvp/rsvp.component';
 import { GuestsComponent } from './guests/guests.component';
 import { GuestsService } from './guests.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { RegistryComponent } from './registry/registry.component';
 
 @Component({
   selector: 'app-root',
@@ -31,5 +32,9 @@ export class AppComponent {
 
   openGuestList(): void {
     this.dialog.open(GuestsComponent);
+  }
+
+  openRegistry(): void {
+    this.dialog.open(RegistryComponent);
   }
 }
