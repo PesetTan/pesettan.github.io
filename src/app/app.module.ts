@@ -10,6 +10,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {MatChipsModule} from '@angular/material/chips';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 import { MapComponent } from './map/map.component';
 import { RsvpComponent } from './rsvp/rsvp.component';
@@ -31,7 +32,8 @@ import { GuestsComponent } from './guests/guests.component';
     MatButtonModule,
     MatDialogModule,
     MatInputModule,
-    MatChipsModule
+    MatChipsModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

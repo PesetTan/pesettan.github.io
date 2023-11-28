@@ -22,7 +22,7 @@ export class GuestsService {
 
   constructor(private client: HttpClient ) { }
 
-  addGuests(name: string, additional: number): void {
+  addGuests(name: string, additional: number): Observable<any> {
     const payload = {
       name: {
         S: name
@@ -34,9 +34,7 @@ export class GuestsService {
 
     console.log(payload)
 
-    this.client.post(this.postEndpoint, payload).subscribe(r => {
-      console.log(r)
-    });
+    return this.client.post(this.postEndpoint, payload);
   }
 
   getGuests(): Observable<Guest[]> {
