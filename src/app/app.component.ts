@@ -14,7 +14,11 @@ export class AppComponent {
     private guestService: GuestsService) {}
   
   openRsvp(): void {
-    this.dialog.open(RsvpComponent);
+    const res = this.dialog.open(RsvpComponent);
+    res.afterClosed().subscribe(r => {
+      console.log('response', r)
+      this.guestService.addGuests(r.name.value ?? '', r.oneMore ? 1 : 0)
+    })
   }
 
   openMap(): void {
@@ -22,9 +26,6 @@ export class AppComponent {
   }
 
   openGuestList(): void {
-    const res = this.dialog.open(GuestsComponent)
-    res.afterClosed().subscribe(r => {
-      this.guestService.addGuests(r.controls.name.value ?? '', r.controls.oneMore ? 1 : 0)
-    })
+    this.dialog.open(GuestsComponent);
   }
 }

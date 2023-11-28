@@ -1,18 +1,17 @@
-<form>
+<div class="p-4">
   <mat-form-field>
     <mat-label>Name</mat-label>
-    <input matInput [formControl]="guest.controls.name" />
+    <input matInput [formControl]="guest.name" />
   </mat-form-field>
 
-  <mat-chip-listbox>
-    <mat-chip-option>Additional Guest</mat-chip-option>
+  <mat-chip-listbox class="flex place-content-center p-6">
+    <mat-chip-option (selectionChange)="onOneMore()">Additional Guest</mat-chip-option>
   </mat-chip-listbox>
 
   <div class="flex place-content-center p-6">
     <button mat-raised-button 
       color="primary" 
-      [disabled]="guest.invalid" 
+      [disabled]="guest.name.invalid" 
       [mat-dialog-close]="guest">Confirm</button>
   </div>
-
-</form>
+</div>

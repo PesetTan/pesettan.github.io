@@ -1,19 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { GuestsService } from '../guests.service';
 
 @Component({
   selector: 'app-rsvp',
   templateUrl: './rsvp.component.html'
 })
 export class RsvpComponent implements OnInit {
-  guest = new FormGroup({
+  guest = {
     name: new FormControl('', Validators.required),
-    oneMore: new FormControl(false)
-  })
+    oneMore: false
+  }
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  onOneMore(): void {
+    this.guest.oneMore = !this.guest.oneMore;
   }
 }
