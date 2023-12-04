@@ -8,7 +8,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class RsvpComponent implements OnInit {
   guest = {
     name: new FormControl('', Validators.required),
-    oneMore: false
+    includeAdult: false,
+    includeChild: false,
   }
 
   constructor() { }
@@ -16,7 +17,11 @@ export class RsvpComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onOneMore(): void {
-    this.guest.oneMore = !this.guest.oneMore;
+  onGuest(): void {
+    this.guest.includeAdult = !this.guest.includeAdult;
+  }
+
+  onChild(): void {
+    this.guest.includeChild = !this.guest.includeChild;
   }
 }

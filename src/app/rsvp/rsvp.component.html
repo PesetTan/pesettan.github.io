@@ -4,9 +4,14 @@
     <input matInput [formControl]="guest.name" />
   </mat-form-field>
 
-  <mat-chip-listbox class="flex place-content-center p-6">
-    <mat-chip-option (selectionChange)="onOneMore()">Additional Guest</mat-chip-option>
-  </mat-chip-listbox>
+  <div class="flex flex-col place-content-center p-6">  
+    <mat-chip-listbox >
+      <mat-chip-option (selectionChange)="onGuest()">Plus a Guest</mat-chip-option>
+    </mat-chip-listbox>
+    <mat-chip-listbox>
+      <mat-chip-option (selectionChange)="onChild()">Plus a Child</mat-chip-option>
+    </mat-chip-listbox>
+  </div>
 
   <div class="flex place-content-center p-6">
     <button mat-raised-button 

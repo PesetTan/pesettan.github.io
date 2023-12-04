@@ -19,8 +19,14 @@ export class AppComponent {
   openRsvp(): void {
     const res = this.dialog.open(RsvpComponent);
     res.afterClosed().subscribe(r => {
-      console.log('response', r)
-      this.guestService.addGuests(r.name.value ?? '', r.oneMore ? 1 : 0).subscribe(res => {
+      let additionalGuests = 0;
+      if (r.includeAdult)
+        additionalGuests += 1;
+      if (r.includeChild)
+        additionalGuests += 1;
+
+      console.log(additionalGuests)
+      this.guestService.addGuests(r.name.value ?? '', additionalGuests).subscribe(res => {
         this.snackBar.open('See you Saturday!', 'OK');
       })
     });
