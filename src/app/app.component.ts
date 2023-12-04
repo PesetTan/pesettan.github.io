@@ -25,7 +25,6 @@ export class AppComponent {
       if (r.includeChild)
         additionalGuests += 1;
 
-      console.log(additionalGuests)
       this.guestService.addGuests(r.name.value ?? '', additionalGuests).subscribe(res => {
         this.snackBar.open('See you Saturday!', 'OK');
       })
@@ -37,7 +36,10 @@ export class AppComponent {
   }
 
   openGuestList(): void {
-    this.dialog.open(GuestsComponent);
+    this.dialog.open(GuestsComponent, {
+      height: '65vh',
+      width: '65vw',
+    });
   }
 
   openRegistry(): void {

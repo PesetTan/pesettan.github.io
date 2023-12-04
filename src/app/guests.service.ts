@@ -32,8 +32,6 @@ export class GuestsService {
       }
     }
 
-    console.log(payload)
-
     return this.client.post(this.postEndpoint, payload);
   }
 

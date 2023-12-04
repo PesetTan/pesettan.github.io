@@ -1,10 +1,12 @@
-<div class="p-4">
-    <div class="flex justify-center font-sans text-3xl text-white pb-4">
+<div mat-dialog-title class="flex justify-center font-sans text-3xl text-white pb-4">
     Total Guests: &nbsp; <em>{{total}}</em>
     </div>
+
+<mat-dialog-content class="p-4">
+
 
     <li *ngFor="let guest of guests" class="flex font-sans text-xl text-white pb-4">
         {{guest.name}}
         +{{guest.additional}}
     </li>
-</div>
+</mat-dialog-content>
