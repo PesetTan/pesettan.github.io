@@ -1,41 +1,86 @@
-<div class="text-2xl pb-4">Summary</div>
-<div class="pr-8 pb-8">
-    Forward-thinking Software Engineer with extensive experience with the agile method in a cloud based environment. 
-    Adept at anticipating gaps in architecture and deploying stable, efficient systems. Proven track record in hands-on leadership 
-    and requirements gathering across a wide range of disciplines including architecture and UX.
-</div>
+<section id="selected-work" class="work-section" aria-labelledby="work-heading">
+    <div class="section-heading">
+        <h2 id="work-heading" class="eyebrow">Selected engineering work</h2>
+        <span class="section-context">Omnicell</span>
+    </div>
 
-<div class="text-2xl pb-4">Work Experience</div>
-<div class="pr-8">
-    <div class="text-xl pb-2 flex align-bottom justify-start">
-        <mat-icon class="mr-2 pr-6 text-slate-500" fontIcon="badge"></mat-icon>
-        Senior Software Engineer, &nbsp; <a class="text-blue-800" href="https://www.omnicell.com">Omnicell Corp.</a> &nbsp; <a>2017-Present</a>
-    </div>
-    <ul class="list-disc pb-8">
-        <li>Inaugural developer for a cloud based web application that manages hospitals' restocking processes.</li>
-        <li>Instrumental in migrating parts of the legacy desktop application into multiple microservices
-            deployed on a Kubernetes cluster, including three backend services and two frontend apps written in Angular. </li>
-        <li>Key player in gathering initial requirements and outlining the technical roadmap that would lay 
-            the foundation for the application and allow scalable growth.</li>
-        <li>Spearheaded new architectural components like data migrations using Python executed as a K8s job during the pre-upgrade hook. 
-            Other initiatives include, integrating an ingress filter for authorization using GoLang
-            and initiating scheduled K8s jobs based on end-user input.</li>
-        <li>One of the primary contributors to the backend ASP.Net library that aggregates common code and specifications 
-            into a single repository. </li>
-        <li>Active contributor to the frontend library hosting Angular Material components enriched with common 
-            functionality and patterns used throughout multiple UI applications within the company. </li>
-    </ul>
-    
-    <div class="text-xl pb-2 flex align-bottom justify-start">
-        <mat-icon class="mr-2 pr-6 text-slate-500" fontIcon="badge"></mat-icon>
-        Web Developer & Data Analyst, &nbsp; <a class="text-blue-800" href="https://www.atac.com">ATAC Corp.</a> &nbsp; <a>2008-2017</a>
-    </div>
-    <ul class="list-disc">
-        <li>Extensive experience in cleaning and presenting data to airspace controllers.</li>
-        <li>Deep understanding of aviation data, enabling the development of in-house tools utilized by other analysts 
-            to quickly clean and present data in excel. These tools were written in C# and included parsing large data sets 
-            and integration with proprietary Windows applications.</li>
-        <li>Prototyped web applications that would display various flight, noise and weather data enabling
-            analysts to visualize historical trends. These prototypes were developed in Angular with a Node.js backend.</li>
-    </ul>
-</div>
+    <article class="work-item" appReveal>
+        <span class="work-number" aria-hidden="true">01</span>
+        <div class="work-content">
+            <h3>Shared auditing infrastructure</h3>
+            <p>Implemented reusable ASP.NET Core auditing and entity-change capture in shared backend infrastructure, recording actor, tenant, trace, and before/after values. Isolated concurrent request contexts and preserved existing package contracts while limiting service integration boilerplate.</p>
+            <details class="evidence">
+                <summary>Performance and validation</summary>
+                <div class="detail-content">
+                    <p>Optimized audit middleware through cached configuration and streamlined claim processing. In repeated in-process Release/.NET 10 benchmarks, the authenticated single-role scenario executed <strong>32.6% faster with 28.2% fewer allocations</strong> than the prior implementation.</p>
+                    <p>Validated request isolation and compatibility with regression tests.</p>
+                </div>
+            </details>
+        </div>
+    </article>
+
+    <article class="work-item" appReveal>
+        <span class="work-number" aria-hidden="true">02</span>
+        <div class="work-content">
+            <h3>Transactional event delivery</h3>
+            <p>Contributed to shared .NET transactional-outbox infrastructure using PostgreSQL and Kafka, persisting events with business changes and supporting leases, retries, and ordering by topic and message key. Optimized claim queries for uneven backlogs.</p>
+            <details class="evidence">
+                <summary>Local validation and delivery semantics</summary>
+                <div class="detail-content">
+                    <p>Synthetic local tests across <strong>100 isolated tenants and three relays</strong> reconciled <strong>299,100 committed events</strong> with no observed loss, duplication, misrouting, malformed records, or ordering errors.</p>
+                    <p>Retained at-least-once delivery semantics. Skewed traffic exposed a capacity limit and accumulated backlog; these tests do not establish sustained production throughput.</p>
+                </div>
+            </details>
+        </div>
+    </article>
+
+    <article class="work-item" appReveal>
+        <span class="work-number" aria-hidden="true">03</span>
+        <div class="work-content">
+            <h3>Tenant-aware audit ingestion</h3>
+            <p>Implemented TypeScript/Node.js audit ingestion from tenant-specific Kafka topics into ClickHouse, retaining the existing Elasticsearch path. Added payload validation, deterministic event IDs, safe handling of large offsets, and offset commits after successful persistence; supported evolving entity-change schemas and tenant-specific connection lifecycles.</p>
+            <details class="evidence">
+                <summary>Cross-service delivery diagnosis</summary>
+                <div class="detail-content">
+                    <p>Diagnosed cross-service audit delivery gaps caused by a mismatch between the queue written and the queue polled. Added an audit-aware reader for fresh and older pending events, preserving stored payloads, keys, headers, and existing business-event behavior.</p>
+                    <p>Added concurrency and compatibility regression coverage.</p>
+                </div>
+            </details>
+        </div>
+    </article>
+
+    <details class="additional-work">
+        <summary>Application and reliability work</summary>
+        <div class="additional-content">
+            <article>
+                <h3>Audit interfaces and identity integration</h3>
+                <p>Implemented Angular/Nx audit-search behavior and contributed reusable frontend components. Preserved row selection across pagination, limited page-level selection to visible rows, and reset selection on filter or sort changes. Added identity-service auditing for role changes and login events, including readable role names and privacy metadata.</p>
+            </article>
+            <article>
+                <h3>Database reliability and operational tooling</h3>
+                <p>Diagnosed ClickHouse audit-query costs and unreadable transaction-report data. Developed guarded recovery runbooks that preserved readable values and required complete evidence before staging or cutover; validated the expanded tooling with 83 local tests. Troubleshot CI/CD, package compatibility, Kubernetes/Helm deployments, and Kafka lag and offsets.</p>
+            </article>
+            <article>
+                <h3>Hospital restocking applications</h3>
+                <p>Served as the inaugural developer for a hospital restocking cloud application; helped migrate legacy desktop functionality into three backend services and two Angular applications on Kubernetes. Gathered initial requirements and contributed to the technical roadmap and architecture.</p>
+            </article>
+        </div>
+    </details>
+</section>
+
+<section id="experience" class="career-section" appReveal aria-labelledby="experience-heading">
+    <h2 id="experience-heading" class="eyebrow">Experience</h2>
+    <article class="career-item">
+        <div class="career-heading"><h3><a href="https://www.omnicell.com">Omnicell <span aria-hidden="true">↗</span></a></h3><span class="career-date">2017–Present</span></div>
+        <p class="career-role">Senior Software Engineer</p>
+        <p>Multitenant healthcare software supporting medication inventory, hospital restocking, identity and authorization, and site configuration.</p>
+    </article>
+    <article class="career-item">
+        <div class="career-heading"><h3><a href="https://www.atac.com">ATAC <span aria-hidden="true">↗</span></a></h3><span class="career-date">2008–2017</span></div>
+        <p class="career-role">Web Developer &amp; Data Analyst</p>
+        <ul class="career-bullets">
+            <li>Developed C# tools to parse large aviation datasets, prepare Excel outputs, and integrate with proprietary Windows applications for analysts and airspace controllers.</li>
+            <li>Cleaned and presented aviation data; prototyped Angular applications with Node.js backends to visualize flight, noise, weather, and historical trends.</li>
+        </ul>
+    </article>
+</section>

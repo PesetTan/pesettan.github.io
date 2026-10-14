@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
+import { RevealDirective } from '../reveal.directive';
 
 @Component({
   selector: 'app-experience',
   standalone: true,
-  imports: [ MatIconModule ],
+  imports: [RevealDirective],
   templateUrl: './experience.component.html',
 })
 export class ExperienceComponent {

@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [ MatIconModule ],
+  imports: [],
   templateUrl: './contact.component.html',
 })
 export class ContactComponent {
