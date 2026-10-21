@@ -54,3 +54,5 @@ The five-stage narrative, scroll duration, ring progression, and approved senten
 Phone typography uses responsive sizes through 600px: larger stage and curved ring labels, and an approximately 11–14% larger payoff. The teaching payoff reserves extra space at widths up to 360px. Wheel dimensions, colors, sequence, and reveal timing are unchanged. Version A retains the final sentence and hides explanatory copy.
 
 Version A — Minimal: https://pesettan.github.io/inbrnd/minimal/ (`content-mode="diagram"`). Version B — Educational: https://pesettan.github.io/inbrnd/educational/ (`content-mode="teaching"`). Both share one component and scroll timeline, including the approved final sentence reveal.
+
+Direct Server URL installs now default to Version A — Minimal when `content-mode` is omitted. Set `content-mode="teaching"` explicitly for Version B. Both retain the final sentence.

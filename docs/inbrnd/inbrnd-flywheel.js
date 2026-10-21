@@ -124,6 +124,8 @@ function diagram(id) {
       this.userStatic=false;this.frameId=0;
     }
     connectedCallback(){
+      // Direct Wix installs default to Minimal; explicit teaching mode stays available.
+      if(!this.hasAttribute('content-mode'))this.setAttribute('content-mode','diagram');
       this.connected=true;
       try {
         this.render();
