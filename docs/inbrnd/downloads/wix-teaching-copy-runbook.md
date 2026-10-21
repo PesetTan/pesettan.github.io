@@ -4,15 +4,13 @@
 
 Includes the hero introduction, all five lessons alongside the wheel, and the educational closing. This is the approved pink-ring design with Hairline outer labels, ivory focus, and a softly fading leading edge. Ordinary page scrolling controls assembly and reverses it.
 
-Live preview: https://pesettan.github.io/inbrnd/
-
-Runbook: https://pesettan.github.io/inbrnd/runbook/
+Local review: http://localhost:5088/
 
 This runbook prepares installation; the component has not yet been executed inside your Wix site. The live site has not been changed. Use a duplicate/test page first.
 
 ## Files and hosting
 
-Unzip **inbrnd-flywheel-wix.zip** from https://pesettan.github.io/inbrnd/downloads/inbrnd-flywheel-wix.zip. Inside the wix folder:
+Unzip **inbrnd-flywheel-wix.zip** from the project's releases folder or the local review page. Inside the wix folder:
 
 - **inbrnd-flywheel.js** — the component; its CSS is already embedded.
 - **assets/editors-note-regular.woff2** and **assets/editors-note-hairline.otf** — required font files.
@@ -25,12 +23,12 @@ The preview header, footer, and comparison controls are separate. They are not i
 For the simplest reproducible setup, put **inbrnd-flywheel.js** and the **assets** directory on an HTTPS static host you control, preserving this structure:
 
 ```text
-https://pesettan.github.io/inbrnd/inbrnd-flywheel.js
-https://pesettan.github.io/inbrnd/assets/editors-note-regular.woff2
-https://pesettan.github.io/inbrnd/assets/editors-note-hairline.otf
+https://YOUR-ASSET-HOST/inbrnd/inbrnd-flywheel.js
+https://YOUR-ASSET-HOST/inbrnd/assets/editors-note-regular.woff2
+https://YOUR-ASSET-HOST/inbrnd/assets/editors-note-hairline.otf
 ```
 
-GitHub Pages is the public HTTPS asset host for this release. The component and fonts are hosted at the URLs above. The localhost preview and owner-private ChatGPT Site are separate review environments.
+**YOUR-ASSET-HOST is a placeholder, not an already-provisioned service.** No public asset hosting was created in this task. The localhost preview and owner-private ChatGPT Site are not usable asset hosts for public Wix visitors.
 
 Verify each URL while logged out. The JS must return JavaScript rather than a sign-in or HTML page. Fonts must be accessible across origins; for these public font files, the host can return `Access-Control-Allow-Origin: *`. Serve the font types as `font/woff2` and `font/otf`. Use versioned folders for future updates so rollback stays easy.
 
@@ -64,7 +62,7 @@ Omit **theme** for the approved ivory/pink palette. Only `content-mode="diagram"
 ```js
 $w.onReady(() => {
   const wheel = $w('#inbrndFlywheel');
-  wheel.setAttribute('asset-base', 'https://pesettan.github.io/inbrnd/assets/');
+  wheel.setAttribute('asset-base', 'https://YOUR-ASSET-HOST/inbrnd/assets/');
   wheel.setAttribute('variant', 'wheel');
   wheel.setAttribute('emphasis', 'ring');
   wheel.setAttribute('content-mode', 'teaching');
@@ -73,7 +71,7 @@ $w.onReady(() => {
 });
 ```
 
-The asset URL is configured for this GitHub Pages release. Replace the header offset before publishing your Wix page. `heading-level="2"` assumes the Wix page already has its own main heading. Set it to `1` only if this component supplies the page's primary heading; this setting has no visible effect when the copy is hidden. Wix supports configuring custom elements through [setAttribute](https://dev.wix.com/docs/velo/velo-only-apis/%24w/custom-element/set-attribute).
+Replace the asset URL and header offset before publishing. `heading-level="2"` assumes the Wix page already has its own main heading. Set it to `1` only if this component supplies the page's primary heading; this setting has no visible effect when the copy is hidden. Wix supports configuring custom elements through [setAttribute](https://dev.wix.com/docs/velo/velo-only-apis/%24w/custom-element/set-attribute).
 
 ## Size the section for scrolling
 
@@ -93,7 +91,7 @@ Expected first impression: The introduction appears, followed by five coordinate
 
 - Confirm both font files and the JavaScript load for a logged-out visitor.
 - Check the clockwise order: Positioning → Narrative → Platforms → Opportunities → Signals → Positioning.
-- Inspect a partly drawn ring segment, its fading tip, and a partially drawn connecting arrow.
+- Inspect a partly drawn ring segment, its solid advancing edge, and a partially drawn connecting arrow.
 - Complete the circle; both curved outer labels should appear with balanced spacing.
 - Scroll upward to confirm precise reversal and verify the frame releases before the next Wix section.
 - Test desktop, tablet, 390px and 320px phones, and landscape. Look for clipping, overlapping sections, or nested scrollbars.
@@ -116,4 +114,21 @@ Keep the old Wix section recoverable until the new section passes the checks. To
 
 ## Delivery validation
 
-Local component checks and screenshots are recorded in docs/inbrnd-flywheel-plan.md. The teaching-copy experience and assets are prepared for GitHub Pages deployment. Published Wix execution and final parent-container sizing remain pending. This guide does not claim those steps have already passed.
+Local component checks and screenshots are recorded in docs/inbrnd-flywheel-plan.md. Published Wix execution, public asset deployment, and final parent-container sizing are still pending. This guide does not claim those steps have already passed.
+
+
+## October 20 refinement
+
+The five-stage system completes at 80% of the existing scroll travel. The teaching version reveals “As authority and recognition compound, career momentum grows.” between 80% and 85%, then holds the completed composition through 100%. The outer ring changes uniformly from soft pink to burgundy and grows from 12 to 13 SVG units. Its lower label is Career Momentum. The circle-only version retains no visible explanatory copy.
+
+Stage emphasis uses solid color and opacity. There is no scaling, gradient highlight, scroll interception, or time-driven animation. Reduced motion and short screens display the complete system in normal flow.
+
+The standalone HTML examples include the complete static diagram and five explanations before JavaScript initializes; they also work if the component script fails. A Wix Editor custom element does not automatically inherit this surrounding HTML, so the equivalent host-page fallback must be validated during Wix installation.
+
+Public preview: https://pesettan.github.io/inbrnd/
+
+Before and after: https://pesettan.github.io/inbrnd/comparison/
+
+Preserved original: https://pesettan.github.io/inbrnd/before/
+
+Wix installation and physical-device testing are not implied by GitHub Pages validation.
