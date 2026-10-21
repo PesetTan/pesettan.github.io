@@ -132,3 +132,7 @@ Before and after: https://pesettan.github.io/inbrnd/comparison/
 Preserved original: https://pesettan.github.io/inbrnd/before/
 
 Wix installation and physical-device testing are not implied by GitHub Pages validation.
+
+## October 2026 brand alignment
+
+The bundle reuses the existing Editor’s Note Regular and Hairline font files. Shared neutral tokens now use Paper `#FBFAF7`, Introspection `#2F2D2E`, Courage `#555555`, Margin `#DDD9D4`, and Reflection `#FCF1F1`. The approved flywheel progression remains `#D5A5B1` to `#945267`; the prototype’s circular composition and serif/sans hierarchy take priority over other guideline examples. Body descriptions use 20px on roomy desktop layouts and 18px on compact/mobile layouts, with 1.5 line height and 0.02em tracking. The preserved Before page retains its original styling.
