@@ -46,3 +46,7 @@ Standalone examples contain a complete light-DOM fallback before JavaScript init
 [Section-only preview](https://pesettan.github.io/inbrnd/embed/) · [Both modes](https://pesettan.github.io/inbrnd/versions/) · [Preserved original](https://pesettan.github.io/inbrnd/before/) · [Package](https://pesettan.github.io/inbrnd/downloads/inbrnd-flywheel-wix.zip)
 
 Only the INBRND GitHub Pages subtree is published by this delivery. Live Wix installation, parent-container behavior, physical-device performance, and native browser 200% zoom remain separate validation steps.
+
+## Final UX polish
+
+The five-stage narrative, scroll duration, ring progression, and approved sentence reveal are unchanged. The final pass keeps stage explanations readable at handoffs, avoids repeated font/diagram measurements during steady scrolling, and slightly increases diagram text in sections at 360px or narrower. The working pre-polish version is preserved at `/inbrnd/pre-polish/`, with a comparison at `/inbrnd/polish-comparison/`.
