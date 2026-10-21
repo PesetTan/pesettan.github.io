@@ -2,7 +2,7 @@
 
 ## Result
 
-Shows a larger centered wheel. The hero, teaching paragraphs, closing copy, and diagram caption are hidden. Stage navigation and motion controls remain. This is the approved pink-ring design with Hairline outer labels, ivory focus, and a softly fading leading edge. Ordinary page scrolling controls assembly and reverses it.
+Shows a larger centered wheel. The hero, teaching paragraphs, closing copy, and diagram caption are hidden. Motion controls remain. The bottom stage-navigation row and small diagram caption have been removed. This is the approved pink-ring design with Hairline outer labels, ivory focus, and a softly fading leading edge. Ordinary page scrolling controls assembly and reverses it.
 
 Local review: http://localhost:5088/diagram-only/
 
