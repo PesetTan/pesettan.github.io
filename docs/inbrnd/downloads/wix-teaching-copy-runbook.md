@@ -1,138 +1,48 @@
-# Wix runbook: With teaching copy
+# INBRND Wix installation: Flywheel with stage explanations
 
-## Result
+## Current component scope
 
-Includes the hero introduction, all five lessons alongside the wheel, and the educational closing. This is the approved pink-ring design with Hairline outer labels, ivory focus, and a softly fading leading edge. Ordinary page scrolling controls assembly and reverses it.
+The JavaScript renders only the flywheel section. In teaching mode, this means the assembling diagram, active-stage heading/question/description, and the final payoff sentence. Circle-only mode hides those explanations and payoff. A small Read without motion control is retained. There is no introduction, closing section, site header/footer, stage-navigation row, or small diagram caption in the component.
 
-Local review: http://localhost:5088/
+Use the existing Wix page for all surrounding headings, introductory copy, navigation, and closing content. The standalone examples contain only the component, so they show the intended embed boundary.
 
-This runbook prepares installation; the component has not yet been executed inside your Wix site. The live site has not been changed. Use a duplicate/test page first.
+## Install
 
-## Files and hosting
-
-Unzip **inbrnd-flywheel-wix.zip** from the project's releases folder or the local review page. Inside the wix folder:
-
-- **inbrnd-flywheel.js** — the component; its CSS is already embedded.
-- **assets/editors-note-regular.woff2** and **assets/editors-note-hairline.otf** — required font files.
-- **example-teaching-copy.html** — a standalone example of this version.
-- **page-code-teaching-copy.js** — the optional Velo page code below.
-- **runbooks/wix-teaching-copy-runbook.md** — this guide.
-
-The preview header, footer, and comparison controls are separate. They are not installed with the custom element; keep the existing INBRND Wix header and footer.
-
-For the simplest reproducible setup, put **inbrnd-flywheel.js** and the **assets** directory on an HTTPS static host you control, preserving this structure:
-
-```text
-https://YOUR-ASSET-HOST/inbrnd/inbrnd-flywheel.js
-https://YOUR-ASSET-HOST/inbrnd/assets/editors-note-regular.woff2
-https://YOUR-ASSET-HOST/inbrnd/assets/editors-note-hairline.otf
-```
-
-**YOUR-ASSET-HOST is a placeholder, not an already-provisioned service.** No public asset hosting was created in this task. The localhost preview and owner-private ChatGPT Site are not usable asset hosts for public Wix visitors.
-
-Verify each URL while logged out. The JS must return JavaScript rather than a sign-in or HTML page. Fonts must be accessible across origins; for these public font files, the host can return `Access-Control-Allow-Origin: *`. Serve the font types as `font/woff2` and `font/otf`. Use versioned folders for future updates so rollback stays easy.
-
-## Add to Wix
-
-1. In **Wix Editor**, use **Add Elements → Embed Code → Custom Element**. In **Wix Studio**, use **Add Elements → Embed & Social → Custom Element**.
-2. Choose **Server URL** and enter the full HTTPS URL ending in **inbrnd-flywheel.js**.
-3. Enter the exact tag name **inbrnd-flywheel**. If using the page code below, give the Wix element the ID **inbrndFlywheel**.
-
-Wix documents these Custom Element entry points and HTTPS/domain requirements in its [Editor guide](https://support.wix.com/en/article/wix-editor-adding-a-custom-element-to-your-site) and [Studio guide](https://support.wix.com/en/article/studio-editor-adding-a-custom-element). Confirm the site's plan/domain configuration supports Custom Elements before installation.
-
-### Alternative: host the JavaScript with Velo
-
-Choose **Velo file** as the element source and replace the sample custom-element code with the contents of **inbrnd-flywheel.js**. Keep the tag name above. This avoids external JS hosting, but **asset-base still needs a public HTTPS directory containing the two fonts**. Font upload in Wix's typography picker alone does not configure this custom element's font URLs. [Wix's Velo setup guide](https://dev.wix.com/docs/velo/velo-only-apis/%24w/custom-element/add-a-custom-element)
-
-## Configure this version
-
-Use **Set Attributes** on the element, or use the Velo code below. All values are strings.
+1. Use a duplicate or test Wix page. Add a Custom Element and set its tag exactly to `inbrnd-flywheel`.
+2. Select a Velo custom-element file and paste the complete `wix/inbrnd-flywheel.js` into that file. The separate `page-code-teaching-copy.js` is only configuration; it is not the component source.
+3. Alternatively choose Server URL and use `https://pesettan.github.io/inbrnd/inbrnd-flywheel.js`.
+4. Set these attributes:
 
 | Attribute | Value |
 | --- | --- |
-| asset-base | Your real HTTPS font directory, ending in `/` |
-| variant | wheel |
-| emphasis | ring |
-| content-mode | teaching |
-| heading-level | 2 |
-| header-offset | 0 if no sticky header; otherwise its measured height in CSS pixels |
+| asset-base | `https://pesettan.github.io/inbrnd/assets/` |
+| content-mode | `teaching` |
+| variant | `wheel` |
+| emphasis | `ring` |
+| heading-level | `2`, or the correct level within the Wix page |
+| header-offset | Sticky header height in CSS pixels; default `0` |
 
-Omit **theme** for the approved ivory/pink palette. Only `content-mode="diagram"` hides the copy; `teaching` shows it.
+5. Let the element fill the section width and grow with its content. Do not fix the entire element to one screen, clip it, or place it in a separately scrolling HTML iframe. Leave ancestor overflow compatible with sticky positioning.
+6. Test the published Wix page while logged out. Wix Editor/Preview can wrap custom elements differently, so it is not proof of the installed scroll behavior.
 
-```js
-$w.onReady(() => {
-  const wheel = $w('#inbrndFlywheel');
-  wheel.setAttribute('asset-base', 'https://YOUR-ASSET-HOST/inbrnd/assets/');
-  wheel.setAttribute('variant', 'wheel');
-  wheel.setAttribute('emphasis', 'ring');
-  wheel.setAttribute('content-mode', 'teaching');
-  wheel.setAttribute('heading-level', '2');
-  wheel.setAttribute('header-offset', '0');
-});
-```
+## Responsive behavior
 
-Replace the asset URL and header offset before publishing. `heading-level="2"` assumes the Wix page already has its own main heading. Set it to `1` only if this component supplies the page's primary heading; this setting has no visible effect when the copy is hidden. Wix supports configuring custom elements through [setAttribute](https://dev.wix.com/docs/velo/velo-only-apis/%24w/custom-element/set-attribute).
+The layout follows the actual component width. Wider sections keep the explanation and wheel side by side; sections at 900px or narrower stack the wheel above the copy. Spacing and type scale use the component width. The SVG stays circular, and label/arrow clearance is recalculated after fonts and resizing.
 
-## Size the section for scrolling
+Short viewports (480px available height or less, or under 680px for narrow sections), reduced motion, and manual Read without motion use the complete unpinned framework. Document touch scrolling remains native.
 
-Place the element in normal page flow, spanning the section width. The component manages its own sticky diagram and responsive layout. Do not pin the entire Wix element, add scroll snapping, or nest it inside an HTML iframe with a separate scrollbar.
+The existing scroll travel is retained: 475 viewport heights of travel for wide sections and 600 for narrow sections, plus the pinned viewport. The system completes at 80%, the teaching payoff appears at 80–85%, and the final 15% holds the completed view. Upward scrolling reverses the same clock.
 
-The host section must grow with the component's full content height. In Studio, use content-driven/Auto or Hug sizing **where the selected element exposes it**, with a responsive width. Avoid proportional scaling. Wix's available sizing controls vary by element; see [Studio sizing](https://support.wix.com/en/article/studio-editor-setting-the-size-of-your-elements).
+## Fonts and colors
 
-The scroll story is intentionally taller than one screen: about 5.75 viewport heights on desktop or 7 on mobile, before the additional content. Do not set the whole element to one viewport tall. If Wix gives it a fixed-height wrapper, inspect that wrapper on the published test page and correct its sizing before continuing. A fixed pixel estimate is not a reliable cross-device solution. This parent-container behavior remains the installation-specific verification step.
+The component reuses Editor’s Note Regular and Hairline. Asset URLs must be public HTTPS with appropriate font CORS. Neutrals use Paper `#FBFAF7`, Introspection `#2F2D2E`, Courage `#555555`, Margin `#DDD9D4`, and Reflection `#FCF1F1`. Approved ring endpoints remain `#D5A5B1` to `#945267`, with stroke 12–13 SVG units.
 
-For a sticky Wix header, set `header-offset` to its real height and check phone/tablet header variations. Check that parent overflow or Wix animations do not prevent the internal frame from sticking.
+## Verification and fallback
 
-## Test before replacing the current section
+Check forward/reverse scrolling, completion/hold/release, desktop/tablet/mobile widths, short landscape, narrow containers, keyboard focus, reduced motion, Read without motion, font loading, and reload midway. Verify header offset and parent sizing on the actual published Wix test page.
 
-Use a **published test page/site**, not just the editor Preview. Wix renders Custom Elements in an iframe in editor/Preview, which can change scrolling behavior. [Wix preview limitation](https://support.wix.com/en/article/wix-editor-adding-a-custom-element-to-your-site)
+Standalone examples contain a complete light-DOM fallback before JavaScript initializes. A bare Wix custom element does not automatically inherit that surrounding HTML; provide and verify equivalent host-page fallback content during installation.
 
-Expected first impression: The introduction appears, followed by five coordinated lessons and the closing. The wheel starts quietly and accumulates as the visitor scrolls.
+[Section-only preview](https://pesettan.github.io/inbrnd/embed/) · [Both modes](https://pesettan.github.io/inbrnd/versions/) · [Preserved original](https://pesettan.github.io/inbrnd/before/) · [Package](https://pesettan.github.io/inbrnd/downloads/inbrnd-flywheel-wix.zip)
 
-- Confirm both font files and the JavaScript load for a logged-out visitor.
-- Check the clockwise order: Positioning → Narrative → Platforms → Opportunities → Signals → Positioning.
-- Inspect a partly drawn ring segment, its solid advancing edge, and a partially drawn connecting arrow.
-- Complete the circle; both curved outer labels should appear with balanced spacing.
-- Scroll upward to confirm precise reversal and verify the frame releases before the next Wix section.
-- Test desktop, tablet, 390px and 320px phones, and landscape. Look for clipping, overlapping sections, or nested scrollbars.
-- Use keyboard Tab/Enter on stage controls and try **Read without motion**. With reduced motion enabled, the full wheel should be stable.
-- Reload midway through the story and check that the diagram matches the restored scroll position.
-
-## Troubleshooting and rollback
-
-| Symptom | Check |
-| --- | --- |
-| Blank element | HTTPS source URL, correct tag name, Custom Element eligibility, and JS response content. |
-| Default-looking fonts | Exact asset-base path, both font files, and font CORS headers. |
-| Whole story moves away instead of sticking | Test published behavior; inspect ancestor overflow, transforms, fixed heights, and whether the outer element was pinned. |
-| Next Wix section overlaps the wheel | The host wrapper has not expanded to the component's content height. Correct that layout before launch. |
-| Header covers labels | Set the actual header-offset and retest that breakpoint. |
-| Wrong copy mode | Verify content-mode is `teaching` and no later page code overwrites it. |
-| Full static wheel instead of animation | Check reduced-motion preference or the Read without motion control. Short landscape screens also use an unpinned layout. |
-
-Keep the old Wix section recoverable until the new section passes the checks. To roll back, restore the prior section and remove/hide the custom element, or point it back to the previous versioned JS/assets folder. Do not overwrite the only copy of the previous release.
-
-## Delivery validation
-
-Local component checks and screenshots are recorded in docs/inbrnd-flywheel-plan.md. Published Wix execution, public asset deployment, and final parent-container sizing are still pending. This guide does not claim those steps have already passed.
-
-
-## October 20 refinement
-
-The five-stage system completes at 80% of the existing scroll travel. The teaching version reveals “As authority and recognition compound, career momentum grows.” between 80% and 85%, then holds the completed composition through 100%. The outer ring changes uniformly from soft pink to burgundy and grows from 12 to 13 SVG units. Its lower label is Career Momentum. The circle-only version retains no visible explanatory copy.
-
-Stage emphasis uses solid color and opacity. There is no scaling, gradient highlight, scroll interception, or time-driven animation. Reduced motion and short screens display the complete system in normal flow.
-
-The standalone HTML examples include the complete static diagram and five explanations before JavaScript initializes; they also work if the component script fails. A Wix Editor custom element does not automatically inherit this surrounding HTML, so the equivalent host-page fallback must be validated during Wix installation.
-
-Public preview: https://pesettan.github.io/inbrnd/
-
-Before and after: https://pesettan.github.io/inbrnd/comparison/
-
-Preserved original: https://pesettan.github.io/inbrnd/before/
-
-Wix installation and physical-device testing are not implied by GitHub Pages validation.
-
-## October 2026 brand alignment
-
-The bundle reuses the existing Editor’s Note Regular and Hairline font files. Shared neutral tokens now use Paper `#FBFAF7`, Introspection `#2F2D2E`, Courage `#555555`, Margin `#DDD9D4`, and Reflection `#FCF1F1`. The approved flywheel progression remains `#D5A5B1` to `#945267`; the prototype’s circular composition and serif/sans hierarchy take priority over other guideline examples. Body descriptions use 20px on roomy desktop layouts and 18px on compact/mobile layouts, with 1.5 line height and 0.02em tracking. The preserved Before page retains its original styling.
+Only the INBRND GitHub Pages subtree is published by this delivery. Live Wix installation, parent-container behavior, physical-device performance, and native browser 200% zoom remain separate validation steps.
