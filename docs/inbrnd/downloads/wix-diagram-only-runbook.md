@@ -50,3 +50,5 @@ Only the INBRND GitHub Pages subtree is published by this delivery. Live Wix ins
 ## Final UX polish
 
 The five-stage narrative, scroll duration, ring progression, and approved sentence reveal are unchanged. The final pass keeps stage explanations readable at handoffs, avoids repeated font/diagram measurements during steady scrolling, and slightly increases diagram text in sections at 360px or narrower. The working pre-polish version is preserved at `/inbrnd/pre-polish/`, with a comparison at `/inbrnd/polish-comparison/`.
+
+Phone typography uses responsive sizes through 600px: larger stage and curved ring labels, and an approximately 11–14% larger payoff. The teaching payoff reserves extra space at widths up to 360px. Wheel dimensions, colors, sequence, and reveal timing are unchanged. Circle-only mode retains its existing content visibility.
