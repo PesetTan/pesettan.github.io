@@ -2,7 +2,7 @@
 
 ## Current component scope
 
-The JavaScript renders only the flywheel section. In teaching mode, this means the assembling diagram, active-stage heading/question/description, and the final payoff sentence. Circle-only mode hides those explanations and payoff. A small Read without motion control is retained. There is no introduction, closing section, site header/footer, stage-navigation row, or small diagram caption in the component.
+The JavaScript renders only the flywheel section. In teaching mode, this means the assembling diagram, active-stage heading/question/description, and the final payoff sentence. Version A — Minimal hides the explanations and retains the final payoff sentence. A small Read without motion control is retained. There is no introduction, closing section, site header/footer, stage-navigation row, or small diagram caption in the component.
 
 Use the existing Wix page for all surrounding headings, introductory copy, navigation, and closing content. The standalone examples contain only the component, so they show the intended embed boundary.
 
@@ -31,7 +31,7 @@ The layout follows the actual component width. Wider sections keep the explanati
 
 Short viewports (480px available height or less, or under 680px for narrow sections), reduced motion, and manual Read without motion use the complete unpinned framework. Document touch scrolling remains native.
 
-The existing scroll travel is retained: 475 viewport heights of travel for wide sections and 600 for narrow sections, plus the pinned viewport. The system completes at 80%, the teaching payoff appears at 80–85%, and the final 15% holds the completed view. Upward scrolling reverses the same clock.
+The existing scroll travel is retained: 475 viewport heights of travel for wide sections and 600 for narrow sections, plus the pinned viewport. The system completes at 80%, the payoff in both versions appears at 80–85%, and the final 15% holds the completed view. Upward scrolling reverses the same clock.
 
 ## Fonts and colors
 
@@ -51,4 +51,6 @@ Only the INBRND GitHub Pages subtree is published by this delivery. Live Wix ins
 
 The five-stage narrative, scroll duration, ring progression, and approved sentence reveal are unchanged. The final pass keeps stage explanations readable at handoffs, avoids repeated font/diagram measurements during steady scrolling, and slightly increases diagram text in sections at 360px or narrower. The working pre-polish version is preserved at `/inbrnd/pre-polish/`, with a comparison at `/inbrnd/polish-comparison/`.
 
-Phone typography uses responsive sizes through 600px: larger stage and curved ring labels, and an approximately 11–14% larger payoff. The teaching payoff reserves extra space at widths up to 360px. Wheel dimensions, colors, sequence, and reveal timing are unchanged. Circle-only mode retains its existing content visibility.
+Phone typography uses responsive sizes through 600px: larger stage and curved ring labels, and an approximately 11–14% larger payoff. The teaching payoff reserves extra space at widths up to 360px. Wheel dimensions, colors, sequence, and reveal timing are unchanged. Version A retains the final sentence and hides explanatory copy.
+
+Version A — Minimal: https://pesettan.github.io/inbrnd/minimal/ (`content-mode="diagram"`). Version B — Educational: https://pesettan.github.io/inbrnd/educational/ (`content-mode="teaching"`). Both share one component and scroll timeline, including the approved final sentence reveal.
