@@ -110,11 +110,12 @@ function drawEgret(elapsed) {
     ctx.quadraticCurveTo(-46,-3-24*lift,-18,3);ctx.quadraticCurveTo(-5,7,5,-6);ctx.fill();ctx.restore();
   }
   wing(true);
-  // Legs unfold during the braking approach; feet remain planted while feeding.
+  // Legs overlap in profile, with a small depth offset between them.
+  // They unfold during braking; feet remain planted while feeding.
   ctx.strokeStyle='#3d5252';ctx.lineWidth=1.6;ctx.lineCap='round';ctx.lineJoin='round';
-  for(const [i,hip] of [[0,[-4,7]],[1,[5,7]]]){
-    const ankle=lerpPoint([-32-i*4,13+i*2],[-4+i*11,24+p.footShuffle*(i?1:-1)],p.stand);
-    const foot=lerpPoint([-59-i*3,16+i*3],[-6+i*15,38],p.stand);
+  for(const [i,hip] of [[1,[0,7]],[0,[-3,7]]]){
+    const ankle=lerpPoint([-32-i*2,13+i],[-3+i*3,24+p.footShuffle*(i?1:-1)],p.stand);
+    const foot=lerpPoint([-59-i*2,16+i],[-4+i*3,38],p.stand);
     ctx.beginPath();ctx.moveTo(...hip);ctx.lineTo(...ankle);ctx.lineTo(...foot);ctx.lineTo(foot[0]+7*p.stand-3*(1-p.stand),foot[1]+1);ctx.stroke();
   }
   // Body and folded wing have softly overlapping contours, without hard outlines.
