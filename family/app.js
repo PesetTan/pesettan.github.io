@@ -18,6 +18,8 @@ const cloudSprite = document.createElement('canvas');
 const {seasons,seasonAt,applyTheme} = window.SeasonScene;
 let activeSeason = seasonAt();
 let calendarSeason = activeSeason;
+// Clouds are decorative; prioritize the painting on slow connections.
+cloudImage.fetchPriority = 'low';
 cloudImage.src = seasons[activeSeason].cloud;
 landscapeImage.src = seasons[activeSeason].image;
 landscapeImage.alt = seasons[activeSeason].description;
