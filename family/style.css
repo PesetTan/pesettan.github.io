@@ -39,11 +39,10 @@
 /* Safari derives its browser tint from the page background. Keep ground surfaces inside it. */
 .page-surface{background:var(--canvas)}
 
-/* A shallow shoreline makes the sky-colored page canvas an intentional footer. */
-.closing{padding-bottom:40px}
-.shoreline{display:block;width:100%;height:clamp(30px,5vw,80px);overflow:hidden}
-.shoreline-water{fill:var(--sky)}
-.shoreline-edge{fill:none;stroke:var(--accent);stroke-width:1;vector-effect:non-scaling-stroke;opacity:.65}
-footer{margin:0;border-top:0;padding:25px 7% 40px;min-height:100px;align-items:center;background:var(--sky);color:#f0f5f2}
+/* The closing panel sits within the same sky color as Safari's page canvas. */
+.closing-court{margin-top:64px;padding:48px 7% 52px;background:var(--sky)}
+.closing{max-width:1120px;margin:0 auto;padding:40px 24px 42px;border-radius:28px;background:var(--canvas)}
+.closing p{margin:18px 0 0}
+footer{margin:0 7%;border-top:1px solid var(--line);padding:25px 0 40px;min-height:100px;align-items:center;background:var(--sky);color:#f0f5f2}
 footer a{color:inherit}
-@media(max-width:650px){.closing{padding-bottom:32px}footer{margin:0;padding:22px 6% 32px;min-height:100px}}
+@media(max-width:650px){.closing-court{margin-top:40px;padding:32px 6% 36px}.closing{padding:32px 20px;border-radius:24px}.closing p{font-size:20px}footer{margin:0 6%;padding:22px 0 32px;min-height:100px}}
