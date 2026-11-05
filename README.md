@@ -10,3 +10,5 @@ GitHub Pages serves `docs/` from `main` at https://www.thetanfamily.net/.
 Run `npm ci` then `npm run build`. The build places Angular output in `docs/sam/resume/`, copies the family landing page into `docs/`, and retains the custom domain. Keep `docs/resume/` and `docs/inbrnd/` when publishing.
 
 Preview with `python3 -m http.server 4388 --directory docs`.
+
+The landing page's tree swallows use curved flight paths, depth projection tied to the painting's crop, and short wingbeat bursts between glides. The illustration follows Cornell's tree swallow identification and foraging references linked in `family/app.js`; its flight paths are designed rather than recorded tracks. Run `node scripts/check-flight.mjs` to check path continuity, finite drawing coordinates, and pause/reduced-motion behavior.
