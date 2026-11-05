@@ -3,3 +3,14 @@ const dialog=document.querySelector('dialog');
 document.querySelectorAll('[data-person]').forEach(card=>card.addEventListener('click',()=>{const person=people[card.dataset.person];document.querySelector('#dialog-title').textContent=person.name;document.querySelector('#dialog-role').textContent=person.role;document.querySelector('#dialog-copy').textContent=person.copy;document.querySelector('#dialog-tags').replaceChildren(...person.tags.map(tag=>{const el=document.createElement('span');el.textContent=tag;return el}));dialog.showModal()}));
 document.querySelectorAll('.close,.dialog-back').forEach(button=>button.addEventListener('click',()=>dialog.close()));
 dialog.addEventListener('click',event=>{if(event.target===dialog){const rect=dialog.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)dialog.close()}});
+
+// Separate wings, long necks, and trailing legs give each crane its silhouette.
+const flock=document.querySelector('.cranes');
+const craneArt=`<svg viewBox="0 0 90 50"><g fill="#f4f7e4"><path class="wing wing-far" d="M43 27Q24 14 20 3Q33 8 49 24Z"/><path d="M28 28 5 32 6 34 34 31Q48 35 58 28L70 20 79 20 85 22 89 21 80 17 70 17 55 25Q40 22 28 28Z"/><path class="wing" d="M37 28Q33 11 45 0L49 3Q44 16 52 28Z"/></g><path d="m30 30-23 6m22-5L9 39" fill="none" stroke="#d5dfcb" stroke-width="1.3"/><circle cx="79" cy="18" r="1" fill="#163e3c"/></svg>`;
+[{y:24,scale:.8,delay:-8},{y:29,scale:.65,delay:-7},{y:20,scale:.56,delay:-6},{y:33,scale:.48,delay:-5},{y:25,scale:.43,delay:-4}].forEach(bird=>{const el=document.createElement('span');el.className='crane';el.style.cssText=`--y:${bird.y}vh;--scale:${bird.scale};--duration:38s;--delay:${bird.delay}s`;el.innerHTML=craneArt;flock.append(el)});
+const motionToggle=document.querySelector('.motion-toggle');
+const motionPreference=matchMedia('(prefers-reduced-motion: reduce)');
+function setFlightPaused(paused){document.body.classList.toggle('flight-paused',paused);motionToggle.setAttribute('aria-pressed',String(paused));motionToggle.innerHTML=paused?'Resume flight <span aria-hidden="true">▷</span>':'Pause flight <span aria-hidden="true">Ⅱ</span>';document.querySelectorAll('.crane,.wing').forEach(el=>el.style.animationPlayState=paused?'paused':'running')}
+setFlightPaused(motionPreference.matches);
+motionToggle.addEventListener('click',()=>setFlightPaused(!document.body.classList.contains('flight-paused')));
+motionPreference.addEventListener('change',event=>setFlightPaused(event.matches));
