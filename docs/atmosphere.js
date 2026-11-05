@@ -1,7 +1,9 @@
 // Both layers use the existing scene clock and the exact painting crop.
 // Clouds move independently; the terrain never translates or scales over time.
+// The 18% overlap matches the feather width, leaving no empty interval.
+const CLOUD_SPACING = .82;
 function cloudOffset(elapsed,width) {
-  return ((elapsed / 720) % 1) * width * 1.6;
+  return ((elapsed / 720) % 1) * width * CLOUD_SPACING;
 }
 function prepareClouds() {
   cloudSprite.width=cloudImage.naturalWidth;cloudSprite.height=cloudImage.naturalHeight;
@@ -11,12 +13,20 @@ function prepareClouds() {
   // rectangular image edge. This also keeps low haze safely above the ridge.
   paint.globalCompositeOperation='destination-in';
   const sides=paint.createLinearGradient(0,0,w,0);
-  sides.addColorStop(0,'transparent');sides.addColorStop(.035,'black');
-  sides.addColorStop(.965,'black');sides.addColorStop(1,'transparent');
+  // Sample a smoothstep ramp: zero slope at both ends avoids a visible
+  // moving boundary where neighboring banks dissolve into one another.
+  for(let i=0;i<=20;i++) {
+    const x=i/20,t=Math.min(1,x/.18,(1-x)/.18);
+    sides.addColorStop(x,`rgba(0,0,0,${t*t*(3-2*t)})`);
+  }
   paint.fillStyle=sides;paint.fillRect(0,0,w,h);
   const bottom=paint.createLinearGradient(0,0,0,h);
-  bottom.addColorStop(0,'black');bottom.addColorStop(.60,'black');
-  bottom.addColorStop(.655,'transparent');bottom.addColorStop(1,'transparent');
+  bottom.addColorStop(0,'black');
+  for(let i=0;i<=20;i++) {
+    const t=i/20;
+    bottom.addColorStop(.50+.155*t,`rgba(0,0,0,${1-t*t*(3-2*t)})`);
+  }
+  bottom.addColorStop(1,'transparent');
   paint.fillStyle=bottom;paint.fillRect(0,0,w,h);
   paint.globalCompositeOperation='source-over';
   renderClouds();
@@ -26,14 +36,18 @@ function renderClouds() {
   if(!cloudImage.complete || !cloudImage.naturalWidth || !cloudSprite.width)return;
   cloudCtx.save();
   cloudCtx.globalAlpha=seasons[activeSeason].cloudOpacity;
+  // Soften the cyan fringe of the summer artwork against the cooler skies.
+  cloudCtx.filter=`saturate(${activeSeason==='autumn'?.65:.85})`;
   // The alpha artwork ends above the hills. A soft sky-only clip prevents
   // moving cloud edges from ever painting over the registered terrain.
   const skyBottom=scene.top+scene.imageHeight*.655;
   cloudCtx.beginPath();cloudCtx.rect(0,0,scene.width,Math.max(0,skyBottom));cloudCtx.clip();
   const width=scene.imageWidth, height=scene.imageHeight;
-  const drift=cloudOffset(time,width), spacing=width*1.6;
+  const drift=cloudOffset(time,width), spacing=width*CLOUD_SPACING;
   // Adjacent copies enter offscreen; the wrap is identical at the cycle seam.
-  for(let copy=-2;copy<=2;copy++) {
+  const first=Math.floor((-scene.left-drift-width)/spacing)+1;
+  const last=Math.ceil((scene.width-scene.left-drift)/spacing)-1;
+  for(let copy=first;copy<=last;copy++) {
     const x=scene.left+drift+copy*spacing;
     if(x+width<=0 || x>=scene.width)continue;
     cloudCtx.drawImage(cloudSprite,x,scene.top,width,height);

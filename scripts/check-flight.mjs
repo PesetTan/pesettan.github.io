@@ -3,14 +3,14 @@ import vm from 'node:vm';
 import assert from 'node:assert/strict';
 
 // Exercise the actual animation with a small DOM/canvas adapter, without a browser.
-const pending = new Map(), timers=new Map(), handlers = {}, canvasCalls = {count:0}, cloudCalls={count:0};
+const pending = new Map(), timers=new Map(), handlers = {}, canvasCalls = {count:0}, cloudCalls={count:0,draws:[]};
 let fakeNow=Date.parse('2026-03-01T08:00:00Z');
 class ClockDate extends Date {constructor(...args){super(...(args.length?args:[fakeNow]));}static now(){return fakeNow;}}
 let id = 0;
 let viewport = {width:1280,height:780};
 const drawing = new Proxy({}, {get:(_,name)=> (...args)=>{if(['moveTo','lineTo','quadraticCurveTo','bezierCurveTo','ellipse','arc','translate','scale','rotate'].includes(name)){assert(args.every(Number.isFinite),`${name} must stay finite`);canvasCalls.count++}}});
 const canvas = {getContext:()=>drawing,getBoundingClientRect:()=>viewport};
-const cloudDrawing=new Proxy({}, {get:(_,name)=>(...args)=>{if(name==='drawImage'){cloudCalls.count++;assert(args.slice(1).every(Number.isFinite));}}});
+const cloudDrawing=new Proxy({}, {get:(_,name)=>(...args)=>{if(name==='drawImage'){cloudCalls.count++;cloudCalls.draws.push(args.slice(1));assert(args.slice(1).every(Number.isFinite));}}});
 const clouds={getContext:()=>cloudDrawing};
 const root={dataset:{},style:{setProperty(){}}};
 const img = {style:{},naturalWidth:1024,naturalHeight:1536,addEventListener(){}};
@@ -24,7 +24,7 @@ const context = vm.createContext({Date:ClockDate,Intl,Image:class{complete=true;
   document:{head:{append(){}},hidden:false,documentElement:root,createElement:()=>({width:1024,getContext:()=>drawing}),querySelector:s=>s==='.marsh-birds'?canvas:s==='.sky-clouds'?clouds:s==='[data-season-image]'?img:s==='.season-cycle'?seasonButton:toggle,addEventListener:(name,cb)=>handlers[name]=cb},
   matchMedia:()=>preference,devicePixelRatio:1,getComputedStyle:()=>({objectPosition:'50% 65%'}),
   ResizeObserver:class{observe(){}},IntersectionObserver:class{constructor(cb){handlers.intersection=cb}observe(){}},
-  requestAnimationFrame:cb=>{pending.set(++id,cb);return id},cancelAnimationFrame:n=>pending.delete(n),assert
+  cloudCalls,requestAnimationFrame:cb=>{pending.set(++id,cb);return id},cancelAnimationFrame:n=>pending.delete(n),assert
 });
 const code=fs.readFileSync(new URL('../family/app.js',import.meta.url),'utf8').split('// Tree swallows:')[1];
 assert(code,'Tree swallow animation exists');
@@ -144,6 +144,22 @@ vm.runInContext(`{
  }
  assert.equal(cloudOffset(0,1000),cloudOffset(720,1000));
  assert(cloudOffset(60,1000)>cloudOffset(0,1000),'Clouds drift');
+ // Inspect actual rendered banks across a complete circuit and the wrap.
+ for(const viewport of [{width:390,height:930},{width:1440,height:900},{width:2560,height:1015}]) {
+   scene={...scene,...viewport,imageWidth:Math.max(viewport.width,viewport.height*2/3),imageHeight:Math.max(viewport.width*1.5,viewport.height),left:0,top:0};
+   const banks=elapsed=>{time=elapsed;cloudCalls.draws=[];renderClouds();return cloudCalls.draws.map(([x,y,w,h])=>({x,end:x+w})).sort((a,b)=>a.x-b.x);};
+   assert.deepEqual(banks(0),banks(720),'The loop renders identical banks at both ends');
+   for(const elapsed of [0,120,240,360,480,600,719.999,720.001]) {
+     const copies=banks(elapsed);
+     assert(copies[0].x<=0 && copies.at(-1).end>=scene.width,'Banks cover both viewport edges');
+     for(let i=1;i<copies.length;i++)assert(copies[i].x<copies[i-1].end,'Cloud banks overlap throughout the loop');
+   }
+   const before=banks(719.999),after=banks(720.001);
+   for(const bank of before.filter(b=>b.x>0 && b.end<scene.width+scene.imageWidth*.1)) {
+     assert(after.some(b=>Math.abs(b.x-bank.x)<.1),'No visible bank jumps at the loop boundary');
+   }
+ }
+
  activeSeason='spring';activeBirdScene='egret';setFlightPaused(true);
 }`,context);
 fakeNow=Date.parse('2026-12-01T08:00:00Z');
