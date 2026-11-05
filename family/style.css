@@ -38,3 +38,12 @@
 
 /* Safari derives its browser tint from the page background. Keep ground surfaces inside it. */
 .page-surface{background:var(--canvas)}
+
+/* A shallow shoreline makes the sky-colored page canvas an intentional footer. */
+.closing{padding-bottom:40px}
+.shoreline{display:block;width:100%;height:clamp(30px,5vw,80px);overflow:hidden}
+.shoreline-water{fill:var(--sky)}
+.shoreline-edge{fill:none;stroke:var(--accent);stroke-width:1;vector-effect:non-scaling-stroke;opacity:.65}
+footer{margin:0;border-top:0;padding:25px 7% 40px;min-height:100px;align-items:center;background:var(--sky);color:#f0f5f2}
+footer a{color:inherit}
+@media(max-width:650px){.closing{padding-bottom:32px}footer{margin:0;padding:22px 6% 32px;min-height:100px}}
