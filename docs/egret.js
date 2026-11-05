@@ -11,8 +11,10 @@ function egretPhase(elapsed) {
     t-=duration;
   }
 }
+// Scale with the painting so the distant marsh bird keeps the same size
+// relative to the shoreline, including on narrow and panoramic screens.
 function egretAnchor(frame) {
-  return {x:frame.left+frame.imageWidth*.64,y:frame.top+frame.imageHeight*.748,scale:Math.max(.42,Math.min(.88,frame.imageWidth*.0005))};
+  return {x:frame.left+frame.imageWidth*.64,y:frame.top+frame.imageHeight*.748,scale:frame.imageWidth*.00024};
 }
 function egretProbe(t) {
   const intervals=[8.2,11.4,9.6,13.1,7.8];
