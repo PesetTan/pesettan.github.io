@@ -5,8 +5,9 @@ import assert from 'node:assert/strict';
 // Exercise the actual animation with a small DOM/canvas adapter, without a browser.
 const pending = new Map(), handlers = {}, canvasCalls = [];
 let id = 0;
+let viewport = {width:1280,height:780};
 const drawing = new Proxy({}, {get:(_,name)=> (...args)=>{if(['moveTo','lineTo','quadraticCurveTo'].includes(name)){assert(args.every(Number.isFinite),`${name} must stay finite`);canvasCalls.push(args)}}});
-const canvas = {getContext:()=>drawing,getBoundingClientRect:()=>({width:1280,height:780})};
+const canvas = {getContext:()=>drawing,getBoundingClientRect:()=>viewport};
 const img = {naturalWidth:1024,naturalHeight:1536,addEventListener(){}};
 const toggle = {setAttribute(k,v){this[k]=v},addEventListener(_,cb){handlers.toggle=cb}};
 const preference = {matches:true,addEventListener(_,cb){handlers.preference=cb}};
@@ -53,3 +54,16 @@ const summary=vm.runInContext(`(()=>{
   return {birds:swallows.length,seconds:65,maxWorldStep:maxStep,maxSeamTangentError:maxSeamError,maxScreenSpeed:Math.round(maxSpeed),minHeight};
 })()`,context);
 console.log('Flight checks passed:',summary);
+
+// The same scene point gains sky clearance in a panoramic hero, with no
+// discontinuous breakpoint and no displacement in the portrait composition.
+const framing=[];
+for(const [width,height] of [[390,930],[1024,940],[1280,780],[1920,940],[2560,1015]]){
+  viewport={width,height};
+  const metrics=vm.runInContext(`(()=>{resizeScene();const p=[0,.16,.5];return {lift:scene.flightLift,y:project(p)[1]}})()`,context);
+  if(width<=1024)assert.equal(metrics.lift,0);
+  if(width>=1920)assert(metrics.lift>=height*.2,'Wide flight clears the hills');
+  assert(metrics.y>height*.2 && metrics.y<height*.8,'Flight remains in the hero');
+  framing.push({width,height,lift:Math.round(metrics.lift)});
+}
+console.log('Responsive framing passed:',framing);

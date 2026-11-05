@@ -23,7 +23,7 @@ const cross = (a,b) => [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]
 const length = a => Math.hypot(...a);
 const unit = a => mul(a,1/(length(a)||1));
 const mix = (a,b,t) => a+(b-a)*t;
-let scene = {width:1,height:1,imageWidth:1,imageHeight:1,left:0,top:0};
+let scene = {width:1,height:1,imageWidth:1,imageHeight:1,left:0,top:0,flightLift:0};
 
 // Closed, C2-continuous paths in world space (x, height, depth). Sampling by
 // arc length keeps birds moving through turns; no resets or screen-edge wrapping.
@@ -54,7 +54,7 @@ function position(route,distance) {
 const swallows=routes.map((points,i)=>({route:makeRoute(points),speed:.38+i*.035,offset:[1.3,3.1,.8,4.5][i],size:[.031,.028,.026,.027][i],beat:5.8+i*.37,phase:i*1.73,bank:0}));
 function project(p) {
   const depth=1/(1+p[2]*.9);
-  return [scene.left+scene.imageWidth*(.54+p[0]*.56*depth),scene.top+scene.imageHeight*(.68+(.18-p[1])*.65*depth)];
+  return [scene.left+scene.imageWidth*(.54+p[0]*.56*depth),scene.top+scene.imageHeight*(.68+(.18-p[1])*.65*depth)-scene.flightLift];
 }
 function blendColor(a,b,t){return `rgb(${a.map((v,i)=>Math.round(mix(v,b[i],t))).join(' ')})`;}
 function drawSwallow(bird,time) {
@@ -121,7 +121,11 @@ function resizeScene(){
   const iw=landscapeImage.naturalWidth||1024,ih=landscapeImage.naturalHeight||1536;
   const fit=Math.max(box.width/iw,box.height/ih);
   const pos=getComputedStyle(landscapeImage).objectPosition.split(' ').map(v=>parseFloat(v)/100);
-  scene={width:box.width,height:box.height,imageWidth:iw*fit,imageHeight:ih*fit,left:(box.width-iw*fit)*pos[0],top:(box.height-ih*fit)*pos[1]};
+  // A wide cover crop brings the ridge close to the birds. Gradually lift
+  // the complete flight volume into open sky as the hero becomes panoramic.
+  const wide=clamp((box.width/box.height-1.15)/.8,0,1);
+  const flightLift=box.height*.21*wide*wide*(3-2*wide);
+  scene={width:box.width,height:box.height,imageWidth:iw*fit,imageHeight:ih*fit,left:(box.width-iw*fit)*pos[0],top:(box.height-ih*fit)*pos[1],flightLift};
   renderBirds();
 }
 function animateFlight(now){
