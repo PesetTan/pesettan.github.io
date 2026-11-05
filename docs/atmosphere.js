@@ -3,11 +3,11 @@
 // The 18% overlap matches the feather width, leaving no empty interval.
 const CLOUD_SPACING = .82;
 const CLOUD_LAYERS = Object.freeze([
-  // Distant clouds are smaller, fainter, and about half as fast on screen.
-  {scale:.82,period:1200,phase:.43,opacity:.22,soft:true},
-  {scale:1,period:720,phase:0,opacity:.86,soft:false}
+  // Distant clouds are smaller, fainter, and about a third as fast on screen.
+  {scale:.82,period:1080,phase:.43,opacity:.22,soft:true},
+  {scale:1,period:480,phase:0,opacity:.86,soft:false}
 ]);
-function cloudOffset(elapsed,width,period=720,phase=0) {
+function cloudOffset(elapsed,width,period=480,phase=0) {
   return (((elapsed % period) / period + phase) % 1) * width * CLOUD_SPACING;
 }
 function prepareClouds() {
