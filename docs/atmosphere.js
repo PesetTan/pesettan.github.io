@@ -67,47 +67,50 @@ function renderClouds() {
 // stripe in males; mottled warm brown females. Illustrative, not recorded tracks.
 // https://www.allaboutbirds.org/guide/Northern_Pintail/lifehistory
 function pintailPose(elapsed,index,onWater,frame) {
+  // The same depth controls apparent size and seasonal atmospheric color.
+  const depth=1.3+index*.15,perspective=1/(1+depth*.9);
   if(onWater) {
-    // Slow continuous circuits in the same open channel used by the egret.
+    // Slow circuits in the distant open water, closer to the far shoreline.
     const phase=elapsed/38+index*1.65;
-    return {x:frame.left+frame.imageWidth*(.62+.035*Math.sin(phase)),
-      y:frame.top+frame.imageHeight*(.751+index*.0003)+Math.sin(elapsed*.8+index)*.15,
-      scale:Math.max(.25,Math.min(.65,frame.imageWidth*.00036))*(1-index*.08),
+    return {x:frame.left+frame.imageWidth*(.62+.035*perspective*Math.sin(phase)),
+      y:frame.top+frame.imageHeight*(.737+index*.0003)+Math.sin(elapsed*.8+index)*.15*perspective,
+      scale:Math.max(.25,Math.min(.65,frame.imageWidth*.00036))*perspective,depth,
       facing:Math.tanh(Math.cos(phase)*8),wing:0,dip:Math.max(0,Math.sin(elapsed*.29+index*2))**12};
   }
-  const cycle=110,progress=((elapsed+index*.65)%cycle)/cycle;
+  const cycle=165,progress=((elapsed+index*.65)%cycle)/cycle;
   return {x:mix(frame.width+150,-150,progress),y:frame.height*(.28+index*.027)+Math.sin(progress*Math.PI)*frame.height*.08,
-    scale:(.36-index*.025)*Math.min(1.4,frame.width/1100),facing:-1,
+    scale:.36*perspective*Math.min(1.4,frame.width/1100),depth,facing:-1,
     wing:Math.sin(elapsed*TAU*2.7+index*.7),dip:0};
 }
 function drawPintails(elapsed,onWater) {
   for(let i=0;i<(onWater?3:5);i++) {
     const p=pintailPose(elapsed,i,onWater,scene),male=i%2===0;
+    const color=(hex,alpha=1)=>atmosphericColor(hex.match(/[a-f0-9]{2}/gi).map(v=>parseInt(v,16)),p.depth,alpha);
     ctx.save();ctx.translate(p.x,p.y);ctx.scale(p.scale*p.facing,p.scale);
     if(onWater) {
-      ctx.strokeStyle='rgba(212,229,222,.45)';ctx.lineWidth=.9;
+      ctx.strokeStyle=color('#d4e5de',.3);ctx.lineWidth=.9;
       ctx.beginPath();ctx.ellipse(-4,8,35,4,0,0,TAU);ctx.stroke();
     }
     function wing(far) {
       if(onWater)return;
       const lift=p.wing*(far?.75:1);
-      ctx.fillStyle=far?'#7e8a89':'#a2aaa3';ctx.beginPath();ctx.moveTo(-17,-3);
+      ctx.fillStyle=far?color('#7e8a89'):color('#a2aaa3');ctx.beginPath();ctx.moveTo(-17,-3);
       ctx.quadraticCurveTo(-5,-13-28*lift,-30,-14-58*lift);
       ctx.lineTo(-43,-10-54*lift);ctx.quadraticCurveTo(-30,-3-13*lift,3,2);ctx.fill();
     }
     wing(true);
-    ctx.fillStyle=male?'#b9bab0':'#8c8069';ctx.beginPath();ctx.ellipse(-3,0,25,9,-.06,0,TAU);ctx.fill();
-    ctx.fillStyle='#535e5a';ctx.beginPath();ctx.moveTo(-22,-3);ctx.lineTo(-51,2);ctx.lineTo(-22,5);ctx.fill();
-    // Side markings and pale breast stay visible at the small illustration scale.
-    ctx.fillStyle=male?'#ecebdb':'#b8ab8c';ctx.beginPath();ctx.ellipse(11,2,10,8,0,0,TAU);ctx.fill();
+    ctx.fillStyle=male?color('#b9bab0'):color('#8c8069');ctx.beginPath();ctx.ellipse(-3,0,25,9,-.06,0,TAU);ctx.fill();
+    ctx.fillStyle=color('#535e5a');ctx.beginPath();ctx.moveTo(-22,-3);ctx.lineTo(-51,2);ctx.lineTo(-22,5);ctx.fill();
+    // All markings, including the pale breast, recede into the same seasonal haze.
+    ctx.fillStyle=male?color('#ecebdb'):color('#b8ab8c');ctx.beginPath();ctx.ellipse(11,2,10,8,0,0,TAU);ctx.fill();
     ctx.save();ctx.translate(15,-4);ctx.rotate(p.dip*.95);
-    ctx.strokeStyle=male?'#ecebdb':'#a39578';ctx.lineWidth=7;ctx.lineCap='round';
+    ctx.strokeStyle=male?color('#ecebdb'):color('#a39578');ctx.lineWidth=7;ctx.lineCap='round';
     ctx.beginPath();ctx.moveTo(0,4);ctx.quadraticCurveTo(4,-4,8,-13);ctx.stroke();
-    ctx.fillStyle=male?'#65503e':'#918064';ctx.beginPath();ctx.ellipse(10,-14,8,6,0,0,TAU);ctx.fill();
-    ctx.fillStyle='#6f8990';ctx.beginPath();ctx.moveTo(15,-16);ctx.lineTo(29,-14);ctx.lineTo(28,-11);ctx.lineTo(15,-11);ctx.fill();
-    ctx.fillStyle='#172b30';ctx.beginPath();ctx.arc(12,-15,1.1,0,TAU);ctx.fill();ctx.restore();
+    ctx.fillStyle=male?color('#65503e'):color('#918064');ctx.beginPath();ctx.ellipse(10,-14,8,6,0,0,TAU);ctx.fill();
+    ctx.fillStyle=color('#6f8990');ctx.beginPath();ctx.moveTo(15,-16);ctx.lineTo(29,-14);ctx.lineTo(28,-11);ctx.lineTo(15,-11);ctx.fill();
+    ctx.fillStyle=color('#172b30');ctx.beginPath();ctx.arc(12,-15,1.1,0,TAU);ctx.fill();ctx.restore();
     if(onWater) {
-      ctx.strokeStyle=male?'#73817b':'#655c4c';ctx.lineWidth=1;
+      ctx.strokeStyle=male?color('#73817b'):color('#655c4c');ctx.lineWidth=1;
       for(let n=0;n<3;n++){ctx.beginPath();ctx.moveTo(-18+n*5,-3);ctx.lineTo(-8+n*5,3);ctx.stroke();}
     }
     wing(false);ctx.restore();
