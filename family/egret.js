@@ -49,19 +49,24 @@ function egretPose(elapsed,frame) {
   const pose={...state,x:a.x,y:groundBody,scale:s,stand:1,wingOpen:0,lift:.1,bend:0,dip:0,tilt:-.12,pitch:0,bank:0,foreshorten:1,footShuffle:0};
   if(state.phase==='arrival'){
     const p=state.t/state.duration,travel=1-(1-p)**1.6;
-    const path=[[frame.width+150,frame.height*.32],[frame.width*.98,frame.height*.4],[a.x+frame.width*.11,groundBody-frame.height*.04],[a.x,groundBody]];
+    // Tie the descent to horizontal travel, rather than viewport height:
+    // portrait screens otherwise turn the approach into a steep dive.
+    const runway=frame.width+150-a.x,rise=Math.min(frame.height*.16,runway*.16);
+    const path=[[frame.width+150,groundBody-rise],
+      [a.x+runway*.62,groundBody-rise*.65],
+      [a.x+runway*.15,groundBody],[a.x,groundBody]];
     [pose.x,pose.y]=egretCurve(path,travel);
     const tangent=egretTangent(path,travel);
-    pose.bank=Math.sin(Math.PI*p)*.65;
+    pose.bank=Math.sin(Math.PI*p)*.35;
     pose.foreshorten=mix(.74,1,egretEase(p));
-    pose.pitch=Math.max(-.32,Math.min(.15,-Math.atan2(tangent[1],-tangent[0])))*(1-egretEase((p-.76)/.24));
+    pose.pitch=Math.max(-.18,Math.min(.12,-Math.atan2(tangent[1],-tangent[0])))*(1-egretEase((p-.76)/.24));
     pose.scale=s*mix(.8,1,travel);
     pose.stand=egretEase((p-.7)/.3);
     pose.wingOpen=1-egretEase((p-.92)/.08);
     const flapCycle=state.t%5.2;
     const pulse=flapCycle<2.3?Math.sin(Math.PI*flapCycle/2.3)**2:0;
     pose.lift=p<.68?.12+Math.sin(state.t*TAU*.85)*pulse*.75:Math.sin((state.t-8.16)*TAU*1.1)*.85;
-    pose.pitch+=Math.sin(Math.PI*pose.stand)*.2;
+    pose.pitch+=Math.sin(Math.PI*pose.stand)*.12;
     pose.y+=Math.sin(state.t*TAU*.85)*.8*s*(1-pose.stand);
     pose.tilt=mix(0,-.12,pose.stand);
   }else if(state.phase==='forage'){
@@ -71,9 +76,13 @@ function egretPose(elapsed,frame) {
     pose.footShuffle=Math.sin(state.t*.65)*.7*(1-probe.bend);
   }else if(state.phase==='departure'){
     const p=state.t/state.duration,travel=p*p*(2-p);
-    pose.x=mix(a.x,-160,travel);
-    pose.y=groundBody-frame.height*.52*egretEase(p);
-    pose.pitch=egretEase(state.t/1.8)*.27;
+    // Gain forward speed before climbing on a shallow, continuous curve.
+    const runway=a.x+160,rise=Math.min(frame.height*.2,runway*.19);
+    const path=[[a.x,groundBody],[a.x-runway*.2,groundBody-rise*.06],
+      [a.x-runway*.68,groundBody-rise*.65],[-160,groundBody-rise]];
+    [pose.x,pose.y]=egretCurve(path,travel);
+    const tangent=egretTangent(path,travel);
+    pose.pitch=egretEase(state.t/1.8)*Math.min(.2,Math.atan2(-tangent[1],-tangent[0]));
     pose.bank=Math.sin(p*Math.PI)*-.35;
     pose.foreshorten=1-.16*egretEase(p);
     pose.stand=1-egretEase(state.t/1.6);

@@ -110,6 +110,20 @@ for(const [width,height] of [[390,930],[1280,780],[1920,940],[2560,1015],[3440,1
   viewport={width,height};
   vm.runInContext(`resizeScene();{const a=egretAnchor(scene);assert(a.x>0 && a.x<scene.width);assert(a.y<scene.height*.9 && a.y>scene.height*.6,'The egret lands on visible marsh');}`,context);
 }
+// Flight angles stay shallow even when portrait height exceeds travel width.
+for(const [width,height] of [[390,930],[1280,780],[1920,940],[3440,1100]]){
+  viewport={width,height};
+  vm.runInContext(`resizeScene();
+    for(const [start,end] of [[0,12],[132,142]]){
+      let previous=egretPose(start,scene);
+      for(let t=start+.02;t<end;t+=.02){
+        const current=egretPose(t,scene),dx=previous.x-current.x;
+        assert(dx>=0,'The egret keeps moving forward');
+        if(dx>.01)assert(Math.abs(current.y-previous.y)/dx<.35,'Approach and departure remain shallow');
+        previous=current;
+      }
+    }`,context);
+}
 console.log('Egret sequence checks passed:',egretChecks);
 
 for(const [instant,expected] of [
