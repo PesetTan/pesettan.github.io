@@ -21,7 +21,7 @@ const saved=new Map();
 const storage={getItem:key=>saved.get(key)??null,setItem:(key,value)=>saved.set(key,value)};
 const context = vm.createContext({Date:ClockDate,Intl,Image:class{complete=true;naturalWidth=1024;addEventListener(){}},setTimeout:cb=>{timers.set(++id,cb);return id},clearTimeout:n=>timers.delete(n),
   window:{sessionStorage:storage,localStorage:storage,addEventListener:(name,cb)=>handlers[name]=cb},
-  document:{hidden:false,documentElement:root,createElement:()=>({width:1024,getContext:()=>drawing}),querySelector:s=>s==='.marsh-birds'?canvas:s==='.sky-clouds'?clouds:s==='[data-season-image]'?img:s==='.season-cycle'?seasonButton:toggle,addEventListener:(name,cb)=>handlers[name]=cb},
+  document:{head:{append(){}},hidden:false,documentElement:root,createElement:()=>({width:1024,getContext:()=>drawing}),querySelector:s=>s==='.marsh-birds'?canvas:s==='.sky-clouds'?clouds:s==='[data-season-image]'?img:s==='.season-cycle'?seasonButton:toggle,addEventListener:(name,cb)=>handlers[name]=cb},
   matchMedia:()=>preference,devicePixelRatio:1,getComputedStyle:()=>({objectPosition:'50% 65%'}),
   ResizeObserver:class{observe(){}},IntersectionObserver:class{constructor(cb){handlers.intersection=cb}observe(){}},
   requestAnimationFrame:cb=>{pending.set(++id,cb);return id},cancelAnimationFrame:n=>pending.delete(n),assert
@@ -149,7 +149,7 @@ vm.runInContext(`{
 fakeNow=Date.parse('2026-12-01T08:00:00Z');
 handlers.visibilitychange();
 assert.equal(root.dataset.season,'winter');
-assert.equal(img.src,'assets/seasons/winter.png');
+assert.equal(img.src,'assets/seasons/winter.webp');
 assert.equal(pending.size,0,'Changing season respects paused motion');
 assert.equal(timers.size,1,'One wall-clock check is scheduled');
 fakeNow=Date.parse('2027-03-01T08:00:00Z');
