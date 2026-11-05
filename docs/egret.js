@@ -87,11 +87,14 @@ function drawEgret(elapsed) {
   const p=egretPose(elapsed,scene);
   if(p.phase==='gap')return;
   const anchor=egretAnchor(scene);
+  // The egret occupies the distant marsh throughout its approach and feeding.
+  // Use the same seasonal air as the swallows on every surface and detail.
+  const mist=(color,alpha=1)=>atmosphericColor(color,3,alpha);
   ctx.save();
   // Subtle contact shadow and water rings keep the landed bird in the marsh.
   if(p.stand>.95 && (p.phase==='forage'||p.phase==='departure')){
-    ctx.fillStyle='rgba(19,60,65,.18)';ctx.beginPath();ctx.ellipse(anchor.x,anchor.y+1,16*p.scale,2.5*p.scale,0,0,TAU);ctx.fill();
-    ctx.strokeStyle='rgba(193,222,218,.22)';ctx.lineWidth=.7;
+    ctx.fillStyle=mist([19,60,65],.18);ctx.beginPath();ctx.ellipse(anchor.x,anchor.y+1,16*p.scale,2.5*p.scale,0,0,TAU);ctx.fill();
+    ctx.strokeStyle=mist([193,222,218],.22);ctx.lineWidth=.7;
     ctx.beginPath();ctx.ellipse(anchor.x+2,anchor.y+1,20*p.scale,3.5*p.scale,0,0,TAU);ctx.stroke();
   }
   ctx.translate(p.x,p.y);ctx.rotate(p.pitch);ctx.scale(-p.scale*p.foreshorten,p.scale);
@@ -102,7 +105,7 @@ function drawEgret(elapsed) {
     const lift=(p.lift+(far?-.55:.55)*p.bank)*p.wingOpen;
     const wrist=[mix(-7,3,(lift+1)/2),-8-28*lift];
     const tip=[-32,-8-62*lift];
-    ctx.fillStyle=far?'#bed4d8':'#eff2e5';ctx.beginPath();ctx.moveTo(5,-6);
+    ctx.fillStyle=far?mist([190, 212, 216]):mist([239, 242, 229]);ctx.beginPath();ctx.moveTo(5,-6);
     ctx.quadraticCurveTo(12,-12-20*lift,...wrist);
     ctx.quadraticCurveTo(wrist[0]-8,tip[1]-3,...tip);
     for(let i=0;i<6;i++){
@@ -114,7 +117,7 @@ function drawEgret(elapsed) {
   wing(true);
   // Legs overlap in profile, with a small depth offset between them.
   // They unfold during braking; feet remain planted while feeding.
-  ctx.strokeStyle='#3d5252';ctx.lineWidth=1.6;ctx.lineCap='round';ctx.lineJoin='round';
+  ctx.strokeStyle=mist([61, 82, 82]);ctx.lineWidth=1.6;ctx.lineCap='round';ctx.lineJoin='round';
   for(const [i,hip] of [[1,[0,7]],[0,[-3,7]]]){
     const ankle=lerpPoint([-32-i*2,13+i],[-3+i*3,24+p.footShuffle*(i?1:-1)],p.stand);
     const foot=lerpPoint([-59-i*2,16+i],[-4+i*3,38],p.stand);
@@ -122,18 +125,18 @@ function drawEgret(elapsed) {
   }
   // Body and folded wing have softly overlapping contours, without hard outlines.
   ctx.save();ctx.rotate(p.tilt);
-  ctx.fillStyle='#e8ede1';ctx.beginPath();ctx.moveTo(-26,2);ctx.bezierCurveTo(-18,-10,3,-14,16,-5);ctx.bezierCurveTo(24,3,12,13,-4,12);ctx.bezierCurveTo(-14,11,-21,6,-26,2);ctx.fill();
-  ctx.fillStyle='#d3e1de';ctx.beginPath();ctx.moveTo(-25,3);ctx.quadraticCurveTo(-1,-8,12,2);ctx.quadraticCurveTo(0,11,-25,3);ctx.fill();ctx.restore();
+  ctx.fillStyle=mist([232, 237, 225]);ctx.beginPath();ctx.moveTo(-26,2);ctx.bezierCurveTo(-18,-10,3,-14,16,-5);ctx.bezierCurveTo(24,3,12,13,-4,12);ctx.bezierCurveTo(-14,11,-21,6,-26,2);ctx.fill();
+  ctx.fillStyle=mist([211, 225, 222]);ctx.beginPath();ctx.moveTo(-25,3);ctx.quadraticCurveTo(-1,-8,12,2);ctx.quadraticCurveTo(0,11,-25,3);ctx.fill();ctx.restore();
   const standingHead=lerpPoint([25,-43],[43,22],p.bend);
   const head=lerpPoint([27,-7],standingHead,p.stand);
   const c1=lerpPoint([35,11],lerpPoint([31,-17],[22,4],p.bend),p.stand);
   const c2=lerpPoint([11,-15],lerpPoint([5,-35],[31,20],p.bend),p.stand);
-  ctx.strokeStyle='#edf1e5';ctx.lineWidth=5.5;ctx.beginPath();ctx.moveTo(12,-3);ctx.bezierCurveTo(...c1,...c2,...head);ctx.stroke();
+  ctx.strokeStyle=mist([237, 241, 229]);ctx.lineWidth=5.5;ctx.beginPath();ctx.moveTo(12,-3);ctx.bezierCurveTo(...c1,...c2,...head);ctx.stroke();
   ctx.save();ctx.translate(...head);ctx.rotate(p.bend*.83*p.stand);
-  ctx.fillStyle='#f1f3e8';ctx.beginPath();ctx.ellipse(0,0,6.5,3.7,0,0,TAU);ctx.fill();
-  ctx.fillStyle='#ceb66c';ctx.beginPath();ctx.moveTo(4,-1.3);ctx.lineTo(25,1.5);ctx.lineTo(5,2);ctx.closePath();ctx.fill();
-  ctx.fillStyle='#364940';ctx.beginPath();ctx.arc(2,-.6,.8,0,TAU);ctx.fill();ctx.restore();
+  ctx.fillStyle=mist([241, 243, 232]);ctx.beginPath();ctx.ellipse(0,0,6.5,3.7,0,0,TAU);ctx.fill();
+  ctx.fillStyle=mist([206, 182, 108]);ctx.beginPath();ctx.moveTo(4,-1.3);ctx.lineTo(25,1.5);ctx.lineTo(5,2);ctx.closePath();ctx.fill();
+  ctx.fillStyle=mist([54, 73, 64]);ctx.beginPath();ctx.arc(2,-.6,.8,0,TAU);ctx.fill();ctx.restore();
   wing(false);
-  if(p.dip>0){ctx.strokeStyle=`rgba(207,227,222,${.45*(1-p.dip)})`;ctx.lineWidth=.8;ctx.beginPath();ctx.ellipse(60,40,4+12*p.dip,1+2*p.dip,0,0,TAU);ctx.stroke();}
+  if(p.dip>0){ctx.strokeStyle=mist([207,227,222],.45*(1-p.dip));ctx.lineWidth=.8;ctx.beginPath();ctx.ellipse(60,40,4+12*p.dip,1+2*p.dip,0,0,TAU);ctx.stroke();}
   ctx.restore();
 }
