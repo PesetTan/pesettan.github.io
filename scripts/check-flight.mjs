@@ -3,30 +3,37 @@ import vm from 'node:vm';
 import assert from 'node:assert/strict';
 
 // Exercise the actual animation with a small DOM/canvas adapter, without a browser.
-const pending = new Map(), handlers = {}, canvasCalls = {count:0};
+const pending = new Map(), timers=new Map(), handlers = {}, canvasCalls = {count:0}, cloudCalls={count:0};
+let fakeNow=Date.parse('2026-03-01T08:00:00Z');
+class ClockDate extends Date {constructor(...args){super(...(args.length?args:[fakeNow]));}static now(){return fakeNow;}}
 let id = 0;
 let viewport = {width:1280,height:780};
 const drawing = new Proxy({}, {get:(_,name)=> (...args)=>{if(['moveTo','lineTo','quadraticCurveTo','bezierCurveTo','ellipse','arc','translate','scale','rotate'].includes(name)){assert(args.every(Number.isFinite),`${name} must stay finite`);canvasCalls.count++}}});
 const canvas = {getContext:()=>drawing,getBoundingClientRect:()=>viewport};
+const cloudDrawing=new Proxy({}, {get:(_,name)=>(...args)=>{if(name==='drawImage'){cloudCalls.count++;assert(args.slice(1).every(Number.isFinite));}}});
+const clouds={getContext:()=>cloudDrawing};
+const root={dataset:{},style:{setProperty(){}}};
 const img = {style:{},naturalWidth:1024,naturalHeight:1536,addEventListener(){}};
 const toggle = {setAttribute(k,v){this[k]=v},addEventListener(_,cb){handlers.toggle=cb}};
+const seasonButton={setAttribute(k,v){this[k]=v},addEventListener(_,cb){handlers.season=cb}};
 const preference = {matches:true,addEventListener(_,cb){handlers.preference=cb}};
 const saved=new Map();
 const storage={getItem:key=>saved.get(key)??null,setItem:(key,value)=>saved.set(key,value)};
-const context = vm.createContext({window:{sessionStorage:storage,localStorage:storage},
-  document:{hidden:false,querySelector:s=>s==='.marsh-birds'?canvas:s==='.landscape img'?img:toggle,addEventListener:(name,cb)=>handlers[name]=cb},
+const context = vm.createContext({Date:ClockDate,Intl,Image:class{complete=true;naturalWidth=1024;addEventListener(){}},setTimeout:cb=>{timers.set(++id,cb);return id},clearTimeout:n=>timers.delete(n),
+  window:{sessionStorage:storage,localStorage:storage,addEventListener:(name,cb)=>handlers[name]=cb},
+  document:{hidden:false,documentElement:root,createElement:()=>({width:1024,getContext:()=>drawing}),querySelector:s=>s==='.marsh-birds'?canvas:s==='.sky-clouds'?clouds:s==='[data-season-image]'?img:s==='.season-cycle'?seasonButton:toggle,addEventListener:(name,cb)=>handlers[name]=cb},
   matchMedia:()=>preference,devicePixelRatio:1,getComputedStyle:()=>({objectPosition:'50% 65%'}),
   ResizeObserver:class{observe(){}},IntersectionObserver:class{constructor(cb){handlers.intersection=cb}observe(){}},
   requestAnimationFrame:cb=>{pending.set(++id,cb);return id},cancelAnimationFrame:n=>pending.delete(n),assert
 });
 const code=fs.readFileSync(new URL('../family/app.js',import.meta.url),'utf8').split('// Tree swallows:')[1];
 assert(code,'Tree swallow animation exists');
-vm.runInContext(fs.readFileSync(new URL('../family/egret.js',import.meta.url),'utf8')+'\n// Tree swallows:'+code,context);
+vm.runInContext(['seasons.js','egret.js','atmosphere.js'].map(file=>fs.readFileSync(new URL('../family/'+file,import.meta.url),'utf8')).join('\n')+'\n// Tree swallows:'+code,context);
 assert.equal(pending.size,0,'Reduced motion starts still');
 assert.equal(toggle['aria-pressed'],'true');
 handlers.toggle();assert.equal(pending.size,1);
 for(const t of [0,16,32,48]){const [key,cb]=pending.entries().next().value;pending.delete(key);cb(t)}
-assert(canvasCalls.count>0);
+assert(canvasCalls.count>0);assert(cloudCalls.count>0,'Clouds render alongside birds');
 handlers.toggle();assert.equal(pending.size,0,'Pause cancels motion');
 handlers.preference({matches:false});assert.equal(pending.size,1);
 handlers.intersection([{isIntersecting:false}]);assert.equal(pending.size,0,'Offscreen stops drawing');
@@ -106,3 +113,61 @@ for(const [width,height] of [[390,930],[1280,780],[1920,940],[2560,1015],[3440,1
   vm.runInContext(`resizeScene();{const a=egretAnchor(scene);assert(a.x>0 && a.x<scene.width);assert(a.y<scene.height*.9 && a.y>scene.height*.6,'The egret lands on visible marsh');}`,context);
 }
 console.log('Egret sequence checks passed:',egretChecks);
+
+for(const [instant,expected] of [
+ ['2026-03-01T07:59:59Z','winter'],['2026-03-01T08:00:00Z','spring'],
+ ['2026-06-01T06:59:59Z','spring'],['2026-06-01T07:00:00Z','summer'],
+ ['2026-09-01T06:59:59Z','summer'],['2026-09-01T07:00:00Z','autumn'],
+ ['2026-12-01T07:59:59Z','autumn'],['2026-12-01T08:00:00Z','winter'],
+ ['2026-12-31T23:59:59-08:00','winter'],['2027-01-01T00:00:00-08:00','winter'],
+ ['2028-02-29T23:59:59-08:00','winter'],['2028-03-01T00:00:00-08:00','spring']
+]) assert.equal(vm.runInContext(`seasonAt(new Date('${instant}'))`,context),expected,instant);
+vm.runInContext(`{
+ for(const name of Object.keys(seasons)){
+   for(let i=0;i<6;i++)assert(seasons[name].birds.includes(chooseBirdScene(name)));
+ }
+ assert(!seasons.winter.birds.includes('swallows'));
+ assert(!seasons.autumn.birds.includes('swallows'));
+ const first=scene.top;
+ for(const name of Object.keys(seasons)){
+   activeSeason=name;activeBirdScene=seasons[name].birds[1];resizeScene();
+   assert.equal(scene.top,first,'Terrain crop stays identical for all seasons and bird alternatives');
+   for(let t=0;t<220;t+=.1){
+     if(activeBirdScene.startsWith('pintail')){
+       for(let i=0;i<5;i++){
+         const p=pintailPose(t,i,activeBirdScene==='pintail-water',scene);
+         assert(Object.values(p).every(Number.isFinite),'Pintail coordinates stay finite');
+       }
+       drawPintails(t,activeBirdScene==='pintail-water');
+     }
+   }
+ }
+ assert.equal(cloudOffset(0,1000),cloudOffset(720,1000));
+ assert(cloudOffset(60,1000)>cloudOffset(0,1000),'Clouds drift');
+ activeSeason='spring';activeBirdScene='egret';setFlightPaused(true);
+}`,context);
+fakeNow=Date.parse('2026-12-01T08:00:00Z');
+handlers.visibilitychange();
+assert.equal(root.dataset.season,'winter');
+assert.equal(img.src,'assets/seasons/winter.png');
+assert.equal(pending.size,0,'Changing season respects paused motion');
+assert.equal(timers.size,1,'One wall-clock check is scheduled');
+fakeNow=Date.parse('2027-03-01T08:00:00Z');
+const [timerID,timerCallback]=timers.entries().next().value;timers.delete(timerID);timerCallback();
+assert.equal(root.dataset.season,'spring');
+assert.equal(timers.size,1);
+console.log('Season dates, seasonal birds, fixed framing, clouds, and open-tab changes passed');
+
+for(const expected of ['summer','autumn','winter','spring']){
+ handlers.season();
+ assert.equal(root.dataset.season,expected);
+ assert.equal(seasonButton.textContent,vm.runInContext(`seasons['${expected}'].icon`,context));
+ assert(vm.runInContext('seasons[activeSeason].birds.includes(activeBirdScene)',context));
+ handlers.visibilitychange();
+ assert.equal(root.dataset.season,expected,'Ordinary clock/visibility checks preserve manual selection');
+ assert.equal(pending.size,0,'Cycling seasons preserves paused motion');
+}
+handlers.season();assert.equal(root.dataset.season,'summer');
+fakeNow=Date.parse('2027-09-01T07:00:00Z');handlers.visibilitychange();
+assert.equal(root.dataset.season,'autumn','Actual calendar boundary restores automatic selection');
+console.log('Hidden icon cycles all seasons and icons, preserves pause, and respects calendar rollover');
