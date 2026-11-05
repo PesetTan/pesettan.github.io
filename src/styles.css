@@ -31,8 +31,6 @@ strong { font-weight: 600; color: var(--ink); }
 .resume-shell { display: grid; grid-template-columns: 250px minmax(0, 1fr); max-width: 1160px; margin: 40px auto; border: 1px solid var(--line); border-radius: 24px; background: var(--paper); box-shadow: 0 28px 90px #0003; }
 .profile-rail { background: linear-gradient(155deg, #21333d, var(--rail) 650px); border-right: 1px solid var(--line); border-radius: 23px 0 0 23px; }
 .rail-content { padding: 38px 27px; }
-.profile-header .monogram { display: inline-block; font: 500 30px/1.2 var(--mono); color: var(--accent); margin-bottom: 26px; }
-.monogram span { color: var(--sub); }
 .profile-header h2 { font-size: 24px; margin-bottom: 10px; }
 .profile-header p { color: var(--sub); font-size: 13px; }
 .section-nav { display: grid; gap: 19px; margin: 39px 0; font: 400 12px/1.8 var(--mono); }
@@ -153,7 +151,6 @@ details[open] > :not(summary) { animation: detail-arrive 350ms ease both; }
     .profile-rail { border-right: 0; border-bottom: 1px solid var(--line); border-radius: 0; }
     .rail-content { padding: 27px 25px 23px; display: grid; grid-template-columns: 1fr; }
     .profile-header { display: flex; align-items: center; gap: 21px; }
-    .profile-header .monogram { margin: 0; font-size: 31px; }
     .profile-header h2 { font-size: 21px; margin-bottom: 5px; }
     .profile-header p { font-size: 12px; }
     .section-nav { display: flex; flex-wrap: wrap; gap: 7px 21px; margin: 22px 0 0; font-size: 11px; }
