@@ -12,3 +12,21 @@
 .season-cycle{appearance:none;display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;margin:-6px 4px -6px -6px;padding:0;border:0;background:none;color:inherit;cursor:default;line-height:1;font-size:13px;vertical-align:middle}
 
 .season-cycle svg{display:block;width:16px;height:16px;flex:none}.park-link{display:inline-flex;align-items:center;text-decoration:none;border-bottom:1px solid transparent;cursor:pointer}.park-link-indicator{width:11px;height:11px;margin-left:3px;opacity:0;transition:opacity .18s}.park-link:hover,.park-link:focus-visible{border-bottom-color:currentColor}.park-link:hover .park-link-indicator,.park-link:focus-visible .park-link-indicator{opacity:1}
+
+/* Coordinated color enhancement. Original sRGB pixels and geometry stay intact.
+   P3 is a wider color gamut, not an increase in HDR peak brightness. */
+:root{--canvas:var(--canvas-sdr,#103e3c);--ink:var(--ink-sdr,#f1f5dc);--muted:var(--muted-sdr,#bfcebc);--sky:var(--sky-sdr,#0753aa);--accent:var(--accent-sdr,#e1f5a5);--accent-hover:var(--accent-hover-sdr,#f0ffd0);--card:var(--card-sdr,#194b47);--card-alt:var(--card-alt-sdr,#204e46);--card-warm:var(--card-warm-sdr,#2a5146);--card-last:var(--card-last-sdr,#315348);--card-hover:var(--card-hover-sdr,#245a51);--detail:var(--detail-sdr,#d2dfce);}
+:root{--scene-saturation:1.045;--scene-contrast:1.015;--scene-light-opacity:0}
+:root[data-season="spring"]{--scene-saturation:1.055}
+:root[data-season="summer"]{--scene-saturation:1.045}
+:root[data-season="autumn"]{--scene-saturation:1.06}
+:root[data-season="winter"]{--scene-saturation:1.035}
+.landscape [data-season-image]{filter:saturate(var(--scene-saturation)) contrast(var(--scene-contrast))}
+.scene-light{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:var(--scene-light-opacity);mix-blend-mode:soft-light;background:linear-gradient(180deg,var(--sky),transparent 58%,var(--accent));}
+@supports (color:color(display-p3 1 1 1)){
+  @media (color-gamut:p3){
+    :root{--canvas:var(--canvas-p3,var(--canvas-sdr,#103e3c));--ink:var(--ink-p3,var(--ink-sdr,#f1f5dc));--muted:var(--muted-p3,var(--muted-sdr,#bfcebc));--sky:var(--sky-p3,var(--sky-sdr,#0753aa));--accent:var(--accent-p3,var(--accent-sdr,#e1f5a5));--accent-hover:var(--accent-hover-p3,var(--accent-hover-sdr,#f0ffd0));--card:var(--card-p3,var(--card-sdr,#194b47));--card-alt:var(--card-alt-p3,var(--card-alt-sdr,#204e46));--card-warm:var(--card-warm-p3,var(--card-warm-sdr,#2a5146));--card-last:var(--card-last-p3,var(--card-last-sdr,#315348));--card-hover:var(--card-hover-p3,var(--card-hover-sdr,#245a51));--detail:var(--detail-p3,var(--detail-sdr,#d2dfce));
+      --scene-light-opacity:.17;
+    }
+  }
+}
