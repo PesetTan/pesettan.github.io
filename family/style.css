@@ -30,3 +30,6 @@
     }
   }
 }
+
+/* Interface marks are SVG geometry, independent of platform emoji fonts. */
+.ui-icon{display:inline-block;width:1em;height:1em;vertical-align:-.12em;flex:none;overflow:visible;pointer-events:none}.small-flower .ui-icon{width:32px;height:32px}
