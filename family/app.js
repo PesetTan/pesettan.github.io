@@ -23,7 +23,6 @@ cloudImage.fetchPriority = 'low';
 cloudImage.src = seasons[activeSeason].cloud;
 landscapeImage.src = seasons[activeSeason].image;
 landscapeImage.alt = seasons[activeSeason].description;
-const motionToggle = document.querySelector('.motion-toggle');
 const seasonToggle = document.querySelector('.season-cycle');
 const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
 // sessionStorage alternates on every full load in this tab, including reloads.
@@ -177,11 +176,10 @@ function animateFlight(now){
   lastFrame=now;renderBirds();renderClouds();frameRequest=requestAnimationFrame(animateFlight);
 }
 function syncFlight(){if(frameRequest!==null)cancelAnimationFrame(frameRequest);frameRequest=null;lastFrame=null;if(!flightPaused&&!document.hidden&&sceneVisible)frameRequest=requestAnimationFrame(animateFlight);}
-function setFlightPaused(paused){flightPaused=paused;motionToggle.setAttribute('aria-pressed',String(paused));motionToggle.setAttribute('aria-label',`${paused?'Resume':'Pause'} scene: clouds and ${activeBirdScene==='egret'?'egret':activeBirdScene==='swallows'?'swallows':'pintails'}`);motionToggle.innerHTML=paused?'Resume scene <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m7 4 13 8-13 8Z"/></svg></span>':'Pause scene <span aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5v14M16 5v14"/></svg></span>';syncFlight();}
+function setFlightPaused(paused){flightPaused=paused;syncFlight();}
 new ResizeObserver(resizeScene).observe(canvas);
 new IntersectionObserver(entries=>{sceneVisible=entries[0].isIntersecting;syncFlight();}).observe(canvas);
 landscapeImage.addEventListener('load',resizeScene);
-motionToggle.addEventListener('click',()=>setFlightPaused(!flightPaused));
 motionPreference.addEventListener('change',event=>setFlightPaused(event.matches));
 document.addEventListener('visibilitychange',()=>{checkSeason();syncFlight();});
 window.addEventListener('pageshow',checkSeason);

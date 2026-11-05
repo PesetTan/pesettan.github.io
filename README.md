@@ -17,7 +17,7 @@ Each full page load alternates between two season-appropriate bird scenes, remem
 
 `family/seasons.js` selects meteorological seasons in `America/Los_Angeles`: March 1, June 1, September 1, and December 1. It supplies artwork, cloud assets, theme colors, and eligible birds. The palette is applied before CSS loads. A wall-clock check switches open pages at the season boundary (independent of animation pause), with additional checks on visibility and page restoration. No deployment or external API is needed for seasonal changes.
 
-All four paintings share the same hill and shoreline registration and identical crop for both bird alternatives. Hills and terrain remain stationary. `family/atmosphere.js` draws feathered, transparent sculptural cloud banks on a separate canvas, drifting horizontally over a twelve-minute cycle, plus the seasonal pintails. Cloud banks overlap with broad smooth edge fades, dissolve into the horizon haze, and use the same periodic spacing at both ends of the loop; their cyan fringe is softened to blend into the seasonal sky. Pause Scene freezes clouds and birds together; hidden/offscreen scenes stop drawing, and reduced motion starts paused. Generated artwork and its prompt set live in `family/assets/seasons/`.
+All four paintings share the same hill and shoreline registration and identical crop for both bird alternatives. Hills and terrain remain stationary. `family/atmosphere.js` draws feathered, transparent sculptural cloud banks on a separate canvas, drifting horizontally over a twelve-minute cycle, plus the seasonal pintails. Cloud banks overlap with broad smooth edge fades, dissolve into the horizon haze, and use the same periodic spacing at both ends of the loop; their cyan fringe is softened to blend into the seasonal sky. The scene animates automatically without a pause control; hidden/offscreen scenes stop drawing, and reduced motion keeps clouds and birds still. Generated artwork and its prompt set live in `family/assets/seasons/`.
 
 Validation: `node scripts/check-flight.mjs` covers bird continuity, egret timing, seasonal selection, California date boundaries, fixed framing, pause, and live season changes. `node scripts/check-artwork.mjs` verifies matching dimensions, hill alignment, and real cloud transparency. If the local Angular LMDB cache crashes during `npm run build`, use `CI=1 npm run build` to bypass that optional local cache.
 
@@ -29,7 +29,7 @@ Color enhancement: the original sRGB paintings receive a small season-specific s
 
 Run `node scripts/check-color.mjs` to verify both seasonal palettes, complete fallback tokens, and normal/large-text contrast. P3 rendering follows [WebKit’s Display-P3 guidance](https://webkit.org/blog/10042/wide-gamut-color-in-css-with-display-p3/).
 
-All interface arrows, plus/close controls, and play/pause marks use inline SVG instead of Unicode icon characters. This prevents iOS Safari from selecting color emoji glyphs; icon strokes inherit the coordinated seasonal colors.
+All interface arrows, and plus/close controls use inline SVG instead of Unicode icon characters. This prevents iOS Safari from selecting color emoji glyphs; icon strokes inherit the coordinated seasonal colors.
 
 The closing mark uses the same Shared Roots Tan Family logo as the header. It links to `/design/` in the same tab, with a default cursor and no hover cue or tooltip; keyboard focus remains visible. The Design library is served by the separate GitHub Pages project at that existing URL.
 

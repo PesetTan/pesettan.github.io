@@ -14,14 +14,13 @@ const cloudDrawing=new Proxy({}, {get:(_,name)=>(...args)=>{if(name==='drawImage
 const clouds={getContext:()=>cloudDrawing};
 const root={dataset:{},style:{setProperty(){}}};
 const img = {style:{},naturalWidth:1024,naturalHeight:1536,addEventListener(){}};
-const toggle = {setAttribute(k,v){this[k]=v},addEventListener(_,cb){handlers.toggle=cb}};
 const seasonButton={setAttribute(k,v){this[k]=v},addEventListener(_,cb){handlers.season=cb}};
 const preference = {matches:true,addEventListener(_,cb){handlers.preference=cb}};
 const saved=new Map();
 const storage={getItem:key=>saved.get(key)??null,setItem:(key,value)=>saved.set(key,value)};
 const context = vm.createContext({Date:ClockDate,Intl,Image:class{complete=true;naturalWidth=1024;addEventListener(){}},setTimeout:cb=>{timers.set(++id,cb);return id},clearTimeout:n=>timers.delete(n),
   window:{sessionStorage:storage,localStorage:storage,addEventListener:(name,cb)=>handlers[name]=cb},
-  document:{head:{append(){}},hidden:false,documentElement:root,createElement:()=>({width:1024,getContext:()=>drawing}),querySelector:s=>s==='.marsh-birds'?canvas:s==='.sky-clouds'?clouds:s==='[data-season-image]'?img:s==='.season-cycle'?seasonButton:toggle,addEventListener:(name,cb)=>handlers[name]=cb},
+  document:{head:{append(){}},hidden:false,documentElement:root,createElement:()=>({width:1024,getContext:()=>drawing}),querySelector:s=>s==='.marsh-birds'?canvas:s==='.sky-clouds'?clouds:s==='[data-season-image]'?img:s==='.season-cycle'?seasonButton:null,addEventListener:(name,cb)=>handlers[name]=cb},
   matchMedia:()=>preference,devicePixelRatio:1,getComputedStyle:()=>({objectPosition:'50% 65%'}),
   ResizeObserver:class{observe(){}},IntersectionObserver:class{constructor(cb){handlers.intersection=cb}observe(){}},
   cloudCalls,requestAnimationFrame:cb=>{pending.set(++id,cb);return id},cancelAnimationFrame:n=>pending.delete(n),assert
@@ -30,11 +29,10 @@ const code=fs.readFileSync(new URL('../family/app.js',import.meta.url),'utf8').s
 assert(code,'Tree swallow animation exists');
 vm.runInContext(['seasons.js','egret.js','atmosphere.js'].map(file=>fs.readFileSync(new URL('../family/'+file,import.meta.url),'utf8')).join('\n')+'\n// Tree swallows:'+code,context);
 assert.equal(pending.size,0,'Reduced motion starts still');
-assert.equal(toggle['aria-pressed'],'true');
-handlers.toggle();assert.equal(pending.size,1);
+handlers.preference({matches:false});assert.equal(pending.size,1);
 for(const t of [0,16,32,48]){const [key,cb]=pending.entries().next().value;pending.delete(key);cb(t)}
 assert(canvasCalls.count>0);assert(cloudCalls.count>0,'Clouds render alongside birds');
-handlers.toggle();assert.equal(pending.size,0,'Pause cancels motion');
+handlers.preference({matches:true});assert.equal(pending.size,0,'Reduced motion cancels animation');
 handlers.preference({matches:false});assert.equal(pending.size,1);
 handlers.intersection([{isIntersecting:false}]);assert.equal(pending.size,0,'Offscreen stops drawing');
 handlers.intersection([{isIntersecting:true}]);assert.equal(pending.size,1);
