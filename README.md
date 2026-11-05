@@ -29,4 +29,6 @@ Color enhancement: the original sRGB paintings receive a small season-specific s
 
 Run `node scripts/check-color.mjs` to verify both seasonal palettes, complete fallback tokens, and normal/large-text contrast. P3 rendering follows [WebKit’s Display-P3 guidance](https://webkit.org/blog/10042/wide-gamut-color-in-css-with-display-p3/).
 
-All interface arrows, the closing flourish, plus/close controls, and play/pause marks use inline SVG instead of Unicode icon characters. This prevents iOS Safari from selecting color emoji glyphs; icon strokes inherit the coordinated seasonal colors.
+All interface arrows, plus/close controls, and play/pause marks use inline SVG instead of Unicode icon characters. This prevents iOS Safari from selecting color emoji glyphs; icon strokes inherit the coordinated seasonal colors.
+
+The closing mark uses the same Shared Roots Tan Family logo as the header. It links to `/design/` in the same tab, with a default cursor and no hover cue or tooltip; keyboard focus remains visible. The Design library is served by the separate GitHub Pages project at that existing URL.
