@@ -82,7 +82,14 @@ function project(p) {
   const depth=1/(1+p[2]*.9);
   return [scene.left+scene.imageWidth*(.54+p[0]*.56*depth),scene.top+scene.imageHeight*(.68+(.18-p[1])*.65*depth)-scene.flightLift];
 }
-function blendColor(a,b,t){return `rgb(${a.map((v,i)=>Math.round(mix(v,b[i],t))).join(' ')})`;}
+// Shared atmospheric perspective for birds at a given landscape depth.
+function atmosphericColor(color,depth,alpha=1) {
+  const sky=seasons[activeSeason].colors.sky.slice(1).match(/../g).map(v=>parseInt(v,16));
+  const air=sky.map((v,i)=>mix(v,[210,225,224][i],.6));
+  const haze=clamp(1-Math.exp(-depth*.22),0,.72);
+  const channels=color.map((v,i)=>Math.round(mix(v,air[i],haze)));
+  return `rgba(${channels.join(',')},${alpha})`;
+}
 function drawSwallow(bird,time) {
   // A gentle speed change through each pass; distance stays monotonic.
   const d=bird.offset+time*bird.speed+.035*Math.sin(time*1.7+bird.phase);
@@ -108,13 +115,10 @@ function drawSwallow(bird,time) {
   const belly=clamp((-topFacing+.1)*1.3,0,1);
   // Atmospheric perspective affects every surface, including the white belly.
   // Mix toward a pale version of this season's sky, with more haze at depth.
-  const sky=seasons[activeSeason].colors.sky.slice(1).match(/../g).map(v=>parseInt(v,16));
-  const air=sky.map((v,i)=>mix(v,[210,225,224][i],.6));
-  const haze=clamp(1-Math.exp(-p[2]*.22),0,.72);
-  const back=blendColor([18,53,66],air,haze);
-  const wingColor=blendColor([24,43,54],air,haze);
+  const back=atmosphericColor([18,53,66],p[2]);
+  const wingColor=atmosphericColor([24,43,54],p[2]);
   const underside=[26,65,77].map((v,i)=>mix(v,[213,224,218][i],belly));
-  const bodyColor=blendColor(underside,air,haze);
+  const bodyColor=atmosphericColor(underside,p[2]);
   function shape(coords,color) {
     ctx.fillStyle=color;ctx.beginPath();
     coords.forEach((v,i)=>{const q=point(...v);if(i===0)ctx.moveTo(...q);else ctx.lineTo(...q)});
