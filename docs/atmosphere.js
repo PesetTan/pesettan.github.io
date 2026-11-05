@@ -1,9 +1,14 @@
-// Both layers use the existing scene clock and the exact painting crop.
+// Clouds and birds use the existing scene clock and painting crop.
 // Clouds move independently; the terrain never translates or scales over time.
 // The 18% overlap matches the feather width, leaving no empty interval.
 const CLOUD_SPACING = .82;
-function cloudOffset(elapsed,width) {
-  return ((elapsed / 720) % 1) * width * CLOUD_SPACING;
+const CLOUD_LAYERS = Object.freeze([
+  // Distant clouds are smaller, fainter, and about half as fast on screen.
+  {scale:.82,period:1200,phase:.43,opacity:.22,soft:true},
+  {scale:1,period:720,phase:0,opacity:.86,soft:false}
+]);
+function cloudOffset(elapsed,width,period=720,phase=0) {
+  return (((elapsed % period) / period + phase) % 1) * width * CLOUD_SPACING;
 }
 function prepareClouds() {
   cloudSprite.width=cloudImage.naturalWidth;cloudSprite.height=cloudImage.naturalHeight;
@@ -35,22 +40,25 @@ function renderClouds() {
   cloudCtx.clearRect(0,0,scene.width,scene.height);
   if(!cloudImage.complete || !cloudImage.naturalWidth || !cloudSprite.width)return;
   cloudCtx.save();
-  cloudCtx.globalAlpha=seasons[activeSeason].cloudOpacity;
-  // Soften the cyan fringe of the summer artwork against the cooler skies.
-  cloudCtx.filter=`saturate(${activeSeason==='autumn'?.65:.85})`;
   // The alpha artwork ends above the hills. A soft sky-only clip prevents
   // moving cloud edges from ever painting over the registered terrain.
   const skyBottom=scene.top+scene.imageHeight*.655;
   cloudCtx.beginPath();cloudCtx.rect(0,0,scene.width,Math.max(0,skyBottom));cloudCtx.clip();
-  const width=scene.imageWidth, height=scene.imageHeight;
-  const drift=cloudOffset(time,width), spacing=width*CLOUD_SPACING;
-  // Adjacent copies enter offscreen; the wrap is identical at the cycle seam.
-  const first=Math.floor((-scene.left-drift-width)/spacing)+1;
-  const last=Math.ceil((scene.width-scene.left-drift)/spacing)-1;
-  for(let copy=first;copy<=last;copy++) {
-    const x=scene.left+drift+copy*spacing;
-    if(x+width<=0 || x>=scene.width)continue;
-    cloudCtx.drawImage(cloudSprite,x,scene.top,width,height);
+  // Draw distant haze first, then the more defined foreground bank.
+  for(const layer of CLOUD_LAYERS) {
+    const width=scene.imageWidth*layer.scale,height=scene.imageHeight*layer.scale;
+    const top=scene.top+scene.imageHeight*(1-layer.scale)*.36;
+    const drift=cloudOffset(time,width,layer.period,layer.phase),spacing=width*CLOUD_SPACING;
+    cloudCtx.globalAlpha=seasons[activeSeason].cloudOpacity*layer.opacity;
+    // Desaturate cyan fringes; only the distant layer gets a little softness.
+    const blur=layer.soft?Math.max(1,Math.min(3,scene.imageWidth*.0012)):0;
+    cloudCtx.filter=`saturate(${activeSeason==='autumn'?.65:.85}) blur(${blur}px)`;
+    const first=Math.floor((-scene.left-drift-width)/spacing)+1;
+    const last=Math.ceil((scene.width-scene.left-drift)/spacing)-1;
+    for(let copy=first;copy<=last;copy++) {
+      const x=scene.left+drift+copy*spacing;
+      cloudCtx.drawImage(cloudSprite,x,top,width,height);
+    }
   }
   cloudCtx.restore();
 }
