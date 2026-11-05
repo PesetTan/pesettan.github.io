@@ -77,7 +77,7 @@ function position(route,distance) {
   const a=route.samples[lo],b=route.samples[hi];
   return spline(route.points,mix(a.t,b.t,(d-a.d)/(b.d-a.d)));
 }
-const swallows=routes.map((points,i)=>({route:makeRoute(points),speed:.38+i*.035,offset:[1.3,3.1,.8,4.5][i],size:[.031,.028,.026,.027][i],beat:5.8+i*.37,phase:i*1.73,bank:0}));
+const swallows=routes.map((points,i)=>({route:makeRoute(points.map(([x,y,z])=>[x,y,z+1.8])),speed:.38+i*.035,offset:[1.3,3.1,.8,4.5][i],size:[.031,.028,.026,.027][i],beat:5.8+i*.37,phase:i*1.73,bank:0}));
 function project(p) {
   const depth=1/(1+p[2]*.9);
   return [scene.left+scene.imageWidth*(.54+p[0]*.56*depth),scene.top+scene.imageHeight*(.68+(.18-p[1])*.65*depth)-scene.flightLift];
@@ -106,10 +106,15 @@ function drawSwallow(bird,time) {
   const fold=1-.17*envelope*Math.max(stroke,0);
   const topFacing=dot(u,[0,.38,-1]);
   const belly=clamp((-topFacing+.1)*1.3,0,1);
-  const haze=clamp(p[2]*.1,0,.29);
-  const back=blendColor([18,53,66],[73,116,137],haze);
-  const wingColor=blendColor([24,43,54],[102,143,158],haze);
-  const bodyColor=blendColor([26,65,77],[213,224,218],belly);
+  // Atmospheric perspective affects every surface, including the white belly.
+  // Mix toward a pale version of this season's sky, with more haze at depth.
+  const sky=seasons[activeSeason].colors.sky.slice(1).match(/../g).map(v=>parseInt(v,16));
+  const air=sky.map((v,i)=>mix(v,[210,225,224][i],.6));
+  const haze=clamp(1-Math.exp(-p[2]*.22),0,.72);
+  const back=blendColor([18,53,66],air,haze);
+  const wingColor=blendColor([24,43,54],air,haze);
+  const underside=[26,65,77].map((v,i)=>mix(v,[213,224,218][i],belly));
+  const bodyColor=blendColor(underside,air,haze);
   function shape(coords,color) {
     ctx.fillStyle=color;ctx.beginPath();
     coords.forEach((v,i)=>{const q=point(...v);if(i===0)ctx.moveTo(...q);else ctx.lineTo(...q)});
