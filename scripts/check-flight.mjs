@@ -3,15 +3,17 @@ import vm from 'node:vm';
 import assert from 'node:assert/strict';
 
 // Exercise the actual animation with a small DOM/canvas adapter, without a browser.
-const pending = new Map(), handlers = {}, canvasCalls = [];
+const pending = new Map(), handlers = {}, canvasCalls = {count:0};
 let id = 0;
 let viewport = {width:1280,height:780};
-const drawing = new Proxy({}, {get:(_,name)=> (...args)=>{if(['moveTo','lineTo','quadraticCurveTo'].includes(name)){assert(args.every(Number.isFinite),`${name} must stay finite`);canvasCalls.push(args)}}});
+const drawing = new Proxy({}, {get:(_,name)=> (...args)=>{if(['moveTo','lineTo','quadraticCurveTo','bezierCurveTo','ellipse','arc','translate','scale','rotate'].includes(name)){assert(args.every(Number.isFinite),`${name} must stay finite`);canvasCalls.count++}}});
 const canvas = {getContext:()=>drawing,getBoundingClientRect:()=>viewport};
-const img = {naturalWidth:1024,naturalHeight:1536,addEventListener(){}};
+const img = {style:{},naturalWidth:1024,naturalHeight:1536,addEventListener(){}};
 const toggle = {setAttribute(k,v){this[k]=v},addEventListener(_,cb){handlers.toggle=cb}};
 const preference = {matches:true,addEventListener(_,cb){handlers.preference=cb}};
-const context = vm.createContext({
+const saved=new Map();
+const storage={getItem:key=>saved.get(key)??null,setItem:(key,value)=>saved.set(key,value)};
+const context = vm.createContext({window:{sessionStorage:storage,localStorage:storage},
   document:{hidden:false,querySelector:s=>s==='.marsh-birds'?canvas:s==='.landscape img'?img:toggle,addEventListener:(name,cb)=>handlers[name]=cb},
   matchMedia:()=>preference,devicePixelRatio:1,getComputedStyle:()=>({objectPosition:'50% 65%'}),
   ResizeObserver:class{observe(){}},IntersectionObserver:class{constructor(cb){handlers.intersection=cb}observe(){}},
@@ -19,12 +21,12 @@ const context = vm.createContext({
 });
 const code=fs.readFileSync(new URL('../family/app.js',import.meta.url),'utf8').split('// Tree swallows:')[1];
 assert(code,'Tree swallow animation exists');
-vm.runInContext('// Tree swallows:'+code,context);
+vm.runInContext(fs.readFileSync(new URL('../family/egret.js',import.meta.url),'utf8')+'\n// Tree swallows:'+code,context);
 assert.equal(pending.size,0,'Reduced motion starts still');
 assert.equal(toggle['aria-pressed'],'true');
 handlers.toggle();assert.equal(pending.size,1);
 for(const t of [0,16,32,48]){const [key,cb]=pending.entries().next().value;pending.delete(key);cb(t)}
-assert(canvasCalls.length>0);
+assert(canvasCalls.count>0);
 handlers.toggle();assert.equal(pending.size,0,'Pause cancels motion');
 handlers.preference({matches:false});assert.equal(pending.size,1);
 handlers.intersection([{isIntersecting:false}]);assert.equal(pending.size,0,'Offscreen stops drawing');
@@ -67,3 +69,40 @@ for(const [width,height] of [[390,930],[1024,940],[1280,780],[1920,940],[2560,10
   framing.push({width,height,lift:Math.round(metrics.lift)});
 }
 console.log('Responsive framing passed:',framing);
+
+const egretChecks=vm.runInContext(`(()=>{
+  assert.equal(activeBirdScene,'egret');
+  assert.equal(chooseBirdScene(),'swallows');
+  assert.equal(chooseBirdScene(),'egret');
+  assert.equal(chooseBirdScene(),'swallows');
+  assert.equal(EGRET_TIMING.forage,120);
+  assert.equal(egretPhase(11.999).phase,'arrival');
+  assert.equal(egretPhase(12).phase,'forage');
+  assert.equal(egretPhase(131.999).phase,'forage');
+  assert.equal(egretPhase(132).phase,'departure');
+  assert.equal(egretPhase(142).phase,'gap');
+  assert.equal(egretPhase(145).phase,'arrival');
+  const entry=egretPose(0,scene),exit=egretPose(141.999,scene);
+  assert(entry.x>scene.width+100,'Arrival begins outside right edge');
+  assert(exit.x<-100,'Departure reaches outside left edge');
+  for(const boundary of [12,132]){
+    const a=egretPose(boundary-.0001,scene),b=egretPose(boundary,scene);
+    assert(Math.hypot(a.x-b.x,a.y-b.y)<.05,'No landing or takeoff position jump');
+    assert(Math.abs(a.stand-b.stand)<.01 && Math.abs(a.bend-b.bend)<.01,'Pose is continuous');
+  }
+  for(let t=0;t<EGRET_CYCLE*2;t+=1/30){
+    const pose=egretPose(t,scene);
+    assert([pose.x,pose.y,pose.scale,pose.bend,pose.wingOpen].every(Number.isFinite));
+    assert(pose.bend>=0 && pose.bend<=1);
+    drawEgret(t);
+  }
+  // A slow frame must not stretch the requested two-minute feeding interval.
+  flightPaused=false;sceneVisible=true;time=0;lastFrame=1000;animateFlight(1500);
+  assert.equal(time,.5);setFlightPaused(true);
+  return {cycleSeconds:EGRET_CYCLE,feedingSeconds:EGRET_TIMING.forage,refreshSequence:'egret → swallows → egret',cyclesRendered:2};
+})()`,context);
+for(const [width,height] of [[390,930],[1280,780],[1920,940],[2560,1015],[3440,1100]]){
+  viewport={width,height};
+  vm.runInContext(`resizeScene();{const a=egretAnchor(scene);assert(a.x>0 && a.x<scene.width);assert(a.y<scene.height*.9 && a.y>scene.height*.6,'The egret lands on visible marsh');}`,context);
+}
+console.log('Egret sequence checks passed:',egretChecks);
