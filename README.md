@@ -11,7 +11,7 @@ Run `npm ci` then `npm run build`. The build places Angular output in `docs/sam/
 
 Preview with `python3 -m http.server 4388 --directory docs`.
 
-The landing page's tree swallows use curved flight paths, depth projection tied to the painting's crop, and short wingbeat bursts between glides. The illustration follows Cornell's tree swallow identification and foraging references linked in `family/app.js`; its flight paths are designed rather than recorded tracks. Run `node scripts/check-flight.mjs` to check path continuity, finite drawing coordinates, and pause/reduced-motion behavior.
+The landing page's tree swallows use curved flight paths, depth projection tied to the painting's crop, and short wingbeat bursts between glides. Their routes sit deeper in the scene, so perspective makes them smaller and reduces their apparent travel; all body and wing colors blend toward a pale seasonal sky color with increasing depth. The illustration follows Cornell's tree swallow identification and foraging references linked in `family/app.js`; its flight paths are designed rather than recorded tracks. Run `node scripts/check-flight.mjs` to check path continuity, finite drawing coordinates, and pause/reduced-motion behavior.
 
 Each full page load alternates between two season-appropriate bird scenes, remembered separately for each season per browser tab. Spring and summer alternate tree swallows and the egret; autumn alternates migrating northern pintails and the egret; winter alternates swimming/dabbling pintails and the egret. The egret makes a 12-second angled arrival, spends exactly 120 seconds probing in the marsh, departs over 10 seconds, and repeats after a 3-second empty interval. Its implementation in `family/egret.js` is preserved.
 
