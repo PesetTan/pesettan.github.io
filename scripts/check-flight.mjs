@@ -142,19 +142,24 @@ vm.runInContext(`{
  }
  assert.equal(cloudOffset(0,1000),cloudOffset(720,1000));
  assert(cloudOffset(60,1000)>cloudOffset(0,1000),'Clouds drift');
- // Inspect actual rendered banks across a complete circuit and the wrap.
+ const near=CLOUD_LAYERS[1],far=CLOUD_LAYERS[0];
+ assert(far.opacity<near.opacity && far.soft,'Distant clouds are fainter and softer');
+ assert(far.scale/far.period<near.scale/near.period,'Distant clouds move more slowly');
+ // Inspect both layers across complete circuits and their independent wraps.
  for(const viewport of [{width:390,height:930},{width:1440,height:900},{width:2560,height:1015}]) {
    scene={...scene,...viewport,imageWidth:Math.max(viewport.width,viewport.height*2/3),imageHeight:Math.max(viewport.width*1.5,viewport.height),left:0,top:0};
-   const banks=elapsed=>{time=elapsed;cloudCalls.draws=[];renderClouds();return cloudCalls.draws.map(([x,y,w,h])=>({x,end:x+w})).sort((a,b)=>a.x-b.x);};
-   assert.deepEqual(banks(0),banks(720),'The loop renders identical banks at both ends');
+   const banks=(elapsed,layer)=>{time=elapsed;cloudCalls.draws=[];renderClouds();return cloudCalls.draws.filter(([,y,w])=>Math.abs(w-scene.imageWidth*layer.scale)<.001).map(([x,y,w,h])=>({x,end:x+w})).sort((a,b)=>a.x-b.x);};
+   for(const layer of CLOUD_LAYERS) {
+   assert.deepEqual(banks(0,layer),banks(layer.period,layer),'The loop renders identical banks at both ends');
    for(const elapsed of [0,120,240,360,480,600,719.999,720.001]) {
-     const copies=banks(elapsed);
+     const copies=banks(elapsed,layer);
      assert(copies[0].x<=0 && copies.at(-1).end>=scene.width,'Banks cover both viewport edges');
      for(let i=1;i<copies.length;i++)assert(copies[i].x<copies[i-1].end,'Cloud banks overlap throughout the loop');
    }
-   const before=banks(719.999),after=banks(720.001);
+   const before=banks(layer.period-.001,layer),after=banks(layer.period+.001,layer);
    for(const bank of before.filter(b=>b.x>0 && b.end<scene.width+scene.imageWidth*.1)) {
      assert(after.some(b=>Math.abs(b.x-bank.x)<.1),'No visible bank jumps at the loop boundary');
+   }
    }
  }
 
