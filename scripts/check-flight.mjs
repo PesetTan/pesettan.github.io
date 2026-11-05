@@ -161,7 +161,7 @@ console.log('Season dates, seasonal birds, fixed framing, clouds, and open-tab c
 for(const expected of ['summer','autumn','winter','spring']){
  handlers.season();
  assert.equal(root.dataset.season,expected);
- assert.equal(seasonButton.textContent,vm.runInContext(`seasons['${expected}'].icon`,context));
+ assert.equal(seasonButton.innerHTML,vm.runInContext(`seasons['${expected}'].icon`,context));
  assert(vm.runInContext('seasons[activeSeason].birds.includes(activeBirdScene)',context));
  handlers.visibilitychange();
  assert.equal(root.dataset.season,expected,'Ordinary clock/visibility checks preserve manual selection');

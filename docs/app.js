@@ -199,7 +199,7 @@ function checkSeason(){
 }
 function updateSeasonIcon(){
   const order=Object.keys(seasons),next=order[(order.indexOf(activeSeason)+1)%order.length];
-  seasonToggle.textContent=seasons[activeSeason].icon;
+  seasonToggle.innerHTML=seasons[activeSeason].icon;
   seasonToggle.setAttribute('aria-label',`${activeSeason[0].toUpperCase()+activeSeason.slice(1)} scene. Show ${next}.`);
 }
 function showSeason(next){
