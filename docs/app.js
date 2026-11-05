@@ -10,22 +10,34 @@ dialog.addEventListener('click',event=>{if(event.target===dialog){const rect=dia
 // https://www.allaboutbirds.org/guide/Tree_Swallow/lifehistory
 const canvas = document.querySelector('.marsh-birds');
 const ctx = canvas.getContext('2d');
-const landscapeImage = document.querySelector('.landscape img');
+const landscapeImage = document.querySelector('[data-season-image]');
+const cloudCanvas = document.querySelector('.sky-clouds');
+const cloudCtx = cloudCanvas.getContext('2d');
+const cloudImage = new Image();
+const cloudSprite = document.createElement('canvas');
+const {seasons,seasonAt,applyTheme} = window.SeasonScene;
+let activeSeason = seasonAt();
+let calendarSeason = activeSeason;
+cloudImage.src = seasons[activeSeason].cloud;
+landscapeImage.src = seasons[activeSeason].image;
+landscapeImage.alt = seasons[activeSeason].description;
 const motionToggle = document.querySelector('.motion-toggle');
+const seasonToggle = document.querySelector('.season-cycle');
 const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
 // sessionStorage alternates on every full load in this tab, including reloads.
 // The first visit shows the new egret scene. Resizing and pause never switch it.
-function chooseBirdScene(){
+function chooseBirdScene(season=activeSeason){
+  const eligible=seasons[season].birds;
   for(const name of ['sessionStorage','localStorage']){
     try{
-      const storage=window[name],key='tan-family-bird-scene';
-      const next=storage.getItem(key)==='egret'?'swallows':'egret';
+      const storage=window[name],key=`tan-family-bird-scene-${season}`;
+      const next=storage.getItem(key)===eligible[0]?eligible[1]:eligible[0];
       storage.setItem(key,next);return next;
     }catch{/* Browsing with storage disabled still gets an animated scene. */}
   }
   return 'egret';
 }
-const activeBirdScene=chooseBirdScene();
+let activeBirdScene=chooseBirdScene();
 const TAU = Math.PI * 2;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const add = (a,b) => a.map((v,i)=>v+b[i]);
@@ -128,12 +140,15 @@ let flightPaused=motionPreference.matches,time=0,lastFrame=null,frameRequest=nul
 function renderBirds(){
   ctx.clearRect(0,0,scene.width,scene.height);
   if(activeBirdScene==='egret'){drawEgret(time);return;}
+  if(activeBirdScene.startsWith('pintail')){drawPintails(time,activeBirdScene==='pintail-water');return;}
   [...swallows].sort((a,b)=>position(b.route,b.offset+time*b.speed)[2]-position(a.route,a.offset+time*a.speed)[2]).forEach(bird=>drawSwallow(bird,time));
 }
 function resizeScene(){
   const box=canvas.getBoundingClientRect();
   const ratio=Math.min(devicePixelRatio||1,2);
   canvas.width=Math.round(box.width*ratio);canvas.height=Math.round(box.height*ratio);
+  cloudCanvas.width=canvas.width;cloudCanvas.height=canvas.height;
+  cloudCtx.setTransform(ratio,0,0,ratio,0,0);
   ctx.setTransform(ratio,0,0,ratio,0,0);
   const iw=landscapeImage.naturalWidth||1024,ih=landscapeImage.naturalHeight||1536;
   const fit=Math.max(box.width/iw,box.height/ih);
@@ -141,7 +156,7 @@ function resizeScene(){
   // when a panoramic viewport would otherwise crop it below the hero.
   landscapeImage.style.objectPosition='';
   const pos=getComputedStyle(landscapeImage).objectPosition.split(' ').map(v=>parseFloat(v)/100);
-  if(activeBirdScene==='egret' && ih*fit>box.height){
+  if(ih*fit>box.height){
     const marshPosition=(ih*fit*.748-box.height*.87)/(ih*fit-box.height);
     pos[1]=clamp(Math.max(pos[1],marshPosition),0,1);
     landscapeImage.style.objectPosition=`${pos[0]*100}% ${pos[1]*100}%`;
@@ -151,20 +166,58 @@ function resizeScene(){
   const wide=clamp((box.width/box.height-1.15)/.8,0,1);
   const flightLift=box.height*.21*wide*wide*(3-2*wide);
   scene={width:box.width,height:box.height,imageWidth:iw*fit,imageHeight:ih*fit,left:(box.width-iw*fit)*pos[0],top:(box.height-ih*fit)*pos[1],flightLift};
-  renderBirds();
+  renderBirds();renderClouds();
 }
 function animateFlight(now){
   frameRequest=null;
   if(flightPaused||document.hidden||!sceneVisible){lastFrame=null;return;}
   if(lastFrame!==null)time+=Math.max(0,(now-lastFrame)/1000);
-  lastFrame=now;renderBirds();frameRequest=requestAnimationFrame(animateFlight);
+  lastFrame=now;renderBirds();renderClouds();frameRequest=requestAnimationFrame(animateFlight);
 }
 function syncFlight(){if(frameRequest!==null)cancelAnimationFrame(frameRequest);frameRequest=null;lastFrame=null;if(!flightPaused&&!document.hidden&&sceneVisible)frameRequest=requestAnimationFrame(animateFlight);}
-function setFlightPaused(paused){flightPaused=paused;motionToggle.setAttribute('aria-pressed',String(paused));motionToggle.setAttribute('aria-label',`${paused?'Resume':'Pause'} ${activeBirdScene==='egret'?'egret':'swallow'} scene`);motionToggle.innerHTML=paused?'Resume scene <span aria-hidden="true">▷</span>':'Pause scene <span aria-hidden="true">Ⅱ</span>';syncFlight();}
+function setFlightPaused(paused){flightPaused=paused;motionToggle.setAttribute('aria-pressed',String(paused));motionToggle.setAttribute('aria-label',`${paused?'Resume':'Pause'} scene: clouds and ${activeBirdScene==='egret'?'egret':activeBirdScene==='swallows'?'swallows':'pintails'}`);motionToggle.innerHTML=paused?'Resume scene <span aria-hidden="true">▷</span>':'Pause scene <span aria-hidden="true">Ⅱ</span>';syncFlight();}
 new ResizeObserver(resizeScene).observe(canvas);
 new IntersectionObserver(entries=>{sceneVisible=entries[0].isIntersecting;syncFlight();}).observe(canvas);
 landscapeImage.addEventListener('load',resizeScene);
 motionToggle.addEventListener('click',()=>setFlightPaused(!flightPaused));
 motionPreference.addEventListener('change',event=>setFlightPaused(event.matches));
-document.addEventListener('visibilitychange',syncFlight);
-resizeScene();setFlightPaused(flightPaused);
+document.addEventListener('visibilitychange',()=>{checkSeason();syncFlight();});
+window.addEventListener('pageshow',checkSeason);
+// Absolute wall-clock checks are independent of the paused animation clock.
+// Schedule against the next real second so a visible page switches at midnight.
+let seasonTimer;
+function scheduleSeasonCheck(){
+  clearTimeout(seasonTimer);
+  seasonTimer=setTimeout(()=>{checkSeason();scheduleSeasonCheck();},1000-Date.now()%1000);
+}
+function checkSeason(){
+  const next=seasonAt();
+  // A discovered manual season lasts for this visit. The next actual seasonal
+  // boundary restores automatic selection; an ordinary timer tick does not.
+  if(next===calendarSeason)return;
+  calendarSeason=next;showSeason(next);
+}
+function updateSeasonIcon(){
+  const order=Object.keys(seasons),next=order[(order.indexOf(activeSeason)+1)%order.length];
+  seasonToggle.textContent=seasons[activeSeason].icon;
+  seasonToggle.setAttribute('aria-label',`${activeSeason[0].toUpperCase()+activeSeason.slice(1)} scene. Show ${next}.`);
+}
+function showSeason(next){
+  activeSeason=next;activeBirdScene=chooseBirdScene(next);
+  applyTheme(next);
+  landscapeImage.src=seasons[next].image;
+  landscapeImage.alt=seasons[next].description;
+  cloudImage.src=seasons[next].cloud;
+  time=0;lastFrame=null;
+  resizeScene();setFlightPaused(flightPaused);updateSeasonIcon();
+}
+seasonToggle.addEventListener('click',()=>{
+  const order=Object.keys(seasons);
+  showSeason(order[(order.indexOf(activeSeason)+1)%order.length]);
+});
+cloudImage.addEventListener('load',prepareClouds);
+landscapeImage.addEventListener('error',()=>{
+  if(!landscapeImage.src.endsWith('/coyote-hills-windswept.jpg'))landscapeImage.src='assets/coyote-hills-windswept.jpg';
+});
+scheduleSeasonCheck();
+resizeScene();setFlightPaused(flightPaused);updateSeasonIcon();
