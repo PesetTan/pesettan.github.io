@@ -140,7 +140,7 @@ vm.runInContext(`{
      }
    }
  }
- assert.equal(cloudOffset(0,1000),cloudOffset(720,1000));
+ assert.equal(cloudOffset(0,1000),cloudOffset(480,1000));
  assert(cloudOffset(60,1000)>cloudOffset(0,1000),'Clouds drift');
  const near=CLOUD_LAYERS[1],far=CLOUD_LAYERS[0];
  assert(far.opacity<near.opacity && far.soft,'Distant clouds are fainter and softer');
@@ -151,7 +151,7 @@ vm.runInContext(`{
    const banks=(elapsed,layer)=>{time=elapsed;cloudCalls.draws=[];renderClouds();return cloudCalls.draws.filter(([,y,w])=>Math.abs(w-scene.imageWidth*layer.scale)<.001).map(([x,y,w,h])=>({x,end:x+w})).sort((a,b)=>a.x-b.x);};
    for(const layer of CLOUD_LAYERS) {
    assert.deepEqual(banks(0,layer),banks(layer.period,layer),'The loop renders identical banks at both ends');
-   for(const elapsed of [0,120,240,360,480,600,719.999,720.001]) {
+   for(const elapsed of [0,layer.period/4,layer.period/2,layer.period*.75,layer.period-.001,layer.period+.001]) {
      const copies=banks(elapsed,layer);
      assert(copies[0].x<=0 && copies.at(-1).end>=scene.width,'Banks cover both viewport edges');
      for(let i=1;i<copies.length;i++)assert(copies[i].x<copies[i-1].end,'Cloud banks overlap throughout the loop');
