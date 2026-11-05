@@ -14,7 +14,7 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": {
-              "base": "docs",
+              "base": "docs/sam/resume",
               "browser": ""
             },
             "deleteOutputPath": false,
@@ -27,13 +27,17 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "public",
+                "ignore": [
+                  "CNAME"
+                ]
               }
             ],
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "baseHref": "/sam/resume/"
           },
           "configurations": {
             "production": {
