@@ -13,6 +13,19 @@ const ctx = canvas.getContext('2d');
 const landscapeImage = document.querySelector('.landscape img');
 const motionToggle = document.querySelector('.motion-toggle');
 const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
+// sessionStorage alternates on every full load in this tab, including reloads.
+// The first visit shows the new egret scene. Resizing and pause never switch it.
+function chooseBirdScene(){
+  for(const name of ['sessionStorage','localStorage']){
+    try{
+      const storage=window[name],key='tan-family-bird-scene';
+      const next=storage.getItem(key)==='egret'?'swallows':'egret';
+      storage.setItem(key,next);return next;
+    }catch{/* Browsing with storage disabled still gets an animated scene. */}
+  }
+  return 'egret';
+}
+const activeBirdScene=chooseBirdScene();
 const TAU = Math.PI * 2;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const add = (a,b) => a.map((v,i)=>v+b[i]);
@@ -112,7 +125,11 @@ function drawSwallow(bird,time) {
   wing(-farSide);
 }
 let flightPaused=motionPreference.matches,time=0,lastFrame=null,frameRequest=null,sceneVisible=true;
-function renderBirds(){ctx.clearRect(0,0,scene.width,scene.height);[...swallows].sort((a,b)=>position(b.route,b.offset+time*b.speed)[2]-position(a.route,a.offset+time*a.speed)[2]).forEach(bird=>drawSwallow(bird,time));}
+function renderBirds(){
+  ctx.clearRect(0,0,scene.width,scene.height);
+  if(activeBirdScene==='egret'){drawEgret(time);return;}
+  [...swallows].sort((a,b)=>position(b.route,b.offset+time*b.speed)[2]-position(a.route,a.offset+time*a.speed)[2]).forEach(bird=>drawSwallow(bird,time));
+}
 function resizeScene(){
   const box=canvas.getBoundingClientRect();
   const ratio=Math.min(devicePixelRatio||1,2);
@@ -120,7 +137,15 @@ function resizeScene(){
   ctx.setTransform(ratio,0,0,ratio,0,0);
   const iw=landscapeImage.naturalWidth||1024,ih=landscapeImage.naturalHeight||1536;
   const fit=Math.max(box.width/iw,box.height/ih);
+  // Keep the actual marsh shoreline visible for a grounded landing, even
+  // when a panoramic viewport would otherwise crop it below the hero.
+  landscapeImage.style.objectPosition='';
   const pos=getComputedStyle(landscapeImage).objectPosition.split(' ').map(v=>parseFloat(v)/100);
+  if(activeBirdScene==='egret' && ih*fit>box.height){
+    const marshPosition=(ih*fit*.748-box.height*.87)/(ih*fit-box.height);
+    pos[1]=clamp(Math.max(pos[1],marshPosition),0,1);
+    landscapeImage.style.objectPosition=`${pos[0]*100}% ${pos[1]*100}%`;
+  }
   // A wide cover crop brings the ridge close to the birds. Gradually lift
   // the complete flight volume into open sky as the hero becomes panoramic.
   const wide=clamp((box.width/box.height-1.15)/.8,0,1);
@@ -131,11 +156,11 @@ function resizeScene(){
 function animateFlight(now){
   frameRequest=null;
   if(flightPaused||document.hidden||!sceneVisible){lastFrame=null;return;}
-  if(lastFrame!==null)time+=Math.min((now-lastFrame)/1000,.05);
+  if(lastFrame!==null)time+=Math.max(0,(now-lastFrame)/1000);
   lastFrame=now;renderBirds();frameRequest=requestAnimationFrame(animateFlight);
 }
 function syncFlight(){if(frameRequest!==null)cancelAnimationFrame(frameRequest);frameRequest=null;lastFrame=null;if(!flightPaused&&!document.hidden&&sceneVisible)frameRequest=requestAnimationFrame(animateFlight);}
-function setFlightPaused(paused){flightPaused=paused;motionToggle.setAttribute('aria-pressed',String(paused));motionToggle.innerHTML=paused?'Resume flight <span aria-hidden="true">▷</span>':'Pause flight <span aria-hidden="true">Ⅱ</span>';syncFlight();}
+function setFlightPaused(paused){flightPaused=paused;motionToggle.setAttribute('aria-pressed',String(paused));motionToggle.setAttribute('aria-label',`${paused?'Resume':'Pause'} ${activeBirdScene==='egret'?'egret':'swallow'} scene`);motionToggle.innerHTML=paused?'Resume scene <span aria-hidden="true">▷</span>':'Pause scene <span aria-hidden="true">Ⅱ</span>';syncFlight();}
 new ResizeObserver(resizeScene).observe(canvas);
 new IntersectionObserver(entries=>{sceneVisible=entries[0].isIntersecting;syncFlight();}).observe(canvas);
 landscapeImage.addEventListener('load',resizeScene);
