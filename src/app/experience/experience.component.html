@@ -83,7 +83,7 @@
             </article>
             <article>
                 <h3>Transactional event delivery</h3>
-                <p>Contributed to shared .NET transactional-outbox infrastructure using PostgreSQL and Kafka, persisting events with business changes and supporting leases, retries, and ordering by topic and message key. Optimized claim queries for uneven backlogs.</p>
+                <p>Contributed to shared .NET transactional-outbox infrastructure using PostgreSQL and Kafka, persisting events with business changes, coordinating concurrent publishers, retrying failed deliveries, and preserving ordering by topic and message key. Optimized database queries that select queued events for publishing, including uneven backlogs.</p>
                 <details class="evidence">
                     <summary>Local validation and delivery semantics</summary>
                     <div class="detail-content">
