@@ -38,3 +38,5 @@ All interface arrows, and plus/close controls use inline SVG instead of Unicode 
 The closing panel contains only the family tagline. The Shared Roots Tan Family logo remains in the header and site icons.
 
 Load performance: the landing page serves WebP delivery copies of the original seasonal PNGs. The painting is preloaded at high priority as soon as the California season is selected, before styles and animation scripts finish loading. Decorative clouds load at low priority. Originals remain available for editing and artwork registration checks. Regenerate delivery images with `python3 scripts/optimize-artwork.py` (requires Pillow); dimensions are retained and cloud alpha is verified pixel-for-pixel.
+
+Album image delivery: full-size stills are capped at 1600 pixels on the long edge (WebP quality 76); thumbnails at 480 pixels (quality 72). Animated WebP uses quality 70 with its timing retained. Keep source originals in the Design workspace. Both albums use cache-versioned image URLs when delivery assets change.
