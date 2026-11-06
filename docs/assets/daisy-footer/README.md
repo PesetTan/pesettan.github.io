@@ -5,7 +5,7 @@ The Windswept Coyote Hills painting supplied the style reference; Daisy's photos
 
 `loop.png` contains twelve simplified poses: sitting, alert sitting, rising, standing, and eight gallop phases. The runtime registers the generated atlas's uneven row padding to a common paw baseline. The 34px sprite sits within a 28px footer strip, below the closing panel.
 
-The 32-second loop starts centered and sitting, rises, runs left, turns to run right, then returns to the center and sits. It pauses while offscreen or hidden; reduced motion always shows Daisy sitting in the center. Run `node scripts/check-daisy.mjs` for the route and loop checks.
+The 18-second chase loop sends a small squirrel and Daisy back and forth along the footer. Daisy follows the same route 0.8 seconds behind, so the squirrel turns first and Daisy follows. The squirrel makes tiny bounds while Daisy uses her existing eight gallop poses. `squirrel.svg` uses broad ochre/umber shapes to match the simplified artwork. Both pause while offscreen or hidden; reduced motion shows Daisy sitting with a still squirrel nearby. Run `node scripts/check-daisy.mjs` for route, pursuit, and loop checks.
 
 The earlier `run.png` is retained as the previous artwork reference; the page uses `loop.png`.
 
