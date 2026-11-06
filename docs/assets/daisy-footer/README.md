@@ -5,7 +5,7 @@ The Windswept Coyote Hills painting supplied the style reference; Daisy's photos
 
 `loop.png` contains twelve simplified poses: sitting, alert sitting, rising, standing, and eight gallop phases. The runtime registers the generated atlas's uneven row padding to a common paw baseline. The 34px sprite sits within a 28px footer strip, below the closing panel.
 
-The 32-second loop starts centered and sitting, rises, runs left, turns to run right, then returns to the center and sits. It pauses while offscreen or hidden; reduced motion always shows Daisy sitting in the center. Run `node scripts/check-daisy.mjs` for the route and loop checks.
+The 18-second chase loop sends a small squirrel and Daisy back and forth along the footer. Daisy follows the same route 1.8 seconds behind, so the squirrel turns first and Daisy follows. The smaller squirrel uses twelve coordinated gallop poses: alternating fore/hind legs, a flexing body, and a trailing tail wave, with a low suspension phase rather than repeated static jumps. Daisy uses her existing eight gallop poses. `squirrel.svg` uses broad ochre/umber shapes to match the simplified artwork. Both pause while offscreen or hidden; reduced motion shows Daisy sitting with a still squirrel nearby. Run `node scripts/check-daisy.mjs` for route, pursuit, and loop checks.
 
 The earlier `run.png` is retained as the previous artwork reference; the page uses `loop.png`.
 
@@ -20,3 +20,13 @@ Make a NEW much simpler Windswept-style sprite sheet of Daisy, based on the supp
 ## Transparency Cleanup Prompt
 
 Remove the background from this sprite sheet. Keep all twelve dogs exactly unchanged at the exact same pixel positions, poses, size, scale, colors and simplified painted style. Remove EVERY bit of white/cream background, fog, halo, shadow and glow between and around the dogs, including spaces between legs and under tails. Only each dog's actual silhouette should remain opaque. Preserve the cream-colored fur INSIDE the dogs. Outside the actual dogs must be completely transparent alpha=0, crisp cutout silhouettes with only one pixel anti-aliasing. Do not add anything or redraw/rearrange the dogs. Retain the exact original image dimensions and layout.
+
+## Return-pass reaction and atlas edge fix
+
+Daisy stops at each returning squirrel pass, plants her paws for 2 seconds, turns toward the squirrel after a short surprise beat, then resumes pursuit. Her route remains continuous. The renderer clips the empty right margin of atlas frames 5 and 6 by 3.2 CSS pixels: a neighboring dog's tail intrudes at source x=293–301, beyond Daisy's x=265 silhouette, producing the stray white dot. The underlying artwork is unchanged.
+
+During the stop, the standing pose is split into body and tail with CSS clips at the tail root. A small damped back-and-forth rotation wags only the original painted tail while the paws remain planted. The wag follows the shared animation clock and stops for reduced motion or when the page is hidden.
+
+## Lightweight footer loading
+
+`loop-small.webp` is a display-sized WebP derivative of the unchanged 1208×1302 PNG in the family-assets repository. It is 604×651 at quality 85: 106,694 bytes instead of 1,012,594 bytes (89.5% smaller). CSS still registers the same frames and baseline. Footer artwork is enabled on the first IntersectionObserver entry, so the sprite does not compete with the hero on initial load. The small WebP and squirrel SVG are allowed local UI assets in `media-hosting.json`, ensuring the copy/build workflow retains both. The full source PNG remains unchanged.
