@@ -1,91 +1,12 @@
 [
   {
-    "src": "photos/daisy-01.webp",
-    "thumb": "photos/daisy-01-small.webp",
-    "alt": "Daisy, looking right at home.",
-    "group": "At home",
-    "width": 1800,
-    "height": 1200
-  },
-  {
     "src": "photos/daisy-02.webp",
     "thumb": "photos/daisy-02-small.webp",
     "alt": "Daisy resting her front paws on the sofa.",
     "group": "At home",
     "width": 1350,
-    "height": 1800
-  },
-  {
-    "src": "photos/daisy-03.webp",
-    "thumb": "photos/daisy-03-small.webp",
-    "alt": "Daisy enjoying the sunshine on a walk.",
-    "group": "Out & about",
-    "width": 1800,
-    "height": 1350
-  },
-  {
-    "src": "photos/daisy-04.webp",
-    "thumb": "photos/daisy-04-small.webp",
-    "alt": "Daisy with her chin on her paws on the rug.",
-    "group": "At home",
-    "width": 1800,
-    "height": 1350
-  },
-  {
-    "src": "photos/daisy-05.webp",
-    "thumb": "photos/daisy-05-small.webp",
-    "alt": "Daisy and Alyna together on the grass.",
-    "group": "Together",
-    "width": 1800,
-    "height": 1286
-  },
-  {
-    "src": "photos/daisy-06.webp",
-    "thumb": "photos/daisy-06-small.webp",
-    "alt": "Daisy watching the world through the window.",
-    "group": "At home",
-    "width": 1350,
-    "height": 1800
-  },
-  {
-    "src": "photos/daisy-07.webp",
-    "thumb": "photos/daisy-07-small.webp",
-    "alt": "Daisy standing tall on an outdoor table in her harness.",
-    "group": "Out & about",
-    "width": 1800,
-    "height": 1350
-  },
-  {
-    "src": "photos/daisy-08.webp",
-    "thumb": "photos/daisy-08-small.webp",
-    "alt": "Daisy curled up on the couch beside Alyna.",
-    "group": "Together",
-    "width": 1800,
-    "height": 1350
-  },
-  {
-    "src": "photos/daisy-09.webp",
-    "thumb": "photos/daisy-09-small.webp",
-    "alt": "Daisy on a blanket with a little toy by her paws.",
-    "group": "At home",
-    "width": 1800,
-    "height": 1350
-  },
-  {
-    "src": "photos/daisy-10.webp",
-    "thumb": "photos/daisy-10-small.webp",
-    "alt": "Daisy pausing beside a trail to look into the trees.",
-    "group": "Out & about",
-    "width": 1350,
-    "height": 1800
-  },
-  {
-    "src": "photos/daisy-11.webp",
-    "thumb": "photos/daisy-11-small.webp",
-    "alt": "Alyna reaching out to Daisy at home.",
-    "group": "Together",
-    "width": 1350,
-    "height": 1800
+    "height": 1800,
+    "date": "2024-05-18"
   },
   {
     "src": "photos/daisy-12.webp",
@@ -93,55 +14,8 @@
     "alt": "Daisy sitting in a patch of warm window light.",
     "group": "At home",
     "width": 1350,
-    "height": 1800
-  },
-  {
-    "src": "photos/daisy-13.webp",
-    "thumb": "photos/daisy-13-small.webp",
-    "alt": "Daisy sitting on the sunlit lawn.",
-    "group": "Out & about",
-    "width": 1800,
-    "height": 1350
-  },
-  {
-    "src": "photos/daisy-14.webp",
-    "thumb": "photos/daisy-14-small.webp",
-    "alt": "Daisy resting on her side on the rug.",
-    "group": "At home",
-    "width": 1800,
-    "height": 1350
-  },
-  {
-    "src": "photos/daisy-15.webp",
-    "thumb": "photos/daisy-15-small.webp",
-    "alt": "Daisy rolling on the rug with Alyna nearby.",
-    "group": "Together",
-    "width": 1800,
-    "height": 1350
-  },
-  {
-    "src": "photos/daisy-16.webp",
-    "thumb": "photos/daisy-16-small.webp",
-    "alt": "Daisy peeking through an open doorway.",
-    "group": "At home",
-    "width": 1800,
-    "height": 1350
-  },
-  {
-    "src": "photos/daisy-17.webp",
-    "thumb": "photos/daisy-17-small.webp",
-    "alt": "Daisy exploring a green lawn beside a path.",
-    "group": "Out & about",
-    "width": 1350,
-    "height": 1800
-  },
-  {
-    "src": "photos/daisy-18.webp",
-    "thumb": "photos/daisy-18-small.webp",
-    "alt": "Daisy keeping Alyna company on the sofa.",
-    "group": "Together",
-    "width": 1350,
-    "height": 1800
+    "height": 1800,
+    "date": "2024-07-09"
   },
   {
     "src": "photos/daisy-19.webp",
@@ -149,23 +23,8 @@
     "alt": "Daisy looking up from the living room rug.",
     "group": "At home",
     "width": 1350,
-    "height": 1800
-  },
-  {
-    "src": "photos/daisy-20.webp",
-    "thumb": "photos/daisy-20-small.webp",
-    "alt": "Daisy keeping watch at the window.",
-    "group": "At home",
-    "width": 1350,
-    "height": 1800
-  },
-  {
-    "src": "photos/daisy-21.webp",
-    "thumb": "photos/daisy-21-small.webp",
-    "alt": "Daisy relaxing on the rug beside Alyna.",
-    "group": "Together",
-    "width": 1350,
-    "height": 1800
+    "height": 1800,
+    "date": "2024-07-20"
   },
   {
     "src": "photos/daisy-22.webp",
@@ -173,23 +32,89 @@
     "alt": "Daisy riding in the car in her harness.",
     "group": "Out & about",
     "width": 1350,
-    "height": 1800
+    "height": 1800,
+    "date": "2024-08-04"
   },
   {
-    "src": "photos/daisy-23.webp",
-    "thumb": "photos/daisy-23-small.webp",
-    "alt": "Daisy stretched out on the floor by a doorway.",
-    "group": "At home",
-    "width": 1350,
-    "height": 1800
+    "src": "photos/daisy-08.webp",
+    "thumb": "photos/daisy-08-small.webp",
+    "alt": "Daisy curled up on the couch beside Alyna.",
+    "group": "Together",
+    "width": 1800,
+    "height": 1350,
+    "date": "2024-08-20"
   },
   {
-    "src": "photos/daisy-24.webp",
-    "thumb": "photos/daisy-24-small.webp",
-    "alt": "Daisy asleep on the sofa beneath a warm lamp.",
+    "src": "photos/daisy-07.webp",
+    "thumb": "photos/daisy-07-small.webp",
+    "alt": "Daisy standing tall on an outdoor table in her harness.",
+    "group": "Out & about",
+    "width": 1800,
+    "height": 1350,
+    "date": "2024-09-06"
+  },
+  {
+    "src": "photos/daisy-11.webp",
+    "thumb": "photos/daisy-11-small.webp",
+    "alt": "Alyna reaching out to Daisy at home.",
+    "group": "Together",
+    "width": 1350,
+    "height": 1800,
+    "date": "2024-09-17"
+  },
+  {
+    "src": "photos/daisy-17.webp",
+    "thumb": "photos/daisy-17-small.webp",
+    "alt": "Daisy exploring a green lawn beside a path.",
+    "group": "Out & about",
+    "width": 1350,
+    "height": 1800,
+    "date": "2025-01-02"
+  },
+  {
+    "src": "photos/daisy-10.webp",
+    "thumb": "photos/daisy-10-small.webp",
+    "alt": "Daisy pausing beside a trail to look into the trees.",
+    "group": "Out & about",
+    "width": 1350,
+    "height": 1800,
+    "date": "2025-01-04"
+  },
+  {
+    "src": "photos/daisy-14.webp",
+    "thumb": "photos/daisy-14-small.webp",
+    "alt": "Daisy resting on her side on the rug.",
+    "group": "At home",
+    "width": 1800,
+    "height": 1350,
+    "date": "2025-03-21"
+  },
+  {
+    "src": "photos/daisy-04.webp",
+    "thumb": "photos/daisy-04-small.webp",
+    "alt": "Daisy with her chin on her paws on the rug.",
+    "group": "At home",
+    "width": 1800,
+    "height": 1350,
+    "date": "2025-03-21"
+  },
+  {
+    "src": "photos/daisy-16.webp",
+    "thumb": "photos/daisy-16-small.webp",
+    "alt": "Daisy peeking through an open doorway.",
+    "group": "At home",
+    "width": 1800,
+    "height": 1350,
+    "date": "2025-04-05"
+  },
+  {
+    "src": "photos/daisy-06.webp",
+    "thumb": "photos/daisy-06-small.webp",
+    "alt": "Daisy watching the world through the window.",
     "group": "At home",
     "width": 1350,
-    "height": 1800
+    "height": 1800,
+    "date": "2025-08-14"
   },
   {
     "src": "photos/daisy-25.webp",
@@ -197,7 +122,26 @@
     "alt": "Daisy looking toward the light at home.",
     "group": "At home",
     "width": 1350,
-    "height": 1800
+    "height": 1800,
+    "date": "2025-08-14"
+  },
+  {
+    "src": "photos/daisy-03.webp",
+    "thumb": "photos/daisy-03-small.webp",
+    "alt": "Daisy enjoying the sunshine on a walk.",
+    "group": "Out & about",
+    "width": 1800,
+    "height": 1350,
+    "date": "2025-09-14"
+  },
+  {
+    "src": "photos/daisy-01.webp",
+    "thumb": "photos/daisy-01-small.webp",
+    "alt": "Daisy, looking right at home.",
+    "group": "At home",
+    "width": 1800,
+    "height": 1200,
+    "date": "2025-11-19"
   },
   {
     "src": "photos/daisy-26.webp",
@@ -205,6 +149,88 @@
     "alt": "A portrait of Daisy with her soft brown eyes and floppy ears.",
     "group": "At home",
     "width": 1800,
-    "height": 1200
+    "height": 1200,
+    "date": "2025-12-01"
+  },
+  {
+    "src": "photos/daisy-18.webp",
+    "thumb": "photos/daisy-18-small.webp",
+    "alt": "Daisy keeping Alyna company on the sofa.",
+    "group": "Together",
+    "width": 1350,
+    "height": 1800,
+    "date": "2026-04-15"
+  },
+  {
+    "src": "photos/daisy-13.webp",
+    "thumb": "photos/daisy-13-small.webp",
+    "alt": "Daisy sitting on the sunlit lawn.",
+    "group": "Out & about",
+    "width": 1800,
+    "height": 1350,
+    "date": "2026-04-30"
+  },
+  {
+    "src": "photos/daisy-15.webp",
+    "thumb": "photos/daisy-15-small.webp",
+    "alt": "Daisy rolling on the rug with Alyna nearby.",
+    "group": "Together",
+    "width": 1800,
+    "height": 1350,
+    "date": "2026-05-23"
+  },
+  {
+    "src": "photos/daisy-05.webp",
+    "thumb": "photos/daisy-05-small.webp",
+    "alt": "Daisy and Alyna together on the grass.",
+    "group": "Together",
+    "width": 1800,
+    "height": 1286,
+    "date": "2026-05-25"
+  },
+  {
+    "src": "photos/daisy-20.webp",
+    "thumb": "photos/daisy-20-small.webp",
+    "alt": "Daisy keeping watch at the window.",
+    "group": "At home",
+    "width": 1350,
+    "height": 1800,
+    "date": "2026-06-19"
+  },
+  {
+    "src": "photos/daisy-09.webp",
+    "thumb": "photos/daisy-09-small.webp",
+    "alt": "Daisy on a blanket with a little toy by her paws.",
+    "group": "At home",
+    "width": 1800,
+    "height": 1350,
+    "date": "2026-06-28"
+  },
+  {
+    "src": "photos/daisy-23.webp",
+    "thumb": "photos/daisy-23-small.webp",
+    "alt": "Daisy stretched out on the floor by a doorway.",
+    "group": "At home",
+    "width": 1350,
+    "height": 1800,
+    "date": "2026-09-02"
+  },
+  {
+    "src": "photos/daisy-24.webp",
+    "thumb": "photos/daisy-24-small.webp",
+    "alt": "Daisy asleep on the sofa beneath a warm lamp.",
+    "group": "At home",
+    "width": 1350,
+    "height": 1800,
+    "date": "2026-09-02"
+  },
+  {
+    "src": "photos/daisy-21.webp",
+    "thumb": "photos/daisy-21-small.webp",
+    "alt": "Daisy relaxing on the rug beside Alyna.",
+    "group": "Together",
+    "width": 1350,
+    "height": 1800,
+    "date": "2026-09-04"
   }
 ]
