@@ -9,7 +9,7 @@ function show(card) {
   const img = card.querySelector('img');
   full.src = card.href;
   full.alt = img.alt;
-  document.querySelector('#caption').textContent = img.alt;
+  document.querySelector('#caption').textContent = `${img.alt} ${card.querySelector('time').textContent}`;
   const visible = visibleCards();
   document.querySelector('#position').textContent = `${visible.indexOf(card) + 1} / ${visible.length}`;
 }
@@ -28,7 +28,7 @@ cards.forEach(card => card.addEventListener('click', event => {
 document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => {
   document.querySelectorAll('[data-filter]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
   cards.forEach(card => { card.hidden = button.dataset.filter !== 'All' && card.dataset.group !== button.dataset.filter; });
-  document.querySelector('#photo-count').textContent = `${visibleCards().length} photographs`;
+  document.querySelector('#photo-count').textContent = `${visibleCards().length} photographs · oldest first`;
 }));
 document.querySelector('#close').addEventListener('click', () => viewer.close());
 document.querySelector('#previous').addEventListener('click', () => move(-1));
@@ -45,3 +45,16 @@ viewer.addEventListener('click', event => {
   if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) viewer.close();
 });
 viewer.addEventListener('close', () => trigger?.focus());
+
+// Keep open albums synchronized with California's meteorological season.
+let calendarSeason = window.SeasonScene.seasonAt();
+function syncSeason() {
+  const next = window.SeasonScene.seasonAt();
+  if (next !== calendarSeason) {
+    calendarSeason = next;
+    window.SeasonScene.applyTheme(next);
+  }
+}
+setInterval(syncSeason, 1000);
+document.addEventListener('visibilitychange', syncSeason);
+window.addEventListener('pageshow', syncSeason);

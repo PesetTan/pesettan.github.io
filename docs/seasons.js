@@ -64,6 +64,7 @@
   applyTheme(initialSeason);
   // Start the visible painting before CSS and deferred animation scripts finish.
   // The later <img> request uses the same URL and reuses this download.
+  if (document.currentScript?.hasAttribute('data-palette-only')) return;
   const heroPreload = document.createElement('link');
   heroPreload.rel = 'preload';
   heroPreload.as = 'image';
