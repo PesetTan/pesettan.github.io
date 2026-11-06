@@ -3,6 +3,7 @@
 GitHub Pages serves `docs/` from `main` at https://www.thetanfamily.net/.
 
 - `/`: Windswept family landing page. Edit `family/`. Sam’s card links to the résumé.
+- `/alyna/`: Alyna’s photo and video album, ordered by original capture time, with shared seasonal colors, category filters, and a keyboard-accessible viewer. Edit `family/alyna/`. Video uses native controls and plays on request.
 - `/daisy/`: Daisy’s photo album in original capture-time order (oldest first), with month/year captions, category filters, and a keyboard-accessible photo viewer. Uses the homepage’s shared seasonal sRGB/P3 colors and California calendar. Edit `family/daisy/`. Dated moments are sorted oldest first; the undated animation follows at the end. Animation opens only in the viewer and uses a still image for reduced motion. Delivery images are resized WebP copies without source metadata; originals remain in the Design workspace’s `daisy/` folder.
 - `/memorial/`: Family memorial index with portrait cards. Edit `family/memorial/`.
 - `/memorial/kimkoeut/`: Kim Koeut memorial and restored portrait. Edit `family/memorial/kimkoeut/`; the family copy step preserves this route.
