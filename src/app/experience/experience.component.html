@@ -8,12 +8,12 @@
         <span class="work-number" aria-hidden="true">01</span>
         <div class="work-content">
             <h3>Shared auditing infrastructure</h3>
-            <p>Implemented reusable ASP.NET Core auditing and entity-change capture in shared backend infrastructure, recording actor, tenant, trace, and before/after values. Isolated concurrent request contexts and preserved existing package contracts while limiting service integration boilerplate.</p>
+            <p>Implemented reusable ASP.NET Core auditing in shared backend infrastructure to record requests and changes to application data, including who made each change, customer and request context, and before/after values. Kept each customer’s and request’s audit data separate and maintained compatibility for services using the shared libraries while limiting service integration boilerplate.</p>
             <details class="evidence">
                 <summary>Schema guidance, performance &amp; validation</summary>
                 <div class="detail-content">
                     <p>Provided technical guidance on ClickHouse database schema design and reviewed compatibility with legacy systems.</p>
-                    <p>Optimized audit middleware through cached configuration and streamlined claim processing. In repeated in-process Release/.NET 10 benchmarks, the authenticated single-role scenario executed <strong>32.6% faster with 28.2% fewer allocations</strong> than the prior implementation.</p>
+                    <p>Optimized audit middleware through cached configuration and streamlined claim processing. In repeated in-process .NET 10 Release-build tests using an authenticated user with one role, audit middleware executed <strong>32.6% faster with 28.2% fewer memory allocations</strong> than the prior implementation.</p>
                     <p>Validated request isolation and compatibility with regression tests.</p>
                 </div>
             </details>
@@ -24,7 +24,7 @@
         <span class="work-number" aria-hidden="true">02</span>
         <div class="work-content">
             <h3>Medication workflows &amp; cloud modernization</h3>
-            <p>Served as the inaugural developer for a hospital restocking cloud application; helped migrate legacy desktop functionality into three backend services and two Angular applications on Kubernetes. Hands-on experience includes Omnicell’s OmniSphere cloud platform, closed-loop systems integrated with medication dispensing systems, diversion workflows, and transactional auditing.</p>
+            <p>Served as the inaugural developer for a hospital restocking cloud application; helped migrate legacy desktop functionality into three backend services and two Angular applications on Kubernetes. Hands-on experience includes Omnicell’s OmniSphere cloud platform, integrations connecting medication dispensing and inventory systems, medication-diversion workflows, and transactional auditing.</p>
             <details class="evidence">
                 <summary>Restock scheduling, site transfers &amp; interoperability</summary>
                 <div class="detail-content">
@@ -41,12 +41,12 @@
         <span class="work-number" aria-hidden="true">03</span>
         <div class="work-content">
             <h3>Service performance &amp; production reliability</h3>
-            <p>Established a performance baseline and added observability to an edge synchronization service. Identified blocking Kafka publishing as a bottleneck and changed producer behavior to significantly reduce message lag.</p>
+            <p>Established a performance baseline and added performance monitoring to an edge synchronization service. Identified blocking Kafka publishing as a bottleneck and changed producer behavior to significantly reduce message lag.</p>
             <details class="evidence">
                 <summary>Distributed caching &amp; production changes</summary>
                 <div class="detail-content">
                     <p>Integrated Redis caching into a shared configuration service and helped diagnose connection and lookup issues across dependent data flows. Supported validation of configurations with multiple connected medication-management systems.</p>
-                    <p>Worked with SRE to reindex Elasticsearch shards across environments, addressing capacity and operational-cost concerns through staged testing and a production rollout with minimal disruption.</p>
+                    <p>Worked with site reliability engineers to reindex Elasticsearch shards across environments, addressing capacity and operational-cost concerns through staged testing and a production rollout with minimal disruption.</p>
                 </div>
             </details>
         </div>
@@ -75,7 +75,7 @@
         <div class="additional-content">
             <article>
                 <h3>Closed-loop data integration</h3>
-                <p>Contributed to historical-data hydration design and cross-team coordination for closed-loop inventory processing, including staging, enrichment, and progress tracking. Worked across service, data, infrastructure, and deployment boundaries to address integration and production-readiness issues.</p>
+                <p>Contributed to the design and cross-team coordination of loading historical data into newer systems for closed-loop inventory processing, including staging, enrichment, and progress tracking. Worked across service, data, infrastructure, and deployment boundaries to address integration and production-readiness issues.</p>
             </article>
             <article>
                 <h3>Deployment automation &amp; authorization</h3>
@@ -94,7 +94,7 @@
             </article>
             <article>
                 <h3>Tenant-aware audit ingestion</h3>
-                <p>Implemented TypeScript/Node.js audit ingestion from tenant-specific Kafka topics into ClickHouse, retaining the existing Elasticsearch path. Added payload validation, deterministic event IDs, safe handling of large offsets, and offset commits after successful persistence; supported evolving entity-change schemas and tenant-specific connection lifecycles.</p>
+                <p>Implemented TypeScript/Node.js audit ingestion from tenant-specific Kafka topics into ClickHouse, retaining the existing Elasticsearch path. Validated incoming event data, generated consistent IDs for the same source event, handled large offsets safely, and marked Kafka messages as processed only after saving their data; supported evolving entity-change schemas and tenant-specific connection lifecycles.</p>
                 <details class="evidence">
                     <summary>Cross-service delivery diagnosis</summary>
                     <div class="detail-content">
@@ -120,7 +120,7 @@
     <article class="career-item">
         <div class="career-heading"><h3><a href="https://www.omnicell.com">Omnicell <span aria-hidden="true">↗</span></a></h3><span class="career-date">2017–Present</span></div>
         <p class="career-role">Senior Software Engineer</p>
-        <p>Hands-on development across OmniSphere cloud software, closed-loop dispensing integrations, hospital restocking, diversion workflows, and transactional auditing, alongside shared identity, authorization, and site configuration services. Also serve as technical lead for three other engineers, with lead responsibilities since 2025.</p>
+        <p>Hands-on development across OmniSphere cloud software, integrations connecting medication dispensing and inventory systems, hospital restocking, medication-diversion workflows, and transactional auditing, alongside shared identity, authorization, and site configuration services. Also serve as technical lead for three other engineers, with lead responsibilities since 2025.</p>
     </article>
     <article class="career-item">
         <div class="career-heading"><h3><a href="https://www.atac.com">ATAC <span aria-hidden="true">↗</span></a></h3><span class="career-date">2008–2017</span></div>
