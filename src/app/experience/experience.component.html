@@ -8,12 +8,12 @@
         <span class="work-number" aria-hidden="true">01</span>
         <div class="work-content">
             <h3>Shared auditing infrastructure</h3>
-            <p>Implemented reusable ASP.NET Core auditing in shared backend infrastructure to record requests and changes to application data, including who made each change, customer and request context, and before/after values. Kept each customer’s and request’s audit data separate and maintained compatibility for services using the shared libraries while limiting service integration boilerplate.</p>
+            <p>Implemented reusable ASP.NET Core auditing in shared backend infrastructure to record requests and changes to application data, including who made each change, customer and request context, and before/after values. Kept each customer’s and request’s audit data separate and maintained compatibility for services using the shared libraries while reducing repetitive setup code when adding auditing to services.</p>
             <details class="evidence">
                 <summary>Schema guidance, performance &amp; validation</summary>
                 <div class="detail-content">
                     <p>Provided technical guidance on ClickHouse database schema design and reviewed compatibility with legacy systems.</p>
-                    <p>Optimized audit middleware through cached configuration and streamlined claim processing. In repeated in-process .NET 10 Release-build tests using an authenticated user with one role, audit middleware executed <strong>32.6% faster with 28.2% fewer memory allocations</strong> than the prior implementation.</p>
+                    <p>Optimized audit middleware through cached configuration and simplified processing of user identity and role information. In repeated in-process .NET 10 Release-build tests using an authenticated user with one role, audit middleware executed <strong>32.6% faster with 28.2% fewer memory allocations</strong> than the prior implementation.</p>
                     <p>Validated request isolation and compatibility with regression tests.</p>
                 </div>
             </details>
@@ -29,7 +29,7 @@
                 <summary>Restock scheduling, site transfers &amp; interoperability</summary>
                 <div class="detail-content">
                     <p>Gathered initial requirements for the restocking application and contributed to its technical roadmap and architecture.</p>
-                    <p>Owned the engineering design and much of the implementation of scheduled restocking. Refined the state machine for pod failures, rejected requests, and database unavailability, using manual and automated testing to validate edge cases.</p>
+                    <p>Owned the engineering design and much of the implementation of scheduled restocking. Refined scheduling logic to handle Kubernetes pod failures, rejected requests, and database unavailability, using manual and automated testing to validate edge cases.</p>
                     <p>Coordinated technical design, integration, and testing of a stock-area transfer workflow across services and teams. Resolved design gaps and followed cross-service work through its initial release.</p>
                     <p>Guide backward-compatibility reviews for legacy message processing and publishing to existing systems, helping the team evolve cloud services alongside established software.</p>
                 </div>
@@ -87,14 +87,14 @@
                 <details class="evidence">
                     <summary>Local validation and delivery semantics</summary>
                     <div class="detail-content">
-                        <p>Synthetic local tests across <strong>100 isolated tenants and three relays</strong> reconciled <strong>299,100 committed events</strong> with no observed loss, duplication, misrouting, malformed records, or ordering errors.</p>
+                        <p>Synthetic local tests across <strong>100 isolated tenants and three event-publishing workers</strong> reconciled <strong>299,100 committed events</strong> with no observed loss, duplication, misrouting, malformed records, or ordering errors.</p>
                         <p>Retained at-least-once delivery semantics. Skewed traffic exposed a capacity limit and accumulated backlog; these tests do not establish sustained production throughput.</p>
                     </div>
                 </details>
             </article>
             <article>
                 <h3>Tenant-aware audit ingestion</h3>
-                <p>Implemented TypeScript/Node.js audit ingestion from tenant-specific Kafka topics into ClickHouse, retaining the existing Elasticsearch path. Validated incoming event data, generated consistent IDs for the same source event, handled large offsets safely, and marked Kafka messages as processed only after saving their data; supported evolving entity-change schemas and tenant-specific connection lifecycles.</p>
+                <p>Implemented TypeScript/Node.js audit ingestion from tenant-specific Kafka topics into ClickHouse, retaining the existing Elasticsearch path. Validated incoming event data, generated consistent IDs for the same source event, handled large offsets safely, and marked Kafka messages as processed only after saving their data; supported evolving entity-change schemas and managed separate database connections for each customer.</p>
                 <details class="evidence">
                     <summary>Cross-service delivery diagnosis</summary>
                     <div class="detail-content">
@@ -109,7 +109,7 @@
             </article>
             <article>
                 <h3>Database reliability and operational tooling</h3>
-                <p>Diagnosed ClickHouse audit-query costs and unreadable transaction-report data. Developed guarded recovery runbooks that preserved readable values and required complete evidence before staging or cutover; validated the expanded tooling with 83 local tests. Troubleshot CI/CD, package compatibility, Kubernetes/Helm deployments, and Kafka lag and offsets.</p>
+                <p>Diagnosed ClickHouse audit-query costs and unreadable transaction-report data. Developed data-recovery procedures with built-in safety checks that preserved readable values and required complete evidence before preparing replacement data or switching to it; validated the expanded tooling with 83 local tests. Troubleshot CI/CD, package compatibility, Kubernetes/Helm deployments, and Kafka lag and offsets.</p>
             </article>
         </div>
     </details>
