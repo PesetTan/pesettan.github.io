@@ -48,3 +48,18 @@ footer a{color:inherit}
 @media(max-width:650px){.closing-court{margin-top:28px;padding:24px 6% 28px}.closing{padding:26px 20px;border-radius:24px}.closing p{font-size:20px}footer{margin:0 6%;padding:22px 0 32px;min-height:100px}}
 
 .footer-links{display:flex;flex-wrap:wrap;align-items:center;gap:24px;font-size:inherit}.footer-links a{display:inline-flex;align-items:center;min-height:44px}.footer-links a:hover,.footer-links a:focus-visible{text-decoration:underline;text-underline-offset:4px}
+
+/* Daisy takes a tiny lap along the footer rule without covering the links. */
+footer{position:relative}
+.footer-beagle-track{position:absolute;left:0;right:0;top:-30px;height:30px;overflow:hidden;pointer-events:none}
+.footer-beagle-runner{position:absolute;left:-48px;width:44px;height:28px;animation:beagle-crossing 26s linear infinite}
+.footer-beagle{display:block;width:44px;height:28px;overflow:visible}
+.beagle-body{animation:beagle-bound .36s ease-in-out infinite;transform-origin:32px 24px}
+.beagle-leg{fill:none;stroke:#f6edda;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;transform-origin:30px 25px;animation:beagle-stride .36s ease-in-out infinite alternate}
+.beagle-leg-back-far,.beagle-leg-front-far{stroke:#c6b99f;animation-delay:-.36s}
+.beagle-ear{transform-origin:43px 13px;animation:beagle-ear-flop .36s ease-in-out infinite alternate}
+@keyframes beagle-crossing{0%{left:-48px}76%,100%{left:calc(100% + 4px)}}
+@keyframes beagle-bound{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-2px) rotate(2deg)}}
+@keyframes beagle-stride{from{transform:rotate(-24deg)}to{transform:rotate(24deg)}}
+@keyframes beagle-ear-flop{from{transform:rotate(-12deg)}to{transform:rotate(16deg)}}
+@media(prefers-reduced-motion:reduce){.footer-beagle-runner{left:12%;animation:none}.footer-beagle *{animation:none}}
