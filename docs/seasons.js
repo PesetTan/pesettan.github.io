@@ -43,8 +43,8 @@
   }
   for (const [name, config] of Object.entries(seasons)) {
     config.p3Colors={...Object.fromEntries(Object.entries(config.colors).map(([key,value])=>[key,expandedColor(value)])),...wideAccents[name]};
-    config.image = `assets/seasons/${name}.webp`;
-    config.cloud = `assets/seasons/${config.cloud}`;
+    config.image = `https://www.thetanfamily.net/family-assets/assets/seasons/${name}.webp`;
+    config.cloud = `https://www.thetanfamily.net/family-assets/assets/seasons/${config.cloud}`;
   }
   function seasonAt(date = new Date()) {
     const month = Number(dateFormat.format(date));
