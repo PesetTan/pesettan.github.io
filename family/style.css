@@ -53,6 +53,3 @@ footer{position:relative}
 .footer-beagle-track{position:absolute;left:0;right:0;top:-28px;height:28px;overflow:hidden;pointer-events:none}
 .footer-beagle-runner{position:absolute;left:calc(50% - 17px);top:-3px;width:34px;height:34px}
 .footer-beagle{display:block;width:34px;height:34px;background-image:url('https://www.thetanfamily.net/family-assets/assets/daisy-footer/loop.png');background-size:136px auto;background-repeat:no-repeat;background-position:0 -17.735px;transform:scaleX(-1)}
-
-/* A small, flat-painted squirrel shares Daisy's ground line. */
-.footer-squirrel{position:absolute;left:60%;top:7px;width:24px;height:20px;background:url('assets/daisy-footer/squirrel.svg') center/contain no-repeat;transform-origin:center center}
