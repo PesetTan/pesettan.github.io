@@ -3,6 +3,7 @@
 GitHub Pages serves `docs/` from `main` at https://www.thetanfamily.net/.
 
 - `/`: Windswept family landing page. Edit `family/`. Sam’s card links to the résumé.
+- `/daisy/`: Daisy’s photo album with category filters and a keyboard-accessible photo viewer. Edit `family/daisy/`. Delivery images are resized WebP copies without source metadata; originals remain in the Design workspace’s `daisy/` folder.
 - `/memorial/`: Family memorial index with portrait cards. Edit `family/memorial/`.
 - `/memorial/kimkoeut/`: Kim Koeut memorial and restored portrait. Edit `family/memorial/kimkoeut/`; the family copy step preserves this route.
 - `/sam/resume/`: Angular résumé. Edit `src/`. Its base URL and output directory are configured in `angular.json`.
