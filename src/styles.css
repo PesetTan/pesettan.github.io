@@ -205,3 +205,27 @@ details[open] > :not(summary) { animation: detail-arrive 350ms ease both; }
     a { color: inherit; }
     @page { margin: 12mm; }
 }
+
+/* Keep the introduction compact after removing the technology cards. */
+.intro { margin-bottom: 48px; }
+@media (max-width: 700px) {
+    .intro { margin-bottom: 36px; }
+}
+/* Autumn on the resume: bark, copper, and oat within the seasonal theme. */
+@media screen {
+    html:root[data-season="autumn"] {
+        --canvas: #241f20;
+        --paper: #332b2b;
+        --card: #332b2b;
+        --card-alt: #2d2826;
+        --rail: #2d2826;
+        --ink: #f3e9df;
+        --muted: #d0bfb1;
+        --sub: #d0bfb1;
+        --accent: #dda18b;
+        --accent-hover: #efbda7;
+        --line: #5b4a45;
+        --detail: #292424;
+    }
+    html:root[data-season="autumn"] .detail-content { background: var(--detail); }
+}
