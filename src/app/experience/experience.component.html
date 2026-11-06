@@ -10,8 +10,9 @@
             <h3>Shared auditing infrastructure</h3>
             <p>Implemented reusable ASP.NET Core auditing and entity-change capture in shared backend infrastructure, recording actor, tenant, trace, and before/after values. Isolated concurrent request contexts and preserved existing package contracts while limiting service integration boilerplate.</p>
             <details class="evidence">
-                <summary>Performance and validation</summary>
+                <summary>Schema guidance, performance &amp; validation</summary>
                 <div class="detail-content">
+                    <p>Provided technical guidance on ClickHouse database schema design and reviewed compatibility with legacy systems.</p>
                     <p>Optimized audit middleware through cached configuration and streamlined claim processing. In repeated in-process Release/.NET 10 benchmarks, the authenticated single-role scenario executed <strong>32.6% faster with 28.2% fewer allocations</strong> than the prior implementation.</p>
                     <p>Validated request isolation and compatibility with regression tests.</p>
                 </div>
@@ -22,13 +23,15 @@
     <article class="work-item" appReveal>
         <span class="work-number" aria-hidden="true">02</span>
         <div class="work-content">
-            <h3>Transactional event delivery</h3>
-            <p>Contributed to shared .NET transactional-outbox infrastructure using PostgreSQL and Kafka, persisting events with business changes and supporting leases, retries, and ordering by topic and message key. Optimized claim queries for uneven backlogs.</p>
+            <h3>Medication workflows &amp; cloud modernization</h3>
+            <p>Served as the inaugural developer for a hospital restocking cloud application; helped migrate legacy desktop functionality into three backend services and two Angular applications on Kubernetes. Hands-on experience includes Omnicell’s OmniSphere cloud platform, closed-loop systems integrated with medication dispensing systems, diversion workflows, and transactional auditing.</p>
             <details class="evidence">
-                <summary>Local validation and delivery semantics</summary>
+                <summary>Restock scheduling, site transfers &amp; interoperability</summary>
                 <div class="detail-content">
-                    <p>Synthetic local tests across <strong>100 isolated tenants and three relays</strong> reconciled <strong>299,100 committed events</strong> with no observed loss, duplication, misrouting, malformed records, or ordering errors.</p>
-                    <p>Retained at-least-once delivery semantics. Skewed traffic exposed a capacity limit and accumulated backlog; these tests do not establish sustained production throughput.</p>
+                    <p>Gathered initial requirements for the restocking application and contributed to its technical roadmap and architecture.</p>
+                    <p>Owned the engineering design and much of the implementation of scheduled restocking. Refined the state machine for pod failures, rejected requests, and database unavailability, using manual and automated testing to validate edge cases.</p>
+                    <p>Coordinated technical design, integration, and testing of a stock-area transfer workflow across services and teams. Resolved design gaps and followed cross-service work through its initial release.</p>
+                    <p>Guide backward-compatibility reviews for legacy message processing and publishing to existing systems, helping the team evolve cloud services alongside established software.</p>
                 </div>
             </details>
         </div>
@@ -37,21 +40,69 @@
     <article class="work-item" appReveal>
         <span class="work-number" aria-hidden="true">03</span>
         <div class="work-content">
-            <h3>Tenant-aware audit ingestion</h3>
-            <p>Implemented TypeScript/Node.js audit ingestion from tenant-specific Kafka topics into ClickHouse, retaining the existing Elasticsearch path. Added payload validation, deterministic event IDs, safe handling of large offsets, and offset commits after successful persistence; supported evolving entity-change schemas and tenant-specific connection lifecycles.</p>
+            <h3>Service performance &amp; production reliability</h3>
+            <p>Established a performance baseline and added observability to an edge synchronization service. Identified blocking Kafka publishing as a bottleneck and changed producer behavior to significantly reduce message lag.</p>
             <details class="evidence">
-                <summary>Cross-service delivery diagnosis</summary>
+                <summary>Distributed caching &amp; production changes</summary>
                 <div class="detail-content">
-                    <p>Diagnosed cross-service audit delivery gaps caused by a mismatch between the queue written and the queue polled. Added an audit-aware reader for fresh and older pending events, preserving stored payloads, keys, headers, and existing business-event behavior.</p>
-                    <p>Added concurrency and compatibility regression coverage.</p>
+                    <p>Integrated Redis caching into a shared configuration service and helped diagnose connection and lookup issues across dependent data flows. Supported validation of configurations with multiple connected medication-management systems.</p>
+                    <p>Worked with SRE to reindex Elasticsearch shards across environments, addressing capacity and operational-cost concerns through staged testing and a production rollout with minimal disruption.</p>
+                </div>
+            </details>
+        </div>
+    </article>
+
+    <article class="work-item" appReveal>
+        <span class="work-number" aria-hidden="true">04</span>
+        <div class="work-content">
+            <h3>Technical leadership &amp; team development</h3>
+            <p>Alongside hands-on engineering, serve as technical lead for three other engineers, with lead responsibilities since 2025. Review team-proposed designs and provide technical guidance on Kubernetes cloud services, ClickHouse schemas, and legacy compatibility, encouraging engineers to develop and own their solutions.</p>
+            <details class="evidence">
+                <summary>Mentoring, collaboration &amp; shared ownership</summary>
+                <div class="detail-content">
+                    <p>Mentor engineers through constructive feedback and positive reinforcement. Encourage open communication and a culture of learning from mistakes, steering discussions toward solutions and away from blame.</p>
+                    <p>Helped engineers expand into backend service ownership, a complex Angular migration, and Kafka topic-management planning. Encourage work across disciplines while maintaining substantial individual engineering contributions.</p>
+                    <p>Promote shared ownership across the team’s products so engineers can support production issues beyond their own features.</p>
+                    <p>Collaborate with product managers, architects, customers, and other engineering teams on requirements, priorities, and technical tradeoffs.</p>
+                    <p>Use AI-assisted development in coding, debugging, and technical-debt work, and help engineers within and beyond the team apply these tools to their own tasks.</p>
                 </div>
             </details>
         </div>
     </article>
 
     <details class="additional-work">
-        <summary>Application and reliability work</summary>
+        <summary>Distributed systems, applications &amp; reliability</summary>
         <div class="additional-content">
+            <article>
+                <h3>Closed-loop data integration</h3>
+                <p>Contributed to historical-data hydration design and cross-team coordination for closed-loop inventory processing, including staging, enrichment, and progress tracking. Worked across service, data, infrastructure, and deployment boundaries to address integration and production-readiness issues.</p>
+            </article>
+            <article>
+                <h3>Deployment automation &amp; authorization</h3>
+                <p>Implemented deployment-time data migrations using Python and Kubernetes pre-upgrade jobs. Worked on authorization infrastructure using Go and scheduled Kubernetes jobs driven by user input.</p>
+            </article>
+            <article>
+                <h3>Transactional event delivery</h3>
+                <p>Contributed to shared .NET transactional-outbox infrastructure using PostgreSQL and Kafka, persisting events with business changes and supporting leases, retries, and ordering by topic and message key. Optimized claim queries for uneven backlogs.</p>
+                <details class="evidence">
+                    <summary>Local validation and delivery semantics</summary>
+                    <div class="detail-content">
+                        <p>Synthetic local tests across <strong>100 isolated tenants and three relays</strong> reconciled <strong>299,100 committed events</strong> with no observed loss, duplication, misrouting, malformed records, or ordering errors.</p>
+                        <p>Retained at-least-once delivery semantics. Skewed traffic exposed a capacity limit and accumulated backlog; these tests do not establish sustained production throughput.</p>
+                    </div>
+                </details>
+            </article>
+            <article>
+                <h3>Tenant-aware audit ingestion</h3>
+                <p>Implemented TypeScript/Node.js audit ingestion from tenant-specific Kafka topics into ClickHouse, retaining the existing Elasticsearch path. Added payload validation, deterministic event IDs, safe handling of large offsets, and offset commits after successful persistence; supported evolving entity-change schemas and tenant-specific connection lifecycles.</p>
+                <details class="evidence">
+                    <summary>Cross-service delivery diagnosis</summary>
+                    <div class="detail-content">
+                        <p>Diagnosed cross-service audit delivery gaps caused by a mismatch between the queue written and the queue polled. Added an audit-aware reader for fresh and older pending events, preserving stored payloads, keys, headers, and existing business-event behavior.</p>
+                        <p>Added concurrency and compatibility regression coverage.</p>
+                    </div>
+                </details>
+            </article>
             <article>
                 <h3>Audit interfaces and identity integration</h3>
                 <p>Implemented Angular/Nx audit-search behavior and contributed reusable frontend components. Preserved row selection across pagination, limited page-level selection to visible rows, and reset selection on filter or sort changes. Added identity-service auditing for role changes and login events, including readable role names and privacy metadata.</p>
@@ -59,10 +110,6 @@
             <article>
                 <h3>Database reliability and operational tooling</h3>
                 <p>Diagnosed ClickHouse audit-query costs and unreadable transaction-report data. Developed guarded recovery runbooks that preserved readable values and required complete evidence before staging or cutover; validated the expanded tooling with 83 local tests. Troubleshot CI/CD, package compatibility, Kubernetes/Helm deployments, and Kafka lag and offsets.</p>
-            </article>
-            <article>
-                <h3>Hospital restocking applications</h3>
-                <p>Served as the inaugural developer for a hospital restocking cloud application; helped migrate legacy desktop functionality into three backend services and two Angular applications on Kubernetes. Gathered initial requirements and contributed to the technical roadmap and architecture.</p>
             </article>
         </div>
     </details>
@@ -73,7 +120,7 @@
     <article class="career-item">
         <div class="career-heading"><h3><a href="https://www.omnicell.com">Omnicell <span aria-hidden="true">↗</span></a></h3><span class="career-date">2017–Present</span></div>
         <p class="career-role">Senior Software Engineer</p>
-        <p>Multitenant healthcare software supporting medication inventory, hospital restocking, identity and authorization, and site configuration.</p>
+        <p>Hands-on development across OmniSphere cloud software, closed-loop dispensing integrations, hospital restocking, diversion workflows, and transactional auditing, alongside shared identity, authorization, and site configuration services. Also serve as technical lead for three other engineers, with lead responsibilities since 2025.</p>
     </article>
     <article class="career-item">
         <div class="career-heading"><h3><a href="https://www.atac.com">ATAC <span aria-hidden="true">↗</span></a></h3><span class="career-date">2008–2017</span></div>
