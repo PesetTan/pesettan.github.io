@@ -223,7 +223,7 @@ seasonToggle.addEventListener('click',()=>{
 });
 cloudImage.addEventListener('load',prepareClouds);
 landscapeImage.addEventListener('error',()=>{
-  if(!landscapeImage.src.endsWith('/coyote-hills-windswept.jpg'))landscapeImage.src='assets/coyote-hills-windswept.jpg';
+  if(!landscapeImage.src.endsWith('/coyote-hills-windswept.jpg'))landscapeImage.src='https://www.thetanfamily.net/family-assets/assets/coyote-hills-windswept.jpg';
 });
 scheduleSeasonCheck();
 resizeScene();setFlightPaused(flightPaused);updateSeasonIcon();

@@ -1,10 +1,12 @@
 import fs from 'node:fs';
+import path from 'node:path';
 import zlib from 'node:zlib';
 import assert from 'node:assert/strict';
+const assetsRoot = process.env.FAMILY_ASSETS_DIR || path.resolve('../family-assets');
 
 // Read generated PNG pixels without adding an image-processing dependency.
 function png(name) {
-  const data=fs.readFileSync(new URL(`../family/assets/seasons/${name}.png`,import.meta.url));
+  const data=fs.readFileSync(path.join(assetsRoot, 'assets/seasons', `${name}.png`));
   let width,height,channels,compressed=[];
   for(let p=8;p<data.length;){
     const size=data.readUInt32BE(p),type=data.toString('ascii',p+4,p+8),chunk=data.subarray(p+8,p+8+size);

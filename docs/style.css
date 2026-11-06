@@ -52,4 +52,4 @@ footer a{color:inherit}
 footer{position:relative}
 .footer-beagle-track{position:absolute;left:0;right:0;top:-28px;height:28px;overflow:hidden;pointer-events:none}
 .footer-beagle-runner{position:absolute;left:calc(50% - 17px);top:-3px;width:34px;height:34px}
-.footer-beagle{display:block;width:34px;height:34px;background-image:url('assets/daisy-footer/loop.png');background-size:136px auto;background-repeat:no-repeat;background-position:0 -17.735px;transform:scaleX(-1)}
+.footer-beagle{display:block;width:34px;height:34px;background-image:url('https://www.thetanfamily.net/family-assets/assets/daisy-footer/loop.png');background-size:136px auto;background-repeat:no-repeat;background-position:0 -17.735px;transform:scaleX(-1)}

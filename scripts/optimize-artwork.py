@@ -1,12 +1,13 @@
 """Generate delivery WebP copies; retain the original PNG artwork.
 
 Requires Pillow: python3 -m pip install Pillow
-Run from any directory: python3 scripts/optimize-artwork.py
+Set FAMILY_ASSETS_DIR to a clone of PesetTan/family-assets, then run this script.
 """
 from pathlib import Path
+import os
 from PIL import Image, ImageChops
 
-assets = Path(__file__).resolve().parents[1] / 'family' / 'assets' / 'seasons'
+assets = Path(os.environ.get('FAMILY_ASSETS_DIR', '../family-assets')).resolve() / 'assets' / 'seasons'
 for name in ('spring', 'summer', 'autumn', 'winter', 'cumulus', 'winter-clouds'):
     source = assets / f'{name}.png'
     target = source.with_suffix('.webp')

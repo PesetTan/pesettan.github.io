@@ -182,7 +182,7 @@ vm.runInContext(`{
 fakeNow=Date.parse('2026-12-01T08:00:00Z');
 handlers.visibilitychange();
 assert.equal(root.dataset.season,'winter');
-assert.equal(img.src,'assets/seasons/winter.webp');
+assert.equal(img.src,'https://www.thetanfamily.net/family-assets/assets/seasons/winter.webp');
 assert.equal(pending.size,0,'Changing season respects paused motion');
 assert.equal(timers.size,1,'One wall-clock check is scheduled');
 fakeNow=Date.parse('2027-03-01T08:00:00Z');
