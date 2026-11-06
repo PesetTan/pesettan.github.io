@@ -1,5 +1,212 @@
 [
   {
+    "src": "photos/daisy-34.webp",
+    "thumb": "photos/daisy-34-small.webp",
+    "alt": "Daisy as a puppy, sitting on Ellene\u2019s lap.",
+    "group": "Together",
+    "width": 1350,
+    "height": 1800,
+    "date": "2020-12-02"
+  },
+  {
+    "src": "photos/daisy-35.webp",
+    "thumb": "photos/daisy-35-small.webp",
+    "alt": "Daisy being held outdoors when she was a puppy.",
+    "group": "Together",
+    "width": 1338,
+    "height": 1800,
+    "date": "2020-12-15"
+  },
+  {
+    "src": "photos/daisy-36.webp",
+    "thumb": "photos/daisy-36-small.webp",
+    "alt": "Daisy sitting patiently and looking toward the camera.",
+    "group": "At home",
+    "width": 1350,
+    "height": 1800,
+    "date": "2021-03-04"
+  },
+  {
+    "src": "photos/daisy-39.webp",
+    "thumb": "photos/daisy-39-small.webp",
+    "alt": "Daisy in her harness on a sunny lawn with a blue ball.",
+    "group": "Out & about",
+    "width": 1350,
+    "height": 1800,
+    "date": "2021-04-11"
+  },
+  {
+    "src": "photos/daisy-41.webp",
+    "thumb": "photos/daisy-41-small.webp",
+    "alt": "Daisy lying upside down on a bed.",
+    "group": "At home",
+    "width": 1350,
+    "height": 1800,
+    "date": "2021-04-29"
+  },
+  {
+    "src": "photos/daisy-33.webp",
+    "thumb": "photos/daisy-33-small.webp",
+    "alt": "A close-up of Daisy\u2019s face in profile.",
+    "group": "At home",
+    "width": 1350,
+    "height": 1800,
+    "date": "2021-10-19"
+  },
+  {
+    "src": "photos/daisy-37.webp",
+    "thumb": "photos/daisy-37-small.webp",
+    "alt": "Daisy sniffing a branch on the grass.",
+    "group": "Out & about",
+    "width": 1800,
+    "height": 1343,
+    "date": "2022-03-11"
+  },
+  {
+    "src": "photos/daisy-38.webp",
+    "thumb": "photos/daisy-38-small.webp",
+    "alt": "Daisy standing at the window above the sofa.",
+    "group": "At home",
+    "width": 1378,
+    "height": 1800,
+    "date": "2022-03-19"
+  },
+  {
+    "src": "photos/daisy-42.webp",
+    "thumb": "photos/daisy-42-small.webp",
+    "alt": "Daisy looking up beside a tree on a walk.",
+    "group": "Out & about",
+    "width": 1800,
+    "height": 1349,
+    "date": "2022-06-06"
+  },
+  {
+    "src": "photos/daisy-43.webp",
+    "thumb": "photos/daisy-43-small.webp",
+    "alt": "Daisy resting by the window with her chin on a cushion.",
+    "group": "At home",
+    "width": 1800,
+    "height": 1440,
+    "date": "2022-07-07"
+  },
+  {
+    "src": "photos/daisy-44.webp",
+    "thumb": "photos/daisy-44-small.webp",
+    "alt": "Daisy exploring a green lawn in the sunshine.",
+    "group": "Out & about",
+    "width": 1350,
+    "height": 1800,
+    "date": "2022-07-24"
+  },
+  {
+    "src": "photos/daisy-45.webp",
+    "thumb": "photos/daisy-45-small.webp",
+    "alt": "Daisy sitting in her harness on a bright green lawn.",
+    "group": "Out & about",
+    "width": 1800,
+    "height": 1800,
+    "date": "2023-01-21"
+  },
+  {
+    "src": "photos/daisy-46.webp",
+    "thumb": "photos/daisy-46-small.webp",
+    "alt": "Daisy in a red jacket beside tall grasses.",
+    "group": "Out & about",
+    "width": 1800,
+    "height": 1800,
+    "date": "2023-03-23"
+  },
+  {
+    "src": "photos/daisy-47.webp",
+    "thumb": "photos/daisy-47-small.webp",
+    "alt": "Daisy sitting on the rug with a toy nearby.",
+    "group": "At home",
+    "width": 1800,
+    "height": 1800,
+    "date": "2023-04-27"
+  },
+  {
+    "src": "photos/daisy-48.webp",
+    "thumb": "photos/daisy-48-small.webp",
+    "alt": "Daisy sitting upright with her front paws on a cushion.",
+    "group": "At home",
+    "width": 1800,
+    "height": 1800,
+    "date": "2023-05-30"
+  },
+  {
+    "src": "photos/daisy-49.webp",
+    "thumb": "photos/daisy-49-small.webp",
+    "alt": "Daisy with her mouth open and tongue out, looking toward the camera.",
+    "group": "At home",
+    "width": 1350,
+    "height": 1800,
+    "date": "2023-08-06"
+  },
+  {
+    "src": "photos/daisy-50.webp",
+    "thumb": "photos/daisy-50-small.webp",
+    "alt": "Daisy sitting on the sofa and watching the room.",
+    "group": "At home",
+    "width": 1800,
+    "height": 1800,
+    "date": "2023-09-16"
+  },
+  {
+    "src": "photos/daisy-27.webp",
+    "thumb": "photos/daisy-27-small.webp",
+    "alt": "Daisy and a family member pausing together beside a sunny path.",
+    "group": "Together",
+    "width": 1638,
+    "height": 1638,
+    "date": "2023-09-22"
+  },
+  {
+    "src": "photos/daisy-28.webp",
+    "thumb": "photos/daisy-28-small.webp",
+    "alt": "Daisy stretched out on a soft blue blanket.",
+    "group": "At home",
+    "width": 1800,
+    "height": 1800,
+    "date": "2023-10-01"
+  },
+  {
+    "src": "photos/daisy-29.webp",
+    "thumb": "photos/daisy-29-small.webp",
+    "alt": "Daisy and a family member together for a close-up photo.",
+    "group": "Together",
+    "width": 1800,
+    "height": 1800,
+    "date": "2023-10-09"
+  },
+  {
+    "src": "photos/daisy-30.webp",
+    "thumb": "photos/daisy-30-small.webp",
+    "alt": "Daisy sitting beside the stairs and looking up.",
+    "group": "At home",
+    "width": 1800,
+    "height": 1800,
+    "date": "2023-10-13"
+  },
+  {
+    "src": "photos/daisy-31.webp",
+    "thumb": "photos/daisy-31-small.webp",
+    "alt": "Daisy perched on the sofa beside a leafy plant.",
+    "group": "At home",
+    "width": 1800,
+    "height": 1800,
+    "date": "2023-10-15"
+  },
+  {
+    "src": "photos/daisy-32.webp",
+    "thumb": "photos/daisy-32-small.webp",
+    "alt": "Daisy looking up with her floppy ears and blue harness.",
+    "group": "At home",
+    "width": 1286,
+    "height": 1800,
+    "date": "2023-10-25"
+  },
+  {
     "src": "photos/daisy-02.webp",
     "thumb": "photos/daisy-02-small.webp",
     "alt": "Daisy resting her front paws on the sofa.",
@@ -232,5 +439,16 @@
     "width": 1350,
     "height": 1800,
     "date": "2026-09-04"
+  },
+  {
+    "src": "photos/daisy-40.webp",
+    "thumb": "photos/daisy-40-small.webp",
+    "alt": "Daisy being held in a doorway.",
+    "group": "Together",
+    "still": "photos/daisy-40-still.webp",
+    "animated": true,
+    "width": 469,
+    "height": 640,
+    "date": null
   }
 ]
