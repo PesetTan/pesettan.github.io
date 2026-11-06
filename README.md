@@ -33,6 +33,6 @@ Run `node scripts/check-color.mjs` to verify both seasonal palettes, complete fa
 
 All interface arrows, and plus/close controls use inline SVG instead of Unicode icon characters. This prevents iOS Safari from selecting color emoji glyphs; icon strokes inherit the coordinated seasonal colors.
 
-The closing mark uses the same Shared Roots Tan Family logo as the header. It links to `/design/` in the same tab, with a default cursor and no hover cue or tooltip; keyboard focus remains visible. The Design library is served by the separate GitHub Pages project at that existing URL.
+The closing panel contains only the family tagline. The Shared Roots Tan Family logo remains in the header and site icons.
 
 Load performance: the landing page serves WebP delivery copies of the original seasonal PNGs. The painting is preloaded at high priority as soon as the California season is selected, before styles and animation scripts finish loading. Decorative clouds load at low priority. Originals remain available for editing and artwork registration checks. Regenerate delivery images with `python3 scripts/optimize-artwork.py` (requires Pillow); dimensions are retained and cloud alpha is verified pixel-for-pixel.
