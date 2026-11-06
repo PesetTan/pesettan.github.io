@@ -1,25 +1,28 @@
-// One continuous lap: sit, rise, left, right, center, sit.
-export const DAISY_LOOP_SECONDS = 32;
+// Daisy follows the squirrel around the same continuous out-and-back path.
+export const DAISY_LOOP_SECONDS = 18;
+const CHASE_DELAY = .8;
+
+function route(seconds) {
+  const t = ((seconds % DAISY_LOOP_SECONDS) + DAISY_LOOP_SECONDS) % DAISY_LOOP_SECONDS;
+  return t < 9 ? { x: t / 9, direction: 1 } : { x: 2 - t / 9, direction: -1 };
+}
 
 export function sampleDaisy(seconds) {
-  const t = ((seconds % DAISY_LOOP_SECONDS) + DAISY_LOOP_SECONDS) % DAISY_LOOP_SECONDS;
-  const run = (x, direction, start) => ({ x, direction, frame: 4 + Math.floor((t - start) / .08) % 8 });
-  if (t < 5) return { x: .5, direction: -1, frame: 0 };
-  if (t < 5.6) return { x: .5, direction: -1, frame: t < 5.3 ? 2 : 3 };
-  if (t < 10.6) return run(.5 * (1 - (t - 5.6) / 5), -1, 5.6);
-  if (t < 10.9) return { x: 0, direction: t < 10.75 ? -1 : 1, frame: 3 };
-  if (t < 20.9) return run((t - 10.9) / 10, 1, 10.9);
-  if (t < 21.2) return { x: 1, direction: t < 21.05 ? 1 : -1, frame: 3 };
-  if (t < 26.2) return run(1 - .5 * (t - 21.2) / 5, -1, 21.2);
-  if (t < 26.8) return { x: .5, direction: -1, frame: t < 26.5 ? 3 : 2 };
-  return { x: .5, direction: -1, frame: 0 };
+  const phase = ((seconds % DAISY_LOOP_SECONDS) + DAISY_LOOP_SECONDS) % DAISY_LOOP_SECONDS;
+  return { ...route(seconds + 4.5), frame: 4 + Math.floor(phase / .075) % 8 };
+}
+
+export function sampleSquirrel(seconds) {
+  const phase = ((seconds % DAISY_LOOP_SECONDS) + DAISY_LOOP_SECONDS) % DAISY_LOOP_SECONDS;
+  return { ...route(seconds + 4.5 + CHASE_DELAY), hop: Math.sin(phase * Math.PI * 2 / .3) ** 2 * 3 };
 }
 
 if (typeof document !== 'undefined') {
   const track = document.querySelector('.footer-beagle-track');
   const runner = track?.querySelector('.footer-beagle-runner');
   const sprite = track?.querySelector('.footer-beagle');
-  if (runner && sprite) {
+  const squirrel = track?.querySelector('.footer-squirrel');
+  if (runner && sprite && squirrel) {
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
     let elapsed = 0;
     let lastTime = null;
@@ -27,7 +30,10 @@ if (typeof document !== 'undefined') {
     let visible = false;
 
     function paint() {
-      const pose = sampleDaisy(reducedMotion.matches ? 0 : elapsed);
+      const pose = reducedMotion.matches ? { x: .5, direction: 1, frame: 0 } : sampleDaisy(elapsed);
+      const prey = reducedMotion.matches ? { x: .62, direction: 1, hop: 0 } : sampleSquirrel(elapsed);
+      squirrel.style.left = `calc(9px + (100% - 42px) * ${prey.x})`;
+      squirrel.style.transform = `translateY(${-prey.hop}px) scaleX(${prey.direction})`;
       runner.style.left = `calc(4px + (100% - 42px) * ${pose.x})`;
       sprite.style.transform = `scaleX(${pose.direction})`;
       // The generated atlas has uneven row padding. Register each row's paw
