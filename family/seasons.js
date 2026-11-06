@@ -59,8 +59,37 @@
     }
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content',config.colors.sky);
   }
-  window.SeasonScene = {seasons, seasonAt, applyTheme, zone};
-  const initialSeason = seasonAt();
+  const storageKey = 'tan-family-season';
+  let manualSelection = null;
+  function periodAt(date = new Date()) {
+    const parts = new Intl.DateTimeFormat('en-US', {timeZone:zone, year:'numeric', month:'numeric'}).formatToParts(date);
+    let year = Number(parts.find(part => part.type === 'year').value);
+    const month = Number(parts.find(part => part.type === 'month').value);
+    if (month < 3) year--;
+    return `${year}-${seasonAt(date)}`;
+  }
+  function getSeason() {
+    try {
+      const saved = window.localStorage.getItem(storageKey);
+      manualSelection = saved ? JSON.parse(saved) : null;
+    } catch { /* An in-memory choice still works when storage is unavailable. */ }
+    return manualSelection && manualSelection.period === periodAt() && Object.hasOwn(seasons, manualSelection.name)
+      ? manualSelection.name : seasonAt();
+  }
+  function selectSeason(name) {
+    if (!Object.hasOwn(seasons, name)) return;
+    manualSelection = {name, period:periodAt()};
+    try { window.localStorage.setItem(storageKey, JSON.stringify(manualSelection)); } catch {}
+    applyTheme(name);
+  }
+  function syncTheme() {
+    const name = getSeason();
+    if (document.documentElement.dataset.season !== name) applyTheme(name);
+  }
+  window.SeasonScene = {seasons, seasonAt, applyTheme, zone, getSeason, selectSeason, syncTheme};
+  window.addEventListener('storage', event => { if (event.key === storageKey || event.key === null) syncTheme(); });
+  window.addEventListener('pageshow', syncTheme);
+  const initialSeason = getSeason();
   applyTheme(initialSeason);
   // Start the visible painting before CSS and deferred animation scripts finish.
   // The later <img> request uses the same URL and reuses this download.

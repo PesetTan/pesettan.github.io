@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 
 const properties=new Map(), preloads=[];
 const root={dataset:{},style:{setProperty:(key,value)=>properties.set(key,value)}};
-const context=vm.createContext({window:{},document:{head:{append:link=>preloads.push(link)},createElement:()=>({}),documentElement:root,querySelector:()=>null},Intl,Date});
+const context=vm.createContext({window:{addEventListener(){}},document:{head:{append:link=>preloads.push(link)},createElement:()=>({}),documentElement:root,querySelector:()=>null},Intl,Date});
 vm.runInContext(fs.readFileSync(new URL('../family/seasons.js',import.meta.url),'utf8'),context);
 const {seasons,applyTheme,seasonAt}=context.window.SeasonScene;
 assert.equal(preloads.length,1,'Only the initial season is preloaded');

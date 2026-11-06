@@ -24,7 +24,7 @@ All four paintings share the same hill and shoreline registration and identical 
 
 Validation: `node scripts/check-flight.mjs` covers bird continuity, egret timing, seasonal selection, California date boundaries, fixed framing, pause, and live season changes. `node scripts/check-artwork.mjs` verifies matching dimensions, hill alignment, and real cloud transparency. If the local Angular LMDB cache crashes during `npm run build`, use `CI=1 npm run build` to bypass that optional local cache.
 
-The seasonal icon beside “Coyote Hills · Close to home” quietly cycles spring → summer → autumn → winter. Only the icon is interactive, with a default cursor and no hover cue or tooltip. It remains a keyboard-accessible button with a descriptive accessible label. Manual selection lasts until reload or the next actual seasonal boundary; it is not stored.
+The seasonal icon beside “Coyote Hills · Close to home” quietly cycles spring → summer → autumn → winter. Only the icon is interactive, with a default cursor and no hover cue or tooltip. It remains a keyboard-accessible button with a descriptive accessible label. Manual selection is shared across family pages and tabs through local storage. It survives navigation and reloads until the next actual California seasonal boundary. Daisy, memorials, the résumé, and the Design library use the same selection and palette. If storage is unavailable, the current page still works with an in-memory choice.
 
 Season icons are original inline SVG line drawings: sprout, sun, leaf, and snowflake. The adjacent “Coyote Hills” text links to the official East Bay Regional Park District page in a new tab, with an underline, small outward arrow, and pointer cursor on hover or keyboard focus. These cues apply only to the park link.
 

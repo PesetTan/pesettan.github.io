@@ -1,0 +1,27 @@
+/* Shared site colors; loaded after each page's own layout styles. */
+@media screen {
+:root[data-season]{--canvas:var(--canvas-sdr);--ink:var(--ink-sdr);--muted:var(--muted-sdr);--sky:var(--sky-sdr);--accent:var(--accent-sdr);--accent-hover:var(--accent-hover-sdr);--card:var(--card-sdr);--card-alt:var(--card-alt-sdr);--card-warm:var(--card-warm-sdr);--card-last:var(--card-last-sdr);--card-hover:var(--card-hover-sdr);--detail:var(--detail-sdr);--line:color-mix(in srgb,var(--ink) 18%,transparent);--paper:var(--canvas);--gold:var(--accent);--rail:var(--card-alt);--sub:var(--muted);color-scheme:dark;background:var(--canvas);color:var(--ink)}
+@supports(color:color(display-p3 1 1 1)){@media(color-gamut:p3){:root[data-season]{--canvas:var(--canvas-p3,var(--canvas-sdr));--ink:var(--ink-p3,var(--ink-sdr));--muted:var(--muted-p3,var(--muted-sdr));--sky:var(--sky-p3,var(--sky-sdr));--accent:var(--accent-p3,var(--accent-sdr));--accent-hover:var(--accent-hover-p3,var(--accent-hover-sdr));--card:var(--card-p3,var(--card-sdr));--card-alt:var(--card-alt-p3,var(--card-alt-sdr));--card-warm:var(--card-warm-p3,var(--card-warm-sdr));--card-last:var(--card-last-p3,var(--card-last-sdr));--card-hover:var(--card-hover-p3,var(--card-hover-sdr));--detail:var(--detail-p3,var(--detail-sdr))}}}
+:root[data-season] body{background:var(--canvas);color:var(--ink)}
+.portrait-frame,.memorial-card{background:var(--card);border-color:var(--line)}
+.small-rule{background:var(--accent)}.family-mark{color:var(--accent)}
+.memorial-card:hover{border-color:var(--accent)}
+::selection{background:var(--accent);color:var(--canvas)}
+/* Resume surfaces and accents retain their layout and typography. */
+:root[data-season] .profile-rail{background:linear-gradient(155deg,var(--card-alt),var(--rail) 650px)}
+:root[data-season] .resume-shell,:root[data-season] .system-node{background:var(--card);border-color:var(--line)}
+:root[data-season] .resume-main{background:radial-gradient(ellipse at 90% 0%,color-mix(in srgb,var(--accent) 9%,transparent),transparent 70%)}
+:root[data-season] .intro:before{background:radial-gradient(ellipse at 70% 30%,color-mix(in srgb,var(--accent) 8%,transparent),transparent 65%)}
+:root[data-season] .headline-accent{background:linear-gradient(100deg,var(--ink),var(--accent));-webkit-background-clip:text;background-clip:text;color:var(--accent)}
+:root[data-season] .download-button{border-color:var(--accent);background:var(--accent);color:var(--canvas)}
+:root[data-season] .download-button:hover{background:var(--accent-hover);color:var(--canvas)}
+/* Design library chrome; reference specimens keep their authored palettes. */
+.masthead .live-dot{background:var(--accent)}
+.intro>p{color:var(--muted)}.intro h1 em{color:var(--accent)}
+[data-seasonal-page="design"] .card{background:var(--card)}
+[data-seasonal-page="design"] .card:hover{border-color:var(--accent)}
+[data-seasonal-page="design"] :is(.card p,.number,.tag,.details-link,.detail-description,.detail-section p,.detail-section li){color:var(--muted)}
+[data-seasonal-page="design"] :is(.tag,.card-bottom){border-color:var(--line)}
+[data-seasonal-page="design"] .close{color:var(--ink)}
+[data-seasonal-page="design"] .preview.brutalist{color:#292c29}
+}
