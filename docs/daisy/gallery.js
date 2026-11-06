@@ -1,13 +1,14 @@
 const cards = [...document.querySelectorAll('.photo')];
 const viewer = document.querySelector('#viewer');
 const full = document.querySelector('#full-photo');
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 let active = 0;
 let trigger;
 const visibleCards = () => cards.filter(card => !card.hidden);
 function show(card) {
   active = cards.indexOf(card);
   const img = card.querySelector('img');
-  full.src = card.href;
+  full.src = reducedMotion.matches && card.dataset.still ? card.dataset.still : card.href;
   full.alt = img.alt;
   document.querySelector('#caption').textContent = `${img.alt} ${card.querySelector('time').textContent}`;
   const visible = visibleCards();
@@ -28,7 +29,7 @@ cards.forEach(card => card.addEventListener('click', event => {
 document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => {
   document.querySelectorAll('[data-filter]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
   cards.forEach(card => { card.hidden = button.dataset.filter !== 'All' && card.dataset.group !== button.dataset.filter; });
-  document.querySelector('#photo-count').textContent = `${visibleCards().length} photographs · oldest first`;
+  document.querySelector('#photo-count').textContent = `${visibleCards().length} moments · oldest first`;
 }));
 document.querySelector('#close').addEventListener('click', () => viewer.close());
 document.querySelector('#previous').addEventListener('click', () => move(-1));
@@ -44,5 +45,9 @@ viewer.addEventListener('click', event => {
   const rect = viewer.getBoundingClientRect();
   if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) viewer.close();
 });
-viewer.addEventListener('close', () => trigger?.focus());
+viewer.addEventListener('close', () => {
+  full.removeAttribute('src');
+  trigger?.focus();
+});
+reducedMotion.addEventListener('change', () => { if (viewer.open) show(cards[active]); });
 
