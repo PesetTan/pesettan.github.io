@@ -3,6 +3,7 @@
 GitHub Pages serves `docs/` from `main` at https://www.thetanfamily.net/.
 
 - `/`: Windswept family landing page. Edit `family/`. Sam’s card links to the résumé.
+- `/memorial/`: Family memorial index with portrait cards. Edit `family/memorial/`.
 - `/memorial/kimkoeut/`: Kim Koeut memorial and restored portrait. Edit `family/memorial/kimkoeut/`; the family copy step preserves this route.
 - `/sam/resume/`: Angular résumé. Edit `src/`. Its base URL and output directory are configured in `angular.json`.
 - `/resume/Sam-Peset-Tan-Resume.pdf`: existing PDF download kept available for saved links. The résumé build also includes its own PDF under `/sam/resume/resume/`.
