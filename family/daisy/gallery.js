@@ -46,15 +46,3 @@ viewer.addEventListener('click', event => {
 });
 viewer.addEventListener('close', () => trigger?.focus());
 
-// Keep open albums synchronized with California's meteorological season.
-let calendarSeason = window.SeasonScene.seasonAt();
-function syncSeason() {
-  const next = window.SeasonScene.seasonAt();
-  if (next !== calendarSeason) {
-    calendarSeason = next;
-    window.SeasonScene.applyTheme(next);
-  }
-}
-setInterval(syncSeason, 1000);
-document.addEventListener('visibilitychange', syncSeason);
-window.addEventListener('pageshow', syncSeason);

@@ -15,9 +15,8 @@ const cloudCanvas = document.querySelector('.sky-clouds');
 const cloudCtx = cloudCanvas.getContext('2d');
 const cloudImage = new Image();
 const cloudSprite = document.createElement('canvas');
-const {seasons,seasonAt,applyTheme} = window.SeasonScene;
-let activeSeason = seasonAt();
-let calendarSeason = activeSeason;
+const {seasons,seasonAt,applyTheme,getSeason,selectSeason} = window.SeasonScene;
+let activeSeason = getSeason();
 // Clouds are decorative; prioritize the painting on slow connections.
 cloudImage.fetchPriority = 'low';
 cloudImage.src = seasons[activeSeason].cloud;
@@ -200,11 +199,8 @@ function scheduleSeasonCheck(){
   seasonTimer=setTimeout(()=>{checkSeason();scheduleSeasonCheck();},1000-Date.now()%1000);
 }
 function checkSeason(){
-  const next=seasonAt();
-  // A discovered manual season lasts for this visit. The next actual seasonal
-  // boundary restores automatic selection; an ordinary timer tick does not.
-  if(next===calendarSeason)return;
-  calendarSeason=next;showSeason(next);
+  const next=getSeason();
+  if(next!==activeSeason)showSeason(next);
 }
 function updateSeasonIcon(){
   const order=Object.keys(seasons),next=order[(order.indexOf(activeSeason)+1)%order.length];
@@ -222,7 +218,8 @@ function showSeason(next){
 }
 seasonToggle.addEventListener('click',()=>{
   const order=Object.keys(seasons);
-  showSeason(order[(order.indexOf(activeSeason)+1)%order.length]);
+  const next=order[(order.indexOf(activeSeason)+1)%order.length];
+  selectSeason(next);showSeason(next);
 });
 cloudImage.addEventListener('load',prepareClouds);
 landscapeImage.addEventListener('error',()=>{
