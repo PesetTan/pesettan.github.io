@@ -30,24 +30,3 @@ During the stop, the standing pose is split into body and tail with CSS clips at
 ## Lightweight footer loading
 
 `loop-small.webp` is a display-sized WebP derivative of the unchanged 1208×1302 PNG in the family-assets repository. It is 604×651 at quality 85: 106,694 bytes instead of 1,012,594 bytes (89.5% smaller). CSS still registers the same frames and baseline. Footer artwork is enabled on the first IntersectionObserver entry, so the sprite does not compete with the hero on initial load. The small WebP and squirrel SVG are allowed local UI assets in `media-hosting.json`, ensuring the copy/build workflow retains both. The full source PNG remains unchanged.
-
-## Reference-informed squirrel bound
-
-Rebuilt the squirrel with fixed-length thigh/shin and upper/lower foreleg segments rather than bending Bézier strokes. The sequence groups the hind push-off, suspended reach, fore-paw support, and hind-foot gather; the body lifts during suspension and the tail follows the landing with a small lag. Removed the runtime sine-wave hop, which previously moved the planted feet away from the ground. `scripts/build-squirrel.mjs --write` regenerates the SVG and `scripts/check-daisy.mjs` checks limb lengths, ground contacts and atlas consistency.
-
-Observational references (not traced or shipped):
-- Hiroki Inoue's running squirrel photo sequence, Sony α Universe: https://www.sony.jp/ichigan/a-universe/news/926/
-- Crow's Path, bounding gait description: https://crowspath.org/natural-history/wildlife/gaits/
-- Lee et al. (2025), squirrel forelimb landing mechanics (branch landings, supplementary context rather than a ground-running timing model): https://pmc.ncbi.nlm.nih.gov/articles/PMC11993264/
-
-The poses are an illustrative adaptation at footer scale, not a measured biomechanical reconstruction.
-
-Anatomy review: moved the foreleg roots back beneath the chest, separated the head from the shoulder silhouette, and shifted the matching foot contacts back. Checked all twelve poses at enlarged scale as well as the footer presentation.
-
-## Fluid foreleg revision
-
-The foreleg elbows now fold toward the body rather than toward the neck. Upper forelegs are occluded by the chest, as they are in a side-on silhouette. A periodic slope-limited Hermite curve interpolates the pose targets, preserving flat ground contacts. The atlas now has 24 frames over a 0.45-second bound (53 pose updates/second); the stride still divides the 18-second chase loop exactly. Each limb retains its fixed segment lengths. This supersedes the earlier twelve-frame timing and foreleg bend direction.
-
-Chest silhouette refinement: added a broad, softly tufted shoulder/chest contour and a muted pale-ochre chest plane. The neck now blends continuously into the torso, and the coat conceals more of the upper forelegs during recovery. The 24-pose gait and fixed joint lengths are unchanged.
-
-Tail-wag seam correction: the original rectangular split included rump pixels and pivoted inside the saddle, causing triangular gaps during rotation. The tail now uses a contour mask with a pivot at (5.5px, 17px); a small root overlap sits behind the static body layer. Checked at 6× size at -20°, 0°, and +20°. This supersedes the earlier rectangular split.

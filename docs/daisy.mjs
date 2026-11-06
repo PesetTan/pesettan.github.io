@@ -1,8 +1,6 @@
 // Daisy follows the squirrel around the same continuous out-and-back path.
 export const DAISY_LOOP_SECONDS = 18;
 const CHASE_DELAY = 1.8;
-export const SQUIRREL_FRAME_COUNT = 24;
-export const SQUIRREL_STRIDE_SECONDS = .45;
 export const DAISY_PAUSE_SECONDS = 2;
 const RUN_SECONDS = 9 - DAISY_PAUSE_SECONDS;
 
@@ -35,10 +33,10 @@ export function sampleDaisy(seconds) {
 
 export function sampleSquirrel(seconds) {
   const phase = ((seconds % DAISY_LOOP_SECONDS) + DAISY_LOOP_SECONDS) % DAISY_LOOP_SECONDS;
-  const stride = phase / SQUIRREL_STRIDE_SECONDS;
+  const stride = phase / .36;
   return { ...route(seconds + 4.5 + CHASE_DELAY),
-    frame: Math.floor(stride * SQUIRREL_FRAME_COUNT) % SQUIRREL_FRAME_COUNT,
-    hop: 0 }; // Suspension and ground contact are drawn into the rig poses.
+    frame: Math.floor(stride * 12) % 12,
+    hop: Math.max(0, Math.sin(stride * Math.PI * 2)) * 1.3 };
 }
 
 if (typeof document !== 'undefined') {
