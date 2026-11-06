@@ -49,20 +49,8 @@ footer a{color:inherit}
 
 .footer-links{display:flex;flex-wrap:wrap;align-items:center;gap:24px;font-size:inherit}.footer-links a{display:inline-flex;align-items:center;min-height:44px}.footer-links a:hover,.footer-links a:focus-visible{text-decoration:underline;text-underline-offset:4px}
 
-/* Daisy's painted gallop follows the footer rule, clear of every link. */
+/* Daisy stays inside the gap beneath the closing panel. */
 footer{position:relative}
-.footer-beagle-track{position:absolute;left:0;right:0;top:-40px;height:40px;overflow:hidden;pointer-events:none}
-.footer-beagle-runner{position:absolute;left:-52px;top:-3px;width:48px;height:48px;animation:beagle-crossing 26s linear infinite}
-.footer-beagle{display:block;width:48px;height:48px;background-image:url('assets/daisy-footer/run.png');background-size:400% 200%;background-repeat:no-repeat;animation:daisy-gallop .64s steps(1,end) infinite}
-@keyframes beagle-crossing{0%{left:-52px}76%,100%{left:calc(100% + 4px)}}
-@keyframes daisy-gallop{
-  0%,100%{background-position:0% 0%}
-  12.5%{background-position:33.333333% 0%}
-  25%{background-position:66.666667% 0%}
-  37.5%{background-position:100% 0%}
-  50%{background-position:0% 100%}
-  62.5%{background-position:33.333333% 100%}
-  75%{background-position:66.666667% 100%}
-  87.5%{background-position:100% 100%}
-}
-@media(prefers-reduced-motion:reduce){.footer-beagle-runner{left:12%;animation:none}.footer-beagle{animation:none}}
+.footer-beagle-track{position:absolute;left:0;right:0;top:-28px;height:28px;overflow:hidden;pointer-events:none}
+.footer-beagle-runner{position:absolute;left:calc(50% - 17px);top:-3px;width:34px;height:34px}
+.footer-beagle{display:block;width:34px;height:34px;background-image:url('assets/daisy-footer/loop.png');background-size:136px auto;background-repeat:no-repeat;background-position:0 -17.735px;transform:scaleX(-1)}
