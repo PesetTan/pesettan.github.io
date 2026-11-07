@@ -42,36 +42,51 @@ for (const t of [0, 2, 7, 10, 16]) {
 }
 console.log('Daisy chase: continuous loop, bounded poses, pursuit and reactions at both return passes passed.');
 
-// Limb lengths stay fixed across the bound; bending occurs only at joints.
-const { sampleSquirrelRig, SQUIRREL_FRAMES, buildSquirrelAtlas } = await import('./build-squirrel.mjs');
-for (let frame=0;frame<SQUIRREL_FRAMES;frame++) {
-  for (const leg of sampleSquirrelRig(frame).limbs) {
-    const distance=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
-    assert.ok(Math.abs(distance(leg.root,leg.joint)-leg.lengths[0])<1e-9);
-    assert.ok(Math.abs(distance(leg.joint,leg.foot)-leg.lengths[1])<1e-9);
-    assert.ok(leg.foot[1] <= 39.01);
+// Check the coordinated gait, including continuous poses between atlas frames.
+const { sampleSquirrelRig, SQUIRREL_FRAMES, buildSquirrelAtlas, GROUND_Y } = await import('./build-squirrel.mjs');
+const { squirrelStrideGeometry, SQUIRREL_SOURCE_STRIDE } = await import('../family/daisy.mjs');
+assert.deepEqual(sampleSquirrelRig(0),sampleSquirrelRig(SQUIRREL_FRAMES));
+let minPitch=Infinity,maxPitch=-Infinity,minSpine=Infinity,maxSpine=-Infinity;
+for(let frame=0;frame<SQUIRREL_FRAMES;frame+=.025) {
+ const rig=sampleSquirrelRig(frame),next=sampleSquirrelRig(frame+.025);
+ minPitch=Math.min(minPitch,rig.pitch);maxPitch=Math.max(maxPitch,rig.pitch);
+ const spine=Math.hypot(rig.shoulder[0]-rig.hip[0],rig.shoulder[1]-rig.hip[1]);
+ minSpine=Math.min(minSpine,spine);maxSpine=Math.max(maxSpine,spine);
+ for(let i=0;i<4;i++) {
+  const leg=rig.limbs[i];
+  const distance=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
+  assert.ok(Math.abs(distance(leg.root,leg.joint)-leg.lengths[0])<1e-9);
+  assert.ok(Math.abs(distance(leg.joint,leg.foot)-leg.lengths[1])<1e-9);
+  assert.ok(distance(leg.foot,leg.target)<1e-8,'Every paw target is physically reachable without stretching');
+  assert.ok(leg.foot[1]<=GROUND_Y+1e-8,'Paws do not pass below ground');
+  if(leg.stance)assert.ok(Math.abs(leg.foot[1]-GROUND_Y)<1e-8);
+  for(const[start,end]of[['root','joint'],['joint','foot']]) {
+   const angle=l=>Math.atan2(l[end][1]-l[start][1],l[end][0]-l[start][0]);
+   const d=angle(next.limbs[i])-angle(leg);
+   assert.ok(Math.abs(Math.atan2(Math.sin(d),Math.cos(d)))<.04,'No joint snap, including at the loop seam');
   }
+ }
+}
+assert.ok(minPitch<-.05&&maxPitch>.2,'Torso pitches through launch and landing');
+assert.ok(maxSpine-minSpine>4,'Spine extends in flight and compresses on landing');
+for(const phase of [.2,.28,.36])assert.ok(sampleSquirrelRig(phase*SQUIRREL_FRAMES).limbs.every(l=>!l.stance&&l.foot[1]<GROUND_Y-.5),'Flight has a genuine suspended phase');
+// A support paw remains fixed in world space while the body travels forward.
+for(const [index,start,end]of[[3,.48,.61],[2,.76,1.04]]) {
+ let previous;
+ for(let phase=start;phase<=end;phase+=.002) {
+  const leg=sampleSquirrelRig(phase*SQUIRREL_FRAMES).limbs[index];
+  assert.equal(leg.stance,true);
+  const worldX=phase*SQUIRREL_SOURCE_STRIDE+leg.foot[0];
+  if(previous!==undefined)assert.ok(Math.abs(worldX-previous)<1e-8,'Stance feet do not slide');
+  previous=worldX;
+ }
+}
+for(const width of [180,260,420,800,1200]) {
+ const g=squirrelStrideGeometry(width);
+ assert.ok(Number.isInteger(g.halfStrides));
+ assert.ok(Math.abs(g.cellWidth*SQUIRREL_SOURCE_STRIDE/64-width/g.halfStrides)<1e-10,'Rendered stride matches traveled distance at each width');
+ for(const t of [0,2.3,8.7])assert.deepEqual(sampleSquirrel(t,g.halfStrides),sampleSquirrel(t+DAISY_LOOP_SECONDS,g.halfStrides));
 }
 const {readFile}=await import('node:fs/promises');
 assert.equal(await readFile(new URL('../family/assets/daisy-footer/squirrel.svg',import.meta.url),'utf8'),buildSquirrelAtlas());
-console.log('Squirrel bound: fixed bone lengths, planted contact poses and generated atlas passed.');
-
-for (const frame of [10,12,14]) assert.ok(Math.abs(sampleSquirrelRig(frame).limbs[3].foot[1]-39)<1e-9, 'Fore-paw support reaches the ground');
-for (const frame of [16,18,20,22,0,2]) assert.ok(Math.abs(sampleSquirrelRig(frame).limbs[2].foot[1]-39)<1e-9, 'Hind-paw support reaches the ground');
-
-for (let frame=0;frame<SQUIRREL_FRAMES;frame++) {
- const rig=sampleSquirrelRig(frame);
- assert.ok(rig.shoulder[0] < 40, 'Forelegs attach below the torso, behind the head');
- assert.ok(rig.shoulder[0] > rig.hip[0], 'Shoulders remain in front of the hips');
-}
-
-// Catch elbow flips and discontinuities, including at the cycle seam.
-for (let frame=0;frame<SQUIRREL_FRAMES;frame+=.05) {
- const a=sampleSquirrelRig(frame).limbs[3], b=sampleSquirrelRig(frame+.05).limbs[3];
- assert.ok(a.joint[0] < 43, 'Elbow stays behind the head');
- for (const [start,end] of [['root','joint'],['joint','foot']]) {
-  const angle=l=>Math.atan2(l[end][1]-l[start][1],l[end][0]-l[start][0]);
-  const delta=angle(b)-angle(a);
-  assert.ok(Math.abs(Math.atan2(Math.sin(delta),Math.cos(delta)))<.06, 'Foreleg folds smoothly without flipping');
- }
-}
+console.log('Squirrel: weight transfer, suspension, fixed limb lengths, reachable contacts, no foot sliding and seamless distance-matched loops passed.');
