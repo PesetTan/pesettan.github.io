@@ -1,5 +1,14 @@
 // Daisy follows the squirrel around the same continuous out-and-back path.
 export const DAISY_LOOP_SECONDS = 18;
+// Separate playback profiles share the reviewed poses and pursuit choreography.
+// A single scaled clock keeps travel, foot contacts and reactions together.
+export const CHASE_PROFILES = Object.freeze({
+  desktop: Object.freeze({ name: 'desktop', rate: .6 }),
+  mobile: Object.freeze({ name: 'mobile', rate: 1 })
+});
+export function chaseProfileForWidth(width) {
+  return width <= 650 ? CHASE_PROFILES.mobile : CHASE_PROFILES.desktop;
+}
 const CHASE_DELAY = 1.8;
 export const SQUIRREL_FRAME_COUNT = 48;
 export const SQUIRREL_STRIDE_SECONDS = .45;
@@ -53,6 +62,9 @@ if (typeof document !== 'undefined') {
   const squirrel = track?.querySelector('.footer-squirrel');
   if (runner && sprite && squirrel) {
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    const mobileLayout = matchMedia('(max-width: 650px)');
+    let profile = mobileLayout.matches ? CHASE_PROFILES.mobile : CHASE_PROFILES.desktop;
+    track.dataset.chaseProfile = profile.name;
     let elapsed = 0;
     let lastTime = null;
     let request = null;
@@ -88,7 +100,7 @@ if (typeof document !== 'undefined') {
 
     function tick(now) {
       request = null;
-      if (lastTime !== null) elapsed += (now - lastTime) / 1000;
+      if (lastTime !== null) elapsed += (now - lastTime) / 1000 * profile.rate;
       lastTime = now;
       paint();
       request = requestAnimationFrame(tick);
@@ -109,6 +121,12 @@ if (typeof document !== 'undefined') {
     }).observe(track);
     document.addEventListener('visibilitychange', sync);
     reducedMotion.addEventListener('change', sync);
+    mobileLayout.addEventListener('change', () => {
+      profile = mobileLayout.matches ? CHASE_PROFILES.mobile : CHASE_PROFILES.desktop;
+      track.dataset.chaseProfile = profile.name;
+      // Retain the current route/gait phase when rotating or resizing.
+      sync();
+    });
     paint();
   }
 }
