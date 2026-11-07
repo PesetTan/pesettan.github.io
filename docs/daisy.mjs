@@ -1,8 +1,14 @@
 // Daisy follows the squirrel around the same continuous out-and-back path.
 export const DAISY_LOOP_SECONDS = 18;
 const CHASE_DELAY = 1.8;
-export const SQUIRREL_FRAME_COUNT = 24;
+export const SQUIRREL_FRAME_COUNT = 48;
 export const SQUIRREL_STRIDE_SECONDS = .45;
+export const SQUIRREL_SOURCE_STRIDE = 60;
+
+export function squirrelStrideGeometry(travelPixels) {
+  const halfStrides = Math.max(1, Math.round(travelPixels / (SQUIRREL_SOURCE_STRIDE * 20 / 64)));
+  return { halfStrides, cellWidth: travelPixels / halfStrides / SQUIRREL_SOURCE_STRIDE * 64 };
+}
 export const DAISY_PAUSE_SECONDS = 2;
 const RUN_SECONDS = 9 - DAISY_PAUSE_SECONDS;
 
@@ -33,12 +39,11 @@ export function sampleDaisy(seconds) {
     reacting: false, tilt: 0, wag: 0 };
 }
 
-export function sampleSquirrel(seconds) {
+export function sampleSquirrel(seconds, halfStrides = 9 / SQUIRREL_STRIDE_SECONDS) {
   const phase = ((seconds % DAISY_LOOP_SECONDS) + DAISY_LOOP_SECONDS) % DAISY_LOOP_SECONDS;
-  const stride = phase / SQUIRREL_STRIDE_SECONDS;
+  const stride = (phase + 4.5 + CHASE_DELAY) / 9 * halfStrides;
   return { ...route(seconds + 4.5 + CHASE_DELAY),
-    frame: Math.floor(stride * SQUIRREL_FRAME_COUNT) % SQUIRREL_FRAME_COUNT,
-    hop: 0 }; // Suspension and ground contact are drawn into the rig poses.
+    frame: Math.floor(((stride % 1) + 1) % 1 * SQUIRREL_FRAME_COUNT), hop: 0 };
 }
 
 if (typeof document !== 'undefined') {
@@ -52,12 +57,21 @@ if (typeof document !== 'undefined') {
     let lastTime = null;
     let request = null;
     let visible = false;
+    let travelPixels = Math.max(1, track.clientWidth - 42);
+    let gait = squirrelStrideGeometry(travelPixels);
+    new ResizeObserver(() => {
+      travelPixels = Math.max(1, track.clientWidth - 42);
+      gait = squirrelStrideGeometry(travelPixels);
+      paint();
+    }).observe(track);
 
     function paint() {
       const pose = reducedMotion.matches ? { x: .5, direction: 1, frame: 0 } : sampleDaisy(elapsed);
-      const prey = reducedMotion.matches ? { x: .72, direction: 1, hop: 0, frame: 3 } : sampleSquirrel(elapsed);
-      squirrel.style.left = `calc(11px + (100% - 42px) * ${prey.x})`;
-      squirrel.style.backgroundPosition = `${-prey.frame * 20}px 0`;
+      const prey = reducedMotion.matches ? { x: .72, direction: 1, hop: 0, frame: 0 } : sampleSquirrel(elapsed, gait.halfStrides);
+      squirrel.style.width = `${gait.cellWidth}px`;
+      squirrel.style.left = `calc(${21 - gait.cellWidth / 2}px + (100% - 42px) * ${prey.x})`;
+      squirrel.style.backgroundSize = `${gait.cellWidth * SQUIRREL_FRAME_COUNT}px 14px`;
+      squirrel.style.backgroundPosition = `${-prey.frame * gait.cellWidth}px 0`;
       squirrel.style.transform = `translateY(${-prey.hop}px) scaleX(${prey.direction})`;
       runner.style.left = `calc(4px + (100% - 42px) * ${pose.x})`;
       sprite.toggleAttribute('data-wagging', Boolean(pose.reacting));
