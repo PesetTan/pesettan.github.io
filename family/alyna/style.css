@@ -1,1 +1,1 @@
-#full-photo[hidden],#full-video[hidden]{display:none}#full-video{display:block;width:100%;height:calc(94svh - 200px);max-height:760px;object-fit:contain;margin:auto}.hero-photo img{object-position:50% 40%}@media(max-width:580px){#full-video{height:calc(90svh - 215px)}}
+.hero-photo img{object-position:50% 40%}
