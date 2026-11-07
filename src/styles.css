@@ -37,6 +37,7 @@ strong { font-weight: 600; color: var(--ink); }
 .section-nav a { display: flex; gap: 10px; align-items: baseline; color: var(--sub); transition: color 200ms ease, transform 250ms ease; }
 .section-nav a:first-child, .section-nav a:hover { color: var(--accent); }
 .section-nav a span { font-size: 11px; }
+.link-icon { display: inline-block; flex: 0 0 auto; width: 12px; height: 12px; vertical-align: -.12em; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
 .eyebrow { font: 400 11px/1.7 var(--mono); letter-spacing: .09em; text-transform: uppercase; color: var(--sub); }
 .skill-stack { border-top: 1px solid var(--line); padding-top: 24px; }
 .skill-stack h2 { margin-bottom: 15px; }
@@ -103,7 +104,7 @@ details[open] > :not(summary) { animation: detail-arrive 350ms ease both; }
 .career-item + .career-item { padding-top: 22px; border-top: 1px solid var(--line); }
 .career-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 15px; flex-wrap: wrap; }
 .career-heading h3 { font-size: 22px; }
-.career-heading h3 span { font-size: 14px; color: var(--sub); }
+.career-heading .link-icon { width: 14px; height: 14px; color: var(--sub); }
 .career-date { font: 400 11px/1.7 var(--mono); color: var(--sub); white-space: nowrap; }
 .career-item .career-role { color: var(--ink); font-size: 14px; margin: 7px 0 13px; }
 .career-item > p, .career-bullets { font-size: 13px; color: var(--sub); }

@@ -7,3 +7,8 @@ footer{max-width:1440px;margin:auto;padding:27px 6% 32px;border-top:1px solid va
 @media(min-width:1600px){.portrait-section{padding-top:55px}}@media(max-width:700px){.site-header{padding:23px 7%}.header-label{font-size:8px;letter-spacing:1.3px}.family-home{font-size:16px}.family-home svg{width:31px;height:31px}.portrait-section{grid-template-columns:1fr;gap:35px;padding:23px 8% 48px}.portrait{max-width:420px;width:100%;margin:auto}.portrait-frame{padding:9px}.portrait figcaption{font-size:9px}.introduction{text-align:center;padding:0}.introduction .eyebrow{margin-bottom:19px}h1{font-size:80px;letter-spacing:-3.5px;line-height:1}h1 br{display:none}h1 span::before{content:' '}.small-rule{margin:26px auto 20px}.relationship{font-size:13px}.dedication{font-size:34px;margin-top:25px}.intro-note{font-size:12px}.remembrance{padding:45px 12px 50px;margin:0 8%}.remembrance>p:last-child{font-size:13px}footer{padding:24px 8%;flex-wrap:wrap;gap:24px}.photo-note{order:3;width:100%;max-width:none}.footer-name{font-size:10px}.family-mark{margin-bottom:20px}}
 @media(max-width:370px){.header-label{display:none}h1{font-size:65px}.footer-name{white-space:normal}}@media print{.site-header,footer,.skip{display:none}body{background:white}.portrait-section{padding:20px;gap:40px}.remembrance{padding:20px}.portrait-frame{box-shadow:none}.portrait-section{grid-template-columns:1fr 1fr}h1{font-size:68px}}
 .wordmark-dot{color:var(--accent,var(--gold))}
+
+.photo-note summary{display:flex;align-items:center;gap:6px;list-style:none}
+.photo-note summary::-webkit-details-marker{display:none}
+.photo-note summary svg{width:14px;height:14px;flex:none}
+.photo-note[open] .photo-note-plus{display:none}
