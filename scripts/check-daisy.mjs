@@ -90,3 +90,22 @@ for(const width of [180,260,420,800,1200]) {
 const {readFile}=await import('node:fs/promises');
 assert.equal(await readFile(new URL('../family/assets/daisy-footer/squirrel.svg',import.meta.url),'utf8'),buildSquirrelAtlas());
 console.log('Squirrel: weight transfer, suspension, fixed limb lengths, reachable contacts, no foot sliding and seamless distance-matched loops passed.');
+
+const { CHASE_PROFILES, chaseProfileForWidth } = await import('../family/daisy.mjs');
+assert.equal(chaseProfileForWidth(390),CHASE_PROFILES.mobile);
+assert.equal(chaseProfileForWidth(650),CHASE_PROFILES.mobile);
+assert.equal(chaseProfileForWidth(651),CHASE_PROFILES.desktop);
+assert.equal(chaseProfileForWidth(1280),CHASE_PROFILES.desktop);
+assert.equal(DAISY_LOOP_SECONDS/CHASE_PROFILES.mobile.rate,18);
+assert.equal(DAISY_LOOP_SECONDS/CHASE_PROFILES.desktop.rate,30);
+for(const profile of Object.values(CHASE_PROFILES)) {
+ const loop=DAISY_LOOP_SECONDS/profile.rate;
+ assert.deepEqual(sampleDaisy(0),sampleDaisy(loop*profile.rate));
+ assert.deepEqual(sampleSquirrel(0),sampleSquirrel(loop*profile.rate));
+ for(const crossing of [3.6,12.6]) {
+  const wallTime=(crossing+.2)/profile.rate;
+  assert.equal(sampleDaisy(wallTime*profile.rate).reacting,true);
+  assert.equal(sampleDaisy(wallTime*profile.rate).direction,sampleSquirrel(wallTime*profile.rate).direction);
+ }
+}
+console.log('Responsive chase: desktop 30s, mobile 18s, paired movement/reactions and loop continuity passed.');
