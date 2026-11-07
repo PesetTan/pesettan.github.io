@@ -1,0 +1,74 @@
+.family-header {
+  position: relative;
+  z-index: 3;
+  padding-inline: max(6%, calc((100% - 1440px) / 2));
+  min-height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--canvas, var(--paper));
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  font: 400 13px/1.3 'Trebuchet MS', Arial, sans-serif;
+}
+
+.family-header a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.family-header a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.family-header-brand {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  white-space: nowrap;
+}
+
+.family-header-brand svg {
+  width: 40px;
+  height: 40px;
+  flex: none;
+}
+
+.family-header-dot {
+  color: var(--accent, currentColor);
+}
+
+.family-header-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  column-gap: clamp(12px, 3vw, 32px);
+}
+
+.family-header-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.family-header-nav a:hover,
+.family-header-nav a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 600px) {
+  .family-header { min-height: 64px; }
+  .family-header-brand { gap: 6px; font-size: 17px; }
+  .family-header-brand svg { width: 32px; height: 32px; }
+}
+
+@media print {
+  .family-header { display: none; }
+}
