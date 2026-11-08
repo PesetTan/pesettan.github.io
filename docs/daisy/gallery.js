@@ -6,7 +6,29 @@ let active = 0;
 let photoRequest = 0;
 let dismissAnimation;
 let trigger;
-const visibleCards = () => cards.filter(card => !card.hidden);
+const batchSize = 18;
+let matchingCards = cards;
+let shownCount = 0;
+const batchObserver = 'IntersectionObserver' in window
+  ? new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) showNextBatch();
+    })
+  : null;
+
+function showNextBatch() {
+  batchObserver?.disconnect();
+  batchObserver?.takeRecords();
+  const nextCount = batchObserver
+    ? Math.min(shownCount + batchSize, matchingCards.length)
+    : matchingCards.length;
+  matchingCards.slice(shownCount, nextCount).forEach(card => { card.hidden = false; });
+  shownCount = nextCount;
+
+  // The last visible card sits in the final row at either grid breakpoint.
+  if (shownCount < matchingCards.length) batchObserver.observe(matchingCards[shownCount - 1]);
+}
+
+showNextBatch();
 async function preparePhoto(card, thumbnail) {
   const photo = new Image();
   photo.id = full.id;
@@ -37,14 +59,13 @@ async function show(card, swipeDirection = 0) {
     }
   }
   document.querySelector('#viewer-date').textContent = card.querySelector('time').textContent;
-  const visible = visibleCards();
-  document.querySelector('#position').textContent = `${visible.indexOf(card) + 1} / ${visible.length}`;
+  document.querySelector('#position').textContent = `${matchingCards.indexOf(card) + 1} / ${matchingCards.length}`;
 }
 function move(step, animateSwipe = false) {
   if (dismissAnimation) return;
-  const visible = visibleCards();
-  const index = visible.indexOf(cards[active]);
-  show(visible[(index + step + visible.length) % visible.length], animateSwipe ? step : 0);
+  const index = matchingCards.indexOf(cards[active]);
+  const next = (index + step + matchingCards.length) % matchingCards.length;
+  show(matchingCards[next], animateSwipe ? step : 0);
 }
 cards.forEach(card => card.addEventListener('click', event => {
   if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -57,8 +78,12 @@ cards.forEach(card => card.addEventListener('click', event => {
 }));
 document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => {
   document.querySelectorAll('[data-filter]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
-  cards.forEach(card => { card.hidden = button.dataset.filter !== 'All' && card.dataset.group !== button.dataset.filter; });
-  document.querySelector('#photo-count').textContent = `${visibleCards().length} moments · oldest first`;
+  const filter = button.dataset.filter;
+  matchingCards = filter === 'All' ? cards : cards.filter(card => card.dataset.group === filter);
+  cards.forEach(card => { card.hidden = true; });
+  shownCount = 0;
+  showNextBatch();
+  document.querySelector('#photo-count').textContent = `${matchingCards.length} moments · oldest first`;
 }));
 document.querySelector('#close').addEventListener('click', () => viewer.close());
 document.querySelector('#previous').addEventListener('click', () => move(-1));
