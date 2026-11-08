@@ -19,7 +19,7 @@
 :root{--scene-saturation:1.045;--scene-contrast:1.015;--scene-light-opacity:0}
 :root[data-season="spring"]{--scene-saturation:1.055}
 :root[data-season="summer"]{--scene-saturation:1.045}
-:root[data-season="autumn"]{--scene-saturation:1.06}
+:root[data-season="autumn"]{--scene-saturation:1.06;--line:#505442}
 :root[data-season="winter"]{--scene-saturation:1.035}
 .landscape [data-season-image]{filter:saturate(var(--scene-saturation)) contrast(var(--scene-contrast))}
 .scene-light{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:var(--scene-light-opacity);mix-blend-mode:soft-light;background:linear-gradient(180deg,var(--sky),transparent 58%,var(--accent));}

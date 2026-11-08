@@ -20,7 +20,7 @@
       icon:'<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 3C10 2 3 7 4 14c.7 5 6 7 10 4 4-3 5-9 6-15ZM3 22 16 8m-8 9v-5m4 1h5"/></svg>',
       birds:['egret','pintail-flight'], cloud:'cumulus.webp', cloudOpacity:.9,
       description:'Ochre Coyote Hills, olive and russet reeds, and a blue autumn marsh, beneath slowly drifting sculptural clouds.',
-      colors:{canvas:'#3d392b',ink:'#fff1df',muted:'#d7c7b0',sky:'#345b7c',accent:'#efc28c','accent-hover':'#ffdbad',card:'#504633','card-alt':'#554b36','card-warm':'#5b4d38','card-last':'#61533b','card-hover':'#5a4c36',detail:'#e9dac4'}
+      colors:{canvas:'#24261f',ink:'#f3eddf',muted:'#c9c4ae',sky:'#24261f',accent:'#efc28c','accent-hover':'#ffdbad',card:'#303329','card-alt':'#2b2e25','card-warm':'#37382b','card-last':'#3d3e30','card-hover':'#3c4034',detail:'#f3eddf'}
     },
     winter: {
       icon:'<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M3.34 7l17.32 10M3.34 17 20.66 7M9 4l3 3 3-3M9 20l3-3 3 3M4.1 10.6l4.1-1.1-1.1-4.1m9.8 13.2-1.1-4.1 4.1-1.1M4.1 13.4l4.1 1.1-1.1 4.1m9.8-13.2-1.1 4.1 4.1 1.1"/></svg>',
@@ -34,7 +34,21 @@
   const wideAccents = {
     spring:{canvas:'color(display-p3 0.045 0.235 0.21)',sky:'color(display-p3 0.025 0.31 0.72)',accent:'color(display-p3 0.84 0.97 0.53)','accent-hover':'color(display-p3 0.92 1 0.73)'},
     summer:{canvas:'color(display-p3 0.19 0.23 0.14)',sky:'color(display-p3 0.025 0.32 0.74)',accent:'color(display-p3 0.99 0.81 0.43)','accent-hover':'color(display-p3 1 0.90 0.67)'},
-    autumn:{canvas:'color(display-p3 0.235 0.205 0.14)',sky:'color(display-p3 0.18 0.345 0.49)',accent:'color(display-p3 0.99 0.72 0.43)','accent-hover':'color(display-p3 1 0.84 0.61)'},
+    // Match the résumé palette on both sRGB and wide-gamut displays.
+    autumn:{
+      canvas:'color(display-p3 0.14260 0.14877 0.12411)',
+      ink:'color(display-p3 0.94882 0.93021 0.88005)',
+      muted:'color(display-p3 0.78480 0.76929 0.69104)',
+      sky:'color(display-p3 0.14260 0.14877 0.12411)',
+      accent:'color(display-p3 0.90918 0.76751 0.57721)',
+      'accent-hover':'color(display-p3 0.97689 0.86401 0.70061)',
+      card:'color(display-p3 0.19038 0.19962 0.16446)',
+      'card-alt':'color(display-p3 0.17078 0.18001 0.14837)',
+      'card-warm':'color(display-p3 0.21639 0.21948 0.17377)',
+      'card-last':'color(display-p3 0.23992 0.24301 0.19377)',
+      'card-hover':'color(display-p3 0.23817 0.25048 0.20830)',
+      detail:'color(display-p3 0.94882 0.93021 0.88005)',
+    },
     winter:{canvas:'color(display-p3 0.11 0.235 0.26)',sky:'color(display-p3 0.245 0.38 0.47)',accent:'color(display-p3 0.70 0.89 0.91)','accent-hover':'color(display-p3 0.86 0.96 0.96)'}
   };
   function expandedColor(hex) {

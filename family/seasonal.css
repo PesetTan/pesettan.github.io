@@ -2,6 +2,7 @@
 @media screen {
 :root[data-season]{--canvas:var(--canvas-sdr);--ink:var(--ink-sdr);--muted:var(--muted-sdr);--sky:var(--sky-sdr);--accent:var(--accent-sdr);--accent-hover:var(--accent-hover-sdr);--card:var(--card-sdr);--card-alt:var(--card-alt-sdr);--card-warm:var(--card-warm-sdr);--card-last:var(--card-last-sdr);--card-hover:var(--card-hover-sdr);--detail:var(--detail-sdr);--line:color-mix(in srgb,var(--ink) 18%,transparent);--paper:var(--canvas);--gold:var(--accent);--rail:var(--card-alt);--sub:var(--muted);color-scheme:dark;background:var(--canvas);color:var(--ink)}
 @supports(color:color(display-p3 1 1 1)){@media(color-gamut:p3){:root[data-season]{--canvas:var(--canvas-p3,var(--canvas-sdr));--ink:var(--ink-p3,var(--ink-sdr));--muted:var(--muted-p3,var(--muted-sdr));--sky:var(--sky-p3,var(--sky-sdr));--accent:var(--accent-p3,var(--accent-sdr));--accent-hover:var(--accent-hover-p3,var(--accent-hover-sdr));--card:var(--card-p3,var(--card-sdr));--card-alt:var(--card-alt-p3,var(--card-alt-sdr));--card-warm:var(--card-warm-p3,var(--card-warm-sdr));--card-last:var(--card-last-p3,var(--card-last-sdr));--card-hover:var(--card-hover-p3,var(--card-hover-sdr));--detail:var(--detail-p3,var(--detail-sdr))}}}
+:root[data-season="autumn"]{--line:#505442}
 :root[data-season] body{background:var(--canvas);color:var(--ink)}
 .portrait-frame,.memorial-card{background:var(--card);border-color:var(--line)}
 .small-rule{background:var(--accent)}.family-mark{color:var(--accent)}
