@@ -1,16 +1,34 @@
 const cards = [...document.querySelectorAll('.photo')];
 const viewer = document.querySelector('#viewer');
-const full = document.querySelector('#full-photo');
+let full = document.querySelector('#full-photo');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 let active = 0;
+let photoRequest = 0;
 let trigger;
 const visibleCards = () => cards.filter(card => !card.hidden);
-function show(card) {
+async function preparePhoto(card, thumbnail) {
+  const photo = new Image();
+  photo.id = full.id;
+  photo.alt = thumbnail.alt;
+  photo.style.setProperty('--phone-photo-position', card.dataset.phonePhotoPosition ?? 'center');
+  photo.src = reducedMotion.matches && card.dataset.still ? card.dataset.still : card.href;
+  try {
+    await photo.decode();
+  } catch {
+    // Keep the requested photo's alt text available if the image fails to load.
+  }
+  return photo;
+}
+async function show(card) {
   active = cards.indexOf(card);
+  const request = ++photoRequest;
   const img = card.querySelector('img');
-  full.style.setProperty('--phone-photo-position', card.dataset.phonePhotoPosition ?? 'center');
-  full.src = reducedMotion.matches && card.dataset.still ? card.dataset.still : card.href;
-  full.alt = img.alt;
+  const photo = await preparePhoto(card, img);
+  if (request !== photoRequest || (photo && !viewer.open)) return;
+  if (photo) {
+    full.replaceWith(photo);
+    full = photo;
+  }
   document.querySelector('#caption').textContent = `${img.alt} ${card.querySelector('time').textContent}`;
   const visible = visibleCards();
   document.querySelector('#position').textContent = `${visible.indexOf(card) + 1} / ${visible.length}`;
@@ -70,6 +88,8 @@ viewer.addEventListener('click', event => {
   if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) viewer.close();
 });
 viewer.addEventListener('close', () => {
+  if (viewer.open) return;
+  photoRequest++;
   full.removeAttribute('src');
   trigger?.focus();
 });

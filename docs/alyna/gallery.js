@@ -1,27 +1,44 @@
 const cards = [...document.querySelectorAll('.photo')];
 const viewer = document.querySelector('#viewer');
-const full = document.querySelector('#full-photo');
+let full = document.querySelector('#full-photo');
 const video = document.querySelector('#full-video');
 let active = 0;
+let photoRequest = 0;
 let trigger;
 const visibleCards = () => cards.filter(card => !card.hidden);
-function show(card) {
+async function preparePhoto(card, thumbnail) {
+  const photo = new Image();
+  photo.id = full.id;
+  photo.alt = thumbnail.alt;
+  photo.style.setProperty('--phone-photo-position', card.dataset.phonePhotoPosition ?? 'center');
+  photo.src = card.href;
+  try {
+    await photo.decode();
+  } catch {
+    // Keep the requested photo's alt text available if the image fails to load.
+  }
+  return photo;
+}
+async function show(card) {
   active = cards.indexOf(card);
+  const request = ++photoRequest;
   const img = card.querySelector('img');
-  full.style.setProperty('--phone-photo-position', card.dataset.phonePhotoPosition ?? 'center');
+  const isVideo = card.dataset.video === 'true';
+  const photo = isVideo ? null : await preparePhoto(card, img);
+  if (request !== photoRequest || (photo && !viewer.open)) return;
   video.pause();
   video.removeAttribute('src');
   video.load();
-  const isVideo = card.dataset.video === 'true';
   full.hidden = isVideo;
   video.hidden = !isVideo;
   if (isVideo) {
     full.removeAttribute('src');
     video.poster = card.dataset.poster;
     video.src = card.href;
-  } else {
-    full.src = card.href;
-    full.alt = img.alt;
+  }
+  if (photo) {
+    full.replaceWith(photo);
+    full = photo;
   }
   document.querySelector('#caption').textContent = `${img.alt} ${card.querySelector('time').textContent}`;
   const visible = visibleCards();
@@ -83,6 +100,8 @@ viewer.addEventListener('click', event => {
   if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) viewer.close();
 });
 viewer.addEventListener('close', () => {
+  if (viewer.open) return;
+  photoRequest++;
   full.removeAttribute('src');
   video.pause();
   video.removeAttribute('src');

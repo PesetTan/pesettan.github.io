@@ -226,6 +226,8 @@ body:has(#viewer[open]) { overflow: hidden; }
 #viewer figure [hidden] { display: none; }
 
 #viewer figcaption {
+  min-block-size: 2lh;
+  align-content: center;
   max-width: 56ch;
   margin: 0 auto;
   color: var(--detail);
@@ -236,10 +238,9 @@ body:has(#viewer[open]) { overflow: hidden; }
 
 .viewer-nav {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, min(145px, calc((100% - 10px) / 2))));
+  justify-content: space-between;
   gap: 10px;
-  width: min(100%, 300px);
-  margin-inline: auto;
 }
 
 #viewer button {
@@ -265,8 +266,10 @@ body:has(#viewer[open]) { overflow: hidden; }
 #viewer button svg { width: 18px; height: 18px; color: var(--accent); }
 #viewer #close { width: 44px; padding: 0; }
 
-/* Use the actual photo slot, including changes in browser chrome and caption height. */
+/* Reserve room for wrapping captions so they do not resize the photo. */
 @media (max-width: 580px) and (orientation: portrait) {
+  #viewer figcaption { min-block-size: 3lh; }
+
   #viewer #full-photo {
     object-fit: cover;
     object-position: var(--phone-photo-position, center);
