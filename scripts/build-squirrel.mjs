@@ -1,5 +1,5 @@
 import { writeFile } from 'node:fs/promises';
-import { SQUIRREL_FRAME_COUNT, SQUIRREL_SOURCE_STRIDE } from '../family/daisy.mjs';
+import { SQUIRREL_FRAME_COUNT, SQUIRREL_SOURCE_STRIDE, SQUIRREL_ATLAS } from '../family/daisy.mjs';
 
 // Observational interpretation of Hiroki Inoue's running sequence, not traced:
 // https://www.sony.jp/ichigan/a-universe/news/926/
@@ -129,7 +129,7 @@ function tailShape(p) {
   return `<path fill="#98734a" d="${smoothPath(outline,true)}"/><path fill="#ad8654" d="${smoothPath(light,true)}"/>`;
 
 }
-function drawFrame(frame) {
+function drawFrame(frame, x, y) {
   const p=sampleSquirrelRig(frame),[hx,hy]=p.hip,[sx,sy]=p.shoulder,mx=(hx+sx)/2,my=(hy+sy)/2;
   const bodyPath=`M${n(hx-4)} ${n(hy+3)} C${n(hx-8)} ${n(hy-2)} ${n(hx-7)} ${n(hy-8)} ${n(hx+1)} ${n(hy-8)} C${n(mx)} ${n(my-9-p.flex)} ${n(sx-2)} ${n(sy-7)} ${n(sx+2)} ${n(sy-6)} C${n(sx+6)} ${n(sy-5)} ${n(sx+7)} ${n(sy+.5)} ${n(sx+4)} ${n(sy+4)} Q${n(sx+2)} ${n(sy+6)} ${n(sx-1)} ${n(sy+4)} C${n(mx)} ${n(my+5)} ${n(hx+1)} ${n(hy+5)} ${n(hx-4)} ${n(hy+3)} Z`;
   const body=`<path fill="#a98050" d="${bodyPath}"/>`;
@@ -140,9 +140,14 @@ function drawFrame(frame) {
   const nearHind=legShape(p.limbs[2],'#b58b56',true);
   const nearFore=legShape(p.limbs[3],'#c09a61',false);
   const head=`<g transform="translate(${n(sx)} ${n(sy-1)}) rotate(${n(p.headPitch*180/Math.PI)})"><path fill="#c09a61" d="M-1-2.5C-2-7 2-10 5-9.5Q6-14 8-12L8-8Q12-6 14-4C17-1 14 1 9 1.5Q4 3-1-2.5Z"/><path fill="#dfc99b" d="m9-2 5 1-1 2-5 .2Z"/><circle cx="10.5" cy="-4.4" r=".9" fill="#3e3b30"/><path fill="#3e3b30" d="m15-2 2 .8-2 1Z"/></g>`;
-  return `<g transform="translate(${frame*64} 0)">${tailShape(p)}${legShape(p.limbs[0],'#806343',true)}${legShape(p.limbs[1],'#806343',false)}${nearHind}${nearFore}${body}${chest}${thigh}${head}</g>`;
+  return `<g transform="translate(${x} ${y})">${tailShape(p)}${legShape(p.limbs[0],'#806343',true)}${legShape(p.limbs[1],'#806343',false)}${nearHind}${nearFore}${body}${chest}${thigh}${head}</g>`;
 }
 export function buildSquirrelAtlas() {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${SQUIRREL_FRAMES*64}" height="44" viewBox="0 0 ${SQUIRREL_FRAMES*64} 44">\n<!-- Coordinated bound: weight transfer, fixed-length legs and distance-matched contacts. -->\n${Array.from({length:SQUIRREL_FRAMES},(_,i)=>drawFrame(i)).join('\n')}\n</svg>\n`;
+  const { columns, poseWidth, poseHeight, padX, padY } = SQUIRREL_ATLAS;
+  const cellWidth = poseWidth + 2 * padX, cellHeight = poseHeight + 2 * padY;
+  const width = columns * cellWidth, height = Math.ceil(SQUIRREL_FRAMES / columns) * cellHeight;
+  const poses = Array.from({length:SQUIRREL_FRAMES}, (_, i) =>
+    drawFrame(i, (i % columns) * cellWidth + padX, Math.floor(i / columns) * cellHeight + padY));
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">\n<!-- Transparent gutters isolate the distance-matched poses. -->\n${poses.join('\n')}\n</svg>\n`;
 }
 if(process.argv.includes('--write'))for(const folder of ['family','docs'])await writeFile(new URL(`../${folder}/assets/daisy-footer/squirrel.svg`,import.meta.url),buildSquirrelAtlas());

@@ -11,6 +11,9 @@ export function chaseProfileForWidth(width) {
 }
 const CHASE_DELAY = 1.8;
 export const SQUIRREL_FRAME_COUNT = 48;
+export const SQUIRREL_ATLAS = Object.freeze({
+  columns: 8, poseWidth: 64, poseHeight: 44, padX: 8, padY: 4
+});
 export const SQUIRREL_STRIDE_SECONDS = .45;
 export const SQUIRREL_SOURCE_STRIDE = 60;
 
@@ -80,10 +83,17 @@ if (typeof document !== 'undefined') {
     function paint() {
       const pose = reducedMotion.matches ? { x: .5, direction: 1, frame: 0 } : sampleDaisy(elapsed);
       const prey = reducedMotion.matches ? { x: .72, direction: 1, hop: 0, frame: 0 } : sampleSquirrel(elapsed, gait.halfStrides);
-      squirrel.style.width = `${gait.cellWidth}px`;
-      squirrel.style.left = `calc(${21 - gait.cellWidth / 2}px + (100% - 42px) * ${prey.x})`;
-      squirrel.style.backgroundSize = `${gait.cellWidth * SQUIRREL_FRAME_COUNT}px 14px`;
-      squirrel.style.backgroundPosition = `${-prey.frame * gait.cellWidth}px 0`;
+      // Include a transparent gutter around each pose so fractional mobile
+      // scaling cannot sample a piece of the neighboring pose.
+      const { columns, poseWidth, poseHeight, padX, padY } = SQUIRREL_ATLAS;
+      const frameWidth = gait.cellWidth * (poseWidth + 2 * padX) / poseWidth;
+      const frameHeight = 14 * (poseHeight + 2 * padY) / poseHeight;
+      squirrel.style.width = `${frameWidth}px`;
+      squirrel.style.height = `${frameHeight}px`;
+      squirrel.style.top = `${14.4 - 14 * padY / poseHeight}px`;
+      squirrel.style.left = `calc(${21 - frameWidth / 2}px + (100% - 42px) * ${prey.x})`;
+      squirrel.style.backgroundSize = `${frameWidth * columns}px ${frameHeight * Math.ceil(SQUIRREL_FRAME_COUNT / columns)}px`;
+      squirrel.style.backgroundPosition = `${-(prey.frame % columns) * frameWidth}px ${-Math.floor(prey.frame / columns) * frameHeight}px`;
       squirrel.style.transform = `translateY(${-prey.hop}px) scaleX(${prey.direction})`;
       runner.style.left = `calc(4px + (100% - 42px) * ${pose.x})`;
       sprite.toggleAttribute('data-wagging', Boolean(pose.reacting));
