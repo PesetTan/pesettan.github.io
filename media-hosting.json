@@ -722,16 +722,6 @@
       "sha256": "ef2c91e55b25ae42f1e03b99da294764d6e549841991cbb2b50cb5d096faee2f"
     },
     {
-      "path": "daisy/photos/daisy-21-small.webp",
-      "bytes": 19750,
-      "sha256": "837c34091a69ce3fb445ecb53558e4d384ba12e8d95fa3c98afd051efeb05a7a"
-    },
-    {
-      "path": "daisy/photos/daisy-21.webp",
-      "bytes": 162854,
-      "sha256": "09426f1559ed433f2491a96045a08a1db7ce07bc06ff17c483ae65321c013e5d"
-    },
-    {
       "path": "daisy/photos/daisy-22-small.webp",
       "bytes": 19814,
       "sha256": "6fe8642a059e9bb4b324f0588d9b541f62cf3af59ded97164361305f984dcf93"
