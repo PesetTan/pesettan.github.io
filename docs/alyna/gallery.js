@@ -2,6 +2,7 @@ const cards = [...document.querySelectorAll('.photo')];
 const viewer = document.querySelector('#viewer');
 let full = document.querySelector('#full-photo');
 const video = document.querySelector('#full-video');
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 let active = 0;
 let photoRequest = 0;
 let trigger;
@@ -19,7 +20,7 @@ async function preparePhoto(card, thumbnail) {
   }
   return photo;
 }
-async function show(card) {
+async function show(card, swipeDirection = 0) {
   active = cards.indexOf(card);
   const request = ++photoRequest;
   const img = card.querySelector('img');
@@ -39,15 +40,22 @@ async function show(card) {
   if (photo) {
     full.replaceWith(photo);
     full = photo;
+    if (swipeDirection && !reducedMotion.matches) {
+      photo.animate([
+        { transform: `translateX(${swipeDirection * 9}%)`, opacity: 0.65 },
+        { transform: 'translateX(0)', opacity: 1 },
+      ], { duration: 220, easing: 'ease-out' });
+    }
   }
-  document.querySelector('#caption').textContent = `${img.alt} ${card.querySelector('time').textContent}`;
+  document.querySelector('#viewer-date').textContent = card.querySelector('time').textContent;
+  document.querySelector('#caption').textContent = img.alt;
   const visible = visibleCards();
   document.querySelector('#position').textContent = `${visible.indexOf(card) + 1} / ${visible.length}`;
 }
-function move(step) {
+function move(step, animateSwipe = false) {
   const visible = visibleCards();
   const index = visible.indexOf(cards[active]);
-  show(visible[(index + step + visible.length) % visible.length]);
+  show(visible[(index + step + visible.length) % visible.length], animateSwipe ? step : 0);
 }
 cards.forEach(card => card.addEventListener('click', event => {
   if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -84,7 +92,7 @@ swipeArea.addEventListener('touchend', event => {
   const dx = end.clientX - start.clientX;
   const dy = end.clientY - start.clientY;
   if (Math.abs(dx) >= 45 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-    move(dx < 0 ? 1 : -1);
+    move(dx < 0 ? 1 : -1, true);
   }
 }, { passive: true });
 viewer.addEventListener('keydown', event => {

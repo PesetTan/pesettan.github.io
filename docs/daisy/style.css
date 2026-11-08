@@ -185,12 +185,18 @@
 body:has(#viewer[open]) { overflow: hidden; }
 
 .viewer-top {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
   padding-bottom: 4px;
   border-bottom: 1px solid var(--line);
+}
+
+#viewer-date {
+  color: var(--detail);
+  font-size: 13px;
+  text-align: center;
 }
 
 #position {
@@ -201,6 +207,7 @@ body:has(#viewer[open]) { overflow: hidden; }
 }
 
 #viewer figure {
+  overflow: clip;
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
   gap: 6px;
@@ -264,7 +271,7 @@ body:has(#viewer[open]) { overflow: hidden; }
 
 #viewer button:focus-visible { outline-offset: 2px; }
 #viewer button svg { width: 18px; height: 18px; color: var(--accent); }
-#viewer #close { width: 44px; padding: 0; }
+#viewer #close { justify-self: end; width: 44px; padding: 0; }
 
 /* Reserve room for wrapping captions so they do not resize the photo. */
 @media (max-width: 580px) and (orientation: portrait) {
