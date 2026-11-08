@@ -49,7 +49,9 @@ async function show(card, swipeDirection = 0) {
     }
   }
   document.querySelector('#viewer-date').textContent = card.querySelector('time').textContent;
-  document.querySelector('#caption').textContent = img.alt;
+  const caption = document.querySelector('#caption');
+  caption.hidden = !isVideo;
+  caption.textContent = isVideo ? img.alt : '';
   const visible = visibleCards();
   document.querySelector('#position').textContent = `${visible.indexOf(card) + 1} / ${visible.length}`;
 }

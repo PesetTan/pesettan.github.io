@@ -157,23 +157,26 @@
 
 /* Shared photo and video viewer for both albums. */
 #viewer {
+  --viewer-spacing: 8px;
+  --viewer-control-size: 40px;
+  --viewer-radius: calc(var(--viewer-control-size) / 2);
   width: calc(100% - 12px);
   height: calc(100dvh - 12px);
   max-width: none;
   max-height: none;
-  padding: 8px;
+  padding: var(--viewer-spacing);
   overflow: auto;
   background: linear-gradient(155deg, var(--card), var(--canvas) 75%);
   color: var(--ink);
   border: 1px solid var(--line);
-  border-radius: 18px;
+  border-radius: calc(var(--viewer-radius) + var(--viewer-spacing) + 1px);
   box-shadow: 0 24px 80px #0006;
 }
 
 #viewer[open] {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
-  gap: 6px;
+  gap: var(--viewer-spacing);
 }
 
 #viewer::backdrop {
@@ -188,9 +191,7 @@ body:has(#viewer[open]) { overflow: hidden; }
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  gap: 12px;
-  padding-bottom: 4px;
-  border-bottom: 1px solid var(--line);
+  gap: var(--viewer-spacing);
 }
 
 #viewer-date {
@@ -209,8 +210,8 @@ body:has(#viewer[open]) { overflow: hidden; }
 #viewer figure {
   overflow: clip;
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
-  gap: 6px;
+  grid-template-rows: minmax(0, 1fr);
+  gap: var(--viewer-spacing);
   margin: 0;
   min-width: 0;
 }
@@ -222,7 +223,7 @@ body:has(#viewer[open]) { overflow: hidden; }
   min-height: 0;
   object-fit: contain;
   background: color-mix(in srgb, var(--canvas) 64%, #000);
-  border-radius: 14px;
+  border-radius: var(--viewer-radius);
 }
 
 #viewer #full-photo { touch-action: pinch-zoom; }
@@ -234,8 +235,6 @@ body:has(#viewer[open]) { overflow: hidden; }
 #viewer figure [hidden] { display: none; }
 
 #viewer figcaption {
-  min-block-size: 2lh;
-  align-content: center;
   max-width: 56ch;
   margin: 0 auto;
   color: var(--detail);
@@ -246,9 +245,9 @@ body:has(#viewer[open]) { overflow: hidden; }
 
 .viewer-nav {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, min(145px, calc((100% - 10px) / 2))));
+  grid-template-columns: repeat(2, minmax(0, min(132px, calc((100% - var(--viewer-spacing)) / 2))));
   justify-content: space-between;
-  gap: 10px;
+  gap: var(--viewer-spacing);
 }
 
 #viewer button {
@@ -256,10 +255,10 @@ body:has(#viewer[open]) { overflow: hidden; }
   align-items: center;
   justify-content: center;
   gap: 8px;
-  min-height: 44px;
+  min-height: var(--viewer-control-size);
   padding: 0 12px;
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: var(--viewer-radius);
   background: var(--card);
   color: var(--ink);
   font-size: 13px;
@@ -270,14 +269,11 @@ body:has(#viewer[open]) { overflow: hidden; }
   border-color: var(--accent);
 }
 
-#viewer button:focus-visible { outline-offset: 2px; }
+#viewer button:focus-visible { outline-offset: -4px; }
 #viewer button svg { width: 18px; height: 18px; color: var(--accent); }
-#viewer #close { justify-self: end; width: 44px; padding: 0; }
+#viewer #close { justify-self: end; width: var(--viewer-control-size); padding: 0; }
 
-/* Reserve room for wrapping captions so they do not resize the photo. */
 @media (max-width: 580px) and (orientation: portrait) {
-  #viewer figcaption { min-block-size: 3lh; }
-
   #viewer #full-photo {
     object-fit: cover;
     object-position: var(--phone-photo-position, center);
