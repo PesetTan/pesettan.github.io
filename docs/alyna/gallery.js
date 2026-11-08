@@ -8,7 +8,7 @@ const visibleCards = () => cards.filter(card => !card.hidden);
 function show(card) {
   active = cards.indexOf(card);
   const img = card.querySelector('img');
-  full.style.setProperty('--phone-photo-x', card.dataset.phonePhotoX ?? '50%');
+  full.style.setProperty('--phone-photo-position', card.dataset.phonePhotoPosition ?? 'center');
   video.pause();
   video.removeAttribute('src');
   video.load();
@@ -47,6 +47,29 @@ document.querySelectorAll('[data-filter]').forEach(button => button.addEventList
 document.querySelector('#close').addEventListener('click', () => viewer.close());
 document.querySelector('#previous').addEventListener('click', () => move(-1));
 document.querySelector('#next').addEventListener('click', () => move(1));
+// Let a single horizontal swipe navigate without intercepting scrolling or zoom.
+const swipeArea = full.closest('figure');
+let swipeStart;
+swipeArea.addEventListener('touchstart', event => {
+  swipeStart = undefined;
+  if (event.touches.length !== 1 || event.target.closest('video')) return;
+  swipeStart = event.touches[0];
+}, { passive: true });
+swipeArea.addEventListener('touchcancel', () => {
+  swipeStart = undefined;
+}, { passive: true });
+swipeArea.addEventListener('touchend', event => {
+  const start = swipeStart;
+  swipeStart = undefined;
+  if (!start || event.touches.length) return;
+  const end = Array.from(event.changedTouches).find(touch => touch.identifier === start.identifier);
+  if (!end) return;
+  const dx = end.clientX - start.clientX;
+  const dy = end.clientY - start.clientY;
+  if (Math.abs(dx) >= 45 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+    move(dx < 0 ? 1 : -1);
+  }
+}, { passive: true });
 viewer.addEventListener('keydown', event => {
   if (event.target === video) return;
   if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
