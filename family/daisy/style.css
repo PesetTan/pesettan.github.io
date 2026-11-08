@@ -157,17 +157,23 @@
 
 /* Shared photo and video viewer for both albums. */
 #viewer {
-  --viewer-media-height: clamp(160px, min(62vw, calc(92svh - 195px)), 760px);
-  width: min(1080px, calc(100% - 32px));
+  width: calc(100% - 12px);
+  height: calc(100dvh - 12px);
   max-width: none;
-  max-height: 92svh;
-  padding: clamp(12px, 2vw, 24px);
+  max-height: none;
+  padding: 8px;
   overflow: auto;
   background: linear-gradient(155deg, var(--card), var(--canvas) 75%);
   color: var(--ink);
   border: 1px solid var(--line);
-  border-radius: 28px;
+  border-radius: 18px;
   box-shadow: 0 24px 80px #0006;
+}
+
+#viewer[open] {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 6px;
 }
 
 #viewer::backdrop {
@@ -183,7 +189,7 @@ body:has(#viewer[open]) { overflow: hidden; }
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding-bottom: 12px;
+  padding-bottom: 4px;
   border-bottom: 1px solid var(--line);
 }
 
@@ -194,12 +200,19 @@ body:has(#viewer[open]) { overflow: hidden; }
   letter-spacing: .14em;
 }
 
-#viewer figure { margin: 12px 0 16px; }
+#viewer figure {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 6px;
+  margin: 0;
+  min-width: 0;
+}
 
 #viewer figure :is(img, video) {
   display: block;
   width: 100%;
-  height: var(--viewer-media-height);
+  height: 100%;
+  min-height: 0;
   object-fit: contain;
   background: color-mix(in srgb, var(--canvas) 64%, #000);
   border-radius: 14px;
@@ -209,7 +222,7 @@ body:has(#viewer[open]) { overflow: hidden; }
 
 #viewer figcaption {
   max-width: 56ch;
-  margin: 12px auto 0;
+  margin: 0 auto;
   color: var(--detail);
   text-align: center;
   font-size: 13px;
@@ -220,8 +233,8 @@ body:has(#viewer[open]) { overflow: hidden; }
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
-  max-width: 300px;
-  margin: auto;
+  width: min(100%, 300px);
+  margin-inline: auto;
 }
 
 #viewer button {
@@ -246,11 +259,3 @@ body:has(#viewer[open]) { overflow: hidden; }
 #viewer button:focus-visible { outline-offset: 2px; }
 #viewer button svg { width: 18px; height: 18px; color: var(--accent); }
 #viewer #close { width: 44px; padding: 0; }
-
-@media (max-width: 580px) {
-  #viewer {
-    --viewer-media-height: clamp(160px, min(118vw, calc(92svh - 215px)), 580px);
-    width: calc(100% - 20px);
-    border-radius: 24px;
-  }
-}
