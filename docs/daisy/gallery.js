@@ -60,7 +60,7 @@ document.querySelectorAll('[data-filter]').forEach(button => button.addEventList
 document.querySelector('#close').addEventListener('click', () => viewer.close());
 document.querySelector('#previous').addEventListener('click', () => move(-1));
 document.querySelector('#next').addEventListener('click', () => move(1));
-// Let a single horizontal swipe navigate without intercepting scrolling or zoom.
+// Use horizontal swipes to browse and a downward swipe on the photo to close.
 const swipeArea = full.closest('figure');
 let swipeStart;
 swipeArea.addEventListener('touchstart', event => {
@@ -79,7 +79,9 @@ swipeArea.addEventListener('touchend', event => {
   if (!end) return;
   const dx = end.clientX - start.clientX;
   const dy = end.clientY - start.clientY;
-  if (Math.abs(dx) >= 45 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+  if (start.target.id === 'full-photo' && dy >= 72 && dy > Math.abs(dx) * 1.5) {
+    viewer.close();
+  } else if (Math.abs(dx) >= 45 && Math.abs(dx) > Math.abs(dy) * 1.5) {
     move(dx < 0 ? 1 : -1, true);
   }
 }, { passive: true });

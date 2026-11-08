@@ -225,7 +225,8 @@ body:has(#viewer[open]) { overflow: hidden; }
   border-radius: 14px;
 }
 
-#viewer figure:has(#full-photo:not([hidden])),
+#viewer #full-photo { touch-action: pinch-zoom; }
+
 #viewer figcaption {
   touch-action: pan-y pinch-zoom;
 }
