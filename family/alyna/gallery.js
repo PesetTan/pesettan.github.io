@@ -5,6 +5,7 @@ const video = document.querySelector('#full-video');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 let active = 0;
 let photoRequest = 0;
+let dismissAnimation;
 let trigger;
 const visibleCards = () => cards.filter(card => !card.hidden);
 async function preparePhoto(card, thumbnail) {
@@ -53,6 +54,7 @@ async function show(card, swipeDirection = 0) {
   document.querySelector('#position').textContent = `${visible.indexOf(card) + 1} / ${visible.length}`;
 }
 function move(step, animateSwipe = false) {
+  if (dismissAnimation) return;
   const visible = visibleCards();
   const index = visible.indexOf(cards[active]);
   show(visible[(index + step + visible.length) % visible.length], animateSwipe ? step : 0);
@@ -60,6 +62,8 @@ function move(step, animateSwipe = false) {
 cards.forEach(card => card.addEventListener('click', event => {
   if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
   event.preventDefault();
+  dismissAnimation?.cancel();
+  dismissAnimation = undefined;
   trigger = card;
   show(card);
   viewer.showModal();
@@ -72,6 +76,19 @@ document.querySelectorAll('[data-filter]').forEach(button => button.addEventList
 document.querySelector('#close').addEventListener('click', () => viewer.close());
 document.querySelector('#previous').addEventListener('click', () => move(-1));
 document.querySelector('#next').addEventListener('click', () => move(1));
+function dismissWithSwipe() {
+  if (dismissAnimation) return;
+  if (reducedMotion.matches) {
+    viewer.close();
+    return;
+  }
+  dismissAnimation = viewer.animate([
+    { transform: 'translateY(0)', opacity: 1 },
+    { transform: 'translateY(24%)', opacity: 0 },
+  ], { duration: 200, easing: 'ease-in', fill: 'forwards' });
+  dismissAnimation.onfinish = () => viewer.close();
+}
+
 // Use horizontal swipes to browse and a downward swipe on the photo to close.
 const swipeArea = full.closest('figure');
 let swipeStart;
@@ -92,7 +109,7 @@ swipeArea.addEventListener('touchend', event => {
   const dx = end.clientX - start.clientX;
   const dy = end.clientY - start.clientY;
   if (start.target.id === 'full-photo' && dy >= 72 && dy > Math.abs(dx) * 1.5) {
-    viewer.close();
+    dismissWithSwipe();
   } else if (Math.abs(dx) >= 45 && Math.abs(dx) > Math.abs(dy) * 1.5) {
     move(dx < 0 ? 1 : -1, true);
   }
@@ -111,6 +128,8 @@ viewer.addEventListener('click', event => {
 });
 viewer.addEventListener('close', () => {
   if (viewer.open) return;
+  dismissAnimation?.cancel();
+  dismissAnimation = undefined;
   photoRequest++;
   full.removeAttribute('src');
   video.pause();
