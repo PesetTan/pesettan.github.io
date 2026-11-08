@@ -8,6 +8,7 @@ const visibleCards = () => cards.filter(card => !card.hidden);
 function show(card) {
   active = cards.indexOf(card);
   const img = card.querySelector('img');
+  full.style.setProperty('--phone-photo-x', card.dataset.phonePhotoX ?? '50%');
   video.pause();
   video.removeAttribute('src');
   video.load();

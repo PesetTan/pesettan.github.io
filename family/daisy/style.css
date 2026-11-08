@@ -218,6 +218,8 @@ body:has(#viewer[open]) { overflow: hidden; }
   border-radius: 14px;
 }
 
+#viewer .viewer-media { display: contents; }
+
 #viewer figure [hidden] { display: none; }
 
 #viewer figcaption {
@@ -259,3 +261,23 @@ body:has(#viewer[open]) { overflow: hidden; }
 #viewer button:focus-visible { outline-offset: 2px; }
 #viewer button svg { width: 18px; height: 18px; color: var(--accent); }
 #viewer #close { width: 44px; padding: 0; }
+
+/* Keep the portrait crop inside the space left by the caption and controls. */
+@media (max-width: 580px) and (orientation: portrait) {
+  #viewer .viewer-media {
+    container-type: size;
+    display: grid;
+    place-items: center;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  #viewer #full-photo {
+    --phone-photo-ratio: 6 / 13;
+    width: min(100%, calc(100cqh * var(--phone-photo-ratio)));
+    height: auto;
+    aspect-ratio: var(--phone-photo-ratio);
+    object-fit: cover;
+    object-position: var(--phone-photo-x, 50%) 50%;
+  }
+}
