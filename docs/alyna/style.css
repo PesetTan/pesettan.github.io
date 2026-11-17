@@ -1,1 +1,3 @@
 .hero-photo img{object-position:50% 40%}
+.hero-links{display:flex;flex-direction:column;align-items:flex-start}
+.hero-links .album-link+.album-link{margin-top:0}
